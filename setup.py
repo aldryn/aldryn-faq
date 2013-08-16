@@ -5,6 +5,7 @@ from aldryn_faq import __version__
 REQUIREMENTS = [
     'django-hvad',
     'django-admin-sortable',
+    'djangocms-text-ckeditor',
 ]
 
 CLASSIFIERS = [

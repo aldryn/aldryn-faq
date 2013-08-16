@@ -7,6 +7,7 @@ author:
 installed-apps:
   - hvad
   - adminsortable
+  - djangocms_text_ckeditor
   - aldryn_faq
 version: 0.0.1
 description: FAQ addon for django CMS
