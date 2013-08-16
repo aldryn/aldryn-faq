@@ -1,0 +1,15 @@
+name: FAQ
+package-name: aldryn-faq
+url: https://github.com/aldryn/aldryn-faq
+author:
+  name: Divio AG
+  url: https://www.divio.ch
+installed-apps:
+  - hvad
+  - adminsortable
+  - aldryn_faq
+version: 0.0.1
+description: FAQ addon for django CMS
+license:
+  name: BSD
+  text: !literal-include LICENSE.txt

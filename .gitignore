@@ -1,4 +1,9 @@
 *.log
 *.pot
 *.pyc
+*~
+.idea
+dist/*
+build/*
+*.egg-info/*
 local_settings.py
