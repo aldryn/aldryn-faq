@@ -26,12 +26,12 @@ class CategoryAdmin(TranslatableAdmin):
 class QuestionAdmin(PlaceholderAdmin, SortableAdmin):
 
     render_placeholder_language_tabs = False
-    list_display = ['title', 'language', 'category']
+    list_display = ['title', 'language', 'category', 'is_top']
 
     def get_fieldsets(self, request, obj=None):
         fieldsets = [
             (None, {
-                'fields': ['title', 'language', 'category']
+                'fields': ['title', 'language', 'category', 'is_top']
             })
         ]
 

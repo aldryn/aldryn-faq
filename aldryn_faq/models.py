@@ -80,22 +80,43 @@ class Question(Sortable):
     language = models.CharField(_('language'), max_length=5, choices=settings.LANGUAGES)
     category = SortableForeignKey(Category, related_name='questions')
     answer = PlaceholderField('faq_question_answer', related_name='faq_questions')
+    is_top = models.BooleanField(default=False)
 
     objects = RelatedManager()
 
     class Meta(Sortable.Meta):
         verbose_name = _('question')
         verbose_name_plural = _('questions')
+        ordering = ('title',)
 
     def __unicode__(self):
         return self.title
 
 
-class LatestQuestionPlugin(CMSPlugin):
+class QuestionsPlugin(models.Model):
 
-    latest_questions = models.IntegerField(default=5, help_text=_('The number of latests questions to be displayed.'))
+    questions = models.IntegerField(default=5, help_text=_('The number of questions to be displayed.'))
+
+    def get_queryset(self):
+        return Question.objects.filter_by_language(self.language)
 
     def get_questions(self):
-        questions = (Question.objects.filter_by_language(self.language)
-                     .order_by('-id'))
-        return questions[:self.latest_questions]
+        questions = self.get_queryset()
+        return questions[:self.questions]
+
+    class Meta:
+        abstract = True
+
+
+class LatestQuestionsPlugin(CMSPlugin, QuestionsPlugin):
+
+    def get_queryset(self):
+        qs = super(LatestQuestionsPlugin, self).get_queryset()
+        return qs.order_by('-id')
+
+
+class TopQuestionsPlugin(CMSPlugin, QuestionsPlugin):
+
+    def get_queryset(self):
+        qs = super(TopQuestionsPlugin, self).get_queryset()
+        return qs.filter(is_top=True)
