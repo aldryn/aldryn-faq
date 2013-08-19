@@ -1,6 +1,7 @@
 from adminsortable.fields import SortableForeignKey
 from adminsortable.models import Sortable
 from cms.models.fields import PlaceholderField
+from cms.models.pluginmodel import CMSPlugin
 from django.conf import settings
 from django.db import models
 from django.utils.translation import get_language, ugettext_lazy as _
@@ -44,3 +45,12 @@ class Question(Sortable):
 
     def __unicode__(self):
         return self.title
+
+
+class LatestQuestionPlugin(CMSPlugin):
+
+    latest_questions = models.IntegerField(default=5, help_text=_('The number of latests questions to be displayed.'))
+
+    def get_questions(self):
+        questions = Question.objects.filter_by_language(self.language)
+        return questions[:self.latest_questions]

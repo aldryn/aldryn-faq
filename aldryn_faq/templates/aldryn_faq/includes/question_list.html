@@ -1,0 +1,20 @@
+{% load placeholder_tags %}
+
+{% regroup object_list|dictsort:"category_id" by category as qgroups %}
+<div class="faq-list">
+    <ul class="faq">
+        {% for qgroup in qgroups %}
+            <li>
+                <h2 id="group-{{ qgroup.grouper.id }}">{{ qgroup.grouper }}</h2>
+                <ul>
+                    {% for question in qgroup.list %}
+                        <li>
+                            <h3 id="question-{{ question.id }}">{{ question.title }}</h3>
+                            {% render_placeholder question.answer 620 %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
