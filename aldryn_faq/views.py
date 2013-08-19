@@ -2,7 +2,7 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic.list import ListView
 
-from . import models
+from . import models, request_faq_category_identifier
 from menus.utils import set_language_changer
 
 
@@ -16,6 +16,7 @@ class FaqByCategoryView(ListView):
 
     def get(self, *args, **kwargs):
         self.object = self.get_object()
+        setattr(self.request, request_faq_category_identifier, self.object)
         response = super(FaqByCategoryView, self).get(*args, **kwargs)
         set_language_changer(self.request, self.object.get_absolute_url)
         return response
