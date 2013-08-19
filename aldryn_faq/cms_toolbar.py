@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, get_language
 
 from cms.toolbar_pool import toolbar_pool
 from cms.toolbar_base import CMSToolbar
 
-from aldryn_blog import request_post_identifier
 from aldryn_faq import request_faq_category_identifier
 
 
@@ -24,6 +23,10 @@ class FaqToolbar(CMSToolbar):
                 menu.add_modal_item(_('Add category'), reverse('admin:aldryn_faq_category_add') + '?_popup')
 
             category = getattr(self.request, request_faq_category_identifier, None)
+            if category and can('add', 'question'):
+                params = ('?_popup&category=%s&language=%s' %
+                          (category.pk, self.request.LANGUAGE_CODE))
+                menu.add_modal_item(_('Add question'), reverse('admin:aldryn_faq_question_add') + params)
             if category and can('change', 'category'):
                 url = reverse('admin:aldryn_faq_category_change', args=(category.pk,)) + '?_popup'
                 menu.add_modal_item(_('Edit category'), url, active=True)
