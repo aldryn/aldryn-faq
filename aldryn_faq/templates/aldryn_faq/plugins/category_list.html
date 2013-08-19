@@ -1,0 +1,7 @@
+<div class="plugin-faq">
+    <ul>
+        {% for category in categories %}
+        <li><a href="{{ category.get_absolute_url }}">{{ category }} ({{ category.count }})</a></li>
+        {% endfor %}
+    </ul>
+</div>

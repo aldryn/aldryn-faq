@@ -8,15 +8,17 @@ from hvad.admin import TranslatableAdmin
 import cms
 
 from . import models
+from aldryn_faq.forms import CategoryForm
 
 
 class CategoryAdmin(TranslatableAdmin):
 
     list_display = ['__unicode__', 'all_translations']
+    form = CategoryForm
 
     def get_fieldsets(self, request, obj=None):
         fieldsets = [
-            (None, {'fields': ['name']}),
+            (None, {'fields': ['name', 'slug']}),
         ]
         return fieldsets
 
