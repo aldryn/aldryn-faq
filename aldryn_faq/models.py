@@ -1,11 +1,11 @@
 from adminsortable.fields import SortableForeignKey
 from adminsortable.models import Sortable
-from aldryn_news.models import get_page_url
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from cms.utils.i18n import get_current_language, force_language
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.core.exceptions import ImproperlyConfigured
+from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db import models
 from django.utils.translation import get_language, ugettext_lazy as _
 from hvad.manager import TranslationManager
@@ -25,6 +25,16 @@ def get_slug_in_language(record, language):
             return None
         else:
             return translation.slug
+
+
+def get_page_url(name, language):
+    try:
+        url = reverse(name)
+    except NoReverseMatch:
+        error = _("There is no page translation for the language: %(lang)s"
+                  % {'lang': language})
+        raise ImproperlyConfigured(error)
+    return url
 
 
 class RelatedManager(models.Manager):
