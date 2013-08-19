@@ -52,5 +52,6 @@ class LatestQuestionPlugin(CMSPlugin):
     latest_questions = models.IntegerField(default=5, help_text=_('The number of latests questions to be displayed.'))
 
     def get_questions(self):
-        questions = Question.objects.filter_by_language(self.language)
+        questions = (Question.objects.filter_by_language(self.language)
+                     .order_by('-id'))
         return questions[:self.latest_questions]
