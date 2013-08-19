@@ -24,7 +24,7 @@ class FaqToolbar(CMSToolbar):
 
             category = getattr(self.request, request_faq_category_identifier, None)
             if category and can('add', 'question'):
-                params = ('?_popup&category=%s&language=%s' %
+                params = ('?category=%s&language=%s' %
                           (category.pk, self.request.LANGUAGE_CODE))
                 menu.add_modal_item(_('Add question'), reverse('admin:aldryn_faq_question_add') + params)
             if category and can('change', 'category'):
