@@ -4,10 +4,10 @@ from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from cms.utils.i18n import get_current_language, force_language
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
-from django.core.urlresolvers import reverse, NoReverseMatch
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import get_language, ugettext_lazy as _
+from djangocms_text_ckeditor.fields import HTMLField
 from hvad.manager import TranslationManager
 from hvad.models import TranslatableModel, TranslatedFields
 from hvad.utils import get_translation
@@ -27,18 +27,7 @@ def get_slug_in_language(record, language):
             return translation.slug
 
 
-def get_page_url(name, language):
-    try:
-        url = reverse(name)
-    except NoReverseMatch:
-        error = _("There is no page translation for the language: %(lang)s"
-                  % {'lang': language})
-        raise ImproperlyConfigured(error)
-    return url
-
-
 class RelatedManager(models.Manager):
-
     def filter_by_language(self, language):
         qs = self.get_query_set()
         return qs.filter(language=language)
@@ -48,13 +37,12 @@ class RelatedManager(models.Manager):
 
 
 class CategoryManager(TranslationManager):
-
     def get_categories(self, language):
         categories = self.language(language).prefetch_related('questions')
 
         for category in categories:
             category.count = (category.questions
-                              .filter_by_language(language).count())
+            .filter_by_language(language).count())
         return sorted(categories, key=lambda x: -x.count)
 
 
@@ -80,7 +68,7 @@ class Category(TranslatableModel):
         slug = get_slug_in_language(self, language)
         with force_language(language):
             if not slug:  # category not translated in given language
-                return get_page_url('faq', language)
+                return '/'
             kwargs = {'category_slug': slug}
             return reverse('aldryn_faq:faq-category', kwargs=kwargs)
 
@@ -89,6 +77,7 @@ class Question(Sortable):
     title = models.CharField(_('Title'), max_length=255)
     language = models.CharField(_('language'), max_length=5, choices=settings.LANGUAGES)
     category = SortableForeignKey(Category, related_name='questions')
+    answer_text = HTMLField(_('answer'), blank=True, null=True)
     answer = PlaceholderField('faq_question_answer', related_name='faq_questions')
     is_top = models.BooleanField(default=False)
 
@@ -102,9 +91,11 @@ class Question(Sortable):
     def __unicode__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('aldryn_faq:faq-answer', args=(self.category.slug, self.pk))
+
 
 class QuestionsPlugin(models.Model):
-
     questions = models.IntegerField(default=5, help_text=_('The number of questions to be displayed.'))
 
     def get_queryset(self):
@@ -119,14 +110,12 @@ class QuestionsPlugin(models.Model):
 
 
 class LatestQuestionsPlugin(CMSPlugin, QuestionsPlugin):
-
     def get_queryset(self):
         qs = super(LatestQuestionsPlugin, self).get_queryset()
         return qs.order_by('-id')
 
 
 class TopQuestionsPlugin(CMSPlugin, QuestionsPlugin):
-
     def get_queryset(self):
         qs = super(TopQuestionsPlugin, self).get_queryset()
         return qs.filter(is_top=True)

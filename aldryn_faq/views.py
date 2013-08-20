@@ -1,19 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import get_object_or_404
+from django.views.generic import DetailView
 from django.views.generic.list import ListView
-
-from . import models, request_faq_category_identifier
 from menus.utils import set_language_changer
 
-
-class FAQView(ListView):
-
-    def get_queryset(self):
-        return models.Question.objects.filter_by_current_language()
+from . import models, request_faq_category_identifier, request_faq_question_identifier
 
 
 class FaqByCategoryView(ListView):
-
     def get(self, *args, **kwargs):
         self.object = self.get_object()
         setattr(self.request, request_faq_category_identifier, self.object)
@@ -27,4 +21,20 @@ class FaqByCategoryView(ListView):
 
     def get_queryset(self):
         return (models.Question.objects
-                .filter_by_current_language().filter(category=self.object))
+        .filter_by_current_language().filter(category=self.object))
+
+
+class FaqAnswerView(DetailView):
+    def get(self, *args, **kwargs):
+        self.object = self.get_object()
+        setattr(self.request, request_faq_category_identifier, self.object.category)
+        setattr(self.request, request_faq_question_identifier, self.object)
+        response = super(FaqAnswerView, self).get(*args, **kwargs)
+        return response
+
+    def get_object(self):
+        return get_object_or_404(models.Question, pk=self.kwargs['id'])
+
+    def get_queryset(self):
+        return (models.Question.objects
+        .filter_by_current_language().filter(category=self.object))

@@ -31,7 +31,7 @@ class QuestionAdmin(PlaceholderAdmin, SortableAdmin):
     def get_fieldsets(self, request, obj=None):
         fieldsets = [
             (None, {
-                'fields': ['title', 'language', 'category', 'is_top']
+                'fields': ['title', 'language', 'category', 'answer_text', 'is_top']
             })
         ]
 

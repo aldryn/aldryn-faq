@@ -9,8 +9,7 @@
                 <ul>
                     {% for question in qgroup.list %}
                         <li>
-                            <h3 id="question-{{ question.id }}">{{ question.title }}</h3>
-                            {% render_placeholder question.answer 620 %}
+                            <a id="question-{{ question.id }}" href="{% url 'aldryn_faq:faq-answer' question.category.slug question.pk %}">{{ question.title }}</a>
                         </li>
                     {% endfor %}
                 </ul>

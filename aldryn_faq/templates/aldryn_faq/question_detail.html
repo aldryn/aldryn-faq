@@ -1,0 +1,10 @@
+{% extends "aldryn_faq/base.html" %}
+{% load placeholder_tags i18n %}
+
+{% block content_faq %}
+<h2 id="question-{{ object.id }}">{{ object.title }}</h2>
+{% if object.answer_text %}{{ object.answer_text|safe }}{% endif %}
+{% render_placeholder object.answer 620 %}
+
+<a href="{% url 'aldryn_faq:faq-category' object.category.slug %}">{% blocktrans with object.category as category %}Back to {{ category }}{% endblocktrans %}</a>
+{% endblock %}
