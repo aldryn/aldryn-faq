@@ -109,10 +109,44 @@ class QuestionsPlugin(models.Model):
         abstract = True
 
 
+class CategoryListPlugin(CMSPlugin):
+
+    def copy_relations(self, oldinstance):
+        for category in oldinstance.selected_categories.all():
+            category.pk = None
+            category.cms_plugin = self
+            category.save()
+
+    def get_categories(self):
+        """
+        By default, if no categories were chosen return all categories.
+        Otherwise, return the chosen categories.
+        """
+        categories = Category.objects.get_categories(language=self.language)
+
+        if self.selected_categories.exists():
+            category_ids =  self.selected_categories.values_list('category__pk', flat=True)
+            # categories is a list, and a sorted one so no need for another db call.
+            categories = [category for category in categories if category.pk in category_ids]
+        return categories
+
+
 class LatestQuestionsPlugin(CMSPlugin, QuestionsPlugin):
     def get_queryset(self):
         qs = super(LatestQuestionsPlugin, self).get_queryset()
         return qs.order_by('-id')
+
+
+class SelectedCategory(models.Model):
+    category = models.ForeignKey(to=Category, verbose_name=_('category'))
+    position = models.PositiveIntegerField(verbose_name=_('position'), blank=True, null=True)
+    cms_plugin = models.ForeignKey(to=CategoryListPlugin, related_name='selected_categories')
+
+    class Meta:
+        ordering = ['position']
+
+    def __unicode__(self):
+        return self.category.name
 
 
 class TopQuestionsPlugin(CMSPlugin, QuestionsPlugin):

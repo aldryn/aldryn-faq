@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.contrib.admin import TabularInline
 from django.utils.translation import ugettext_lazy as _
 
 from cms.models.pluginmodel import CMSPlugin
@@ -35,15 +36,26 @@ class TopQuestionsPlugin(FAQPlugin):
         return context
 
 
+class SelectedCategoryInline(TabularInline):
+    model = models.SelectedCategory
+    extra = 0
+
+    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
+        field = super(SelectedCategoryInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        if db_field.name == 'category':
+            field.queryset = models.Category.objects.language()
+        return field
+
+
 class CategoryListPlugin(FAQPlugin):
 
     render_template = 'aldryn_faq/plugins/category_list.html'
     name = _('List of categories')
-    model = CMSPlugin
+    model = models.CategoryListPlugin
+    inlines = [SelectedCategoryInline]
 
     def render(self, context, instance, placeholder):
-        context['categories'] = (models.Category.objects
-                                 .get_categories(instance.language))
+        context['categories'] = instance.get_categories()
         return context
 
 

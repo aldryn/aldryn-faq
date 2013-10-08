@@ -2,11 +2,12 @@
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import post_save, post_delete
 
-from aldryn_faq.models import Category
-
 from cms.menu_bases import CMSAttachMenu
+
 from menus.base import NavigationNode
 from menus.menu_pool import menu_pool
+
+from aldryn_faq.models import Category
 
 
 class FaqCategoryMenu(CMSAttachMenu):
