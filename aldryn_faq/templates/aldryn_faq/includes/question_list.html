@@ -1,6 +1,9 @@
 {% load i18n placeholder_tags sekizai_tags %}
 
 {% regroup object_list|dictsort:"category_id" by category as qgroups %}
+{% for qgroup in qgroups %}
+{% if list %}<h2>{{ qgroup.grouper }}</h2>{% endif %}
+{% endfor %}
 <ul class="faq-items">
 	{% for qgroup in qgroups %}
 	{% for question in qgroup.list %}
