@@ -16,7 +16,7 @@ class FAQPlugin(CMSPluginBase):
 
 class LatestQuestionsPlugin(FAQPlugin):
 
-    render_template = 'aldryn_faq/plugins/questions.html'
+    render_template = 'aldryn_faq/plugins/latest_questions.html'
     name = _('Latest questions')
     model = models.LatestQuestionsPlugin
 
@@ -27,7 +27,7 @@ class LatestQuestionsPlugin(FAQPlugin):
 
 class TopQuestionsPlugin(FAQPlugin):
 
-    render_template = 'aldryn_faq/plugins/questions.html'
+    render_template = 'aldryn_faq/plugins/top_questions.html'
     name = _('Top questions')
     model = models.TopQuestionsPlugin
 

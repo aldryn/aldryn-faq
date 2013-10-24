@@ -1,0 +1,15 @@
+{% load i18n placeholder_tags %}
+
+{% regroup object_list|dictsort:"category_id" by category as qgroups %}
+{% for qgroup in qgroups %}
+<h3>{{ qgroup.grouper }}</h3>
+<ul class="faq-items">
+	{% for question in qgroup.list %}
+	<li>
+		<a id="question-{{ question.id }}" href="{% url 'aldryn_faq:faq-answer' question.category.slug question.pk %}">{{ question.title }}</a>
+	</li>
+	{% endfor %}
+	{% empty %}
+	<li class="faq-empty"><p>{% trans "No entry found." %}</p></li>
+</ul>
+{% endfor %}

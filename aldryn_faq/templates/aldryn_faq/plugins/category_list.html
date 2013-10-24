@@ -1,7 +1,11 @@
+{% load i18n %}
+
 <div class="plugin-faq">
-    <ul>
-        {% for category in categories %}
-        <li><a href="{{ category.get_absolute_url }}">{{ category }} ({{ category.count }})</a></li>
-        {% endfor %}
-    </ul>
+	<ul class="faq-categories">
+		{% for category in categories %}
+		<li><a href="{{ category.get_absolute_url }}">{{ category }} <span>({{ category.count }})</span></a></li>
+		{% empty %}
+		<li class="faq-empty"><p>{% trans "No entry found." %}</p></li>
+		{% endfor %}
+	</ul>
 </div>

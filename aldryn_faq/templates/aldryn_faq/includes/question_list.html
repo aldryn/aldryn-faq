@@ -1,19 +1,40 @@
-{% load placeholder_tags %}
+{% load i18n placeholder_tags sekizai_tags %}
 
 {% regroup object_list|dictsort:"category_id" by category as qgroups %}
-<div class="faq-list">
-    <ul class="faq">
-        {% for qgroup in qgroups %}
-            <li>
-                <h2 id="group-{{ qgroup.grouper.id }}">{{ qgroup.grouper }}</h2>
-                <ul>
-                    {% for question in qgroup.list %}
-                        <li>
-                            <a id="question-{{ question.id }}" href="{% url 'aldryn_faq:faq-answer' question.category.slug question.pk %}">{{ question.title }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </li>
-        {% endfor %}
-    </ul>
-</div>
+<ul class="faq-items">
+	{% for qgroup in qgroups %}
+	{% for question in qgroup.list %}
+	<li{% if list %} class="faq-expandable"{% endif %}>
+		{% if not list %}<a href="{{ qgroup.grouper.get_absolute_url }}" class="category">{{ qgroup.grouper }}</a>{% endif %}
+		<a href="{% url 'aldryn_faq:faq-answer' question.category.slug question.pk %}" class="item">{{ question.title }}</a>
+
+		{% if list %}
+		<div class="faq-detail"{% if list %} hidden="hidden"{% endif %}>
+			{% if question.answer_text %}{{ question.answer_text|safe }}{% else %}{% trans "No answer available." %}{% endif %}
+			<p><a href="{% url 'aldryn_faq:faq-answer' question.category.slug question.pk %}">{% trans "Read more" %}</a></p>
+		</div>
+		{% endif %}
+	</li>
+	{% endfor %}
+	{% empty %}
+	<li class="faq-empty"><p>{% trans "No entry found." %}</p></li>
+	{% endfor %}
+</ul>
+
+{% if list %}
+<p class="faq-back"><a href="../">{% trans "Back" %}</a></p>
+{% endif %}
+
+{% addtoblock "js" %}
+<script>
+jQuery(document).ready(function () {
+	var containers = $('.faq-expandable .faq-detail');
+	var triggers = $('.faq-expandable .item');
+		triggers.on('click', function (e) {
+			e.preventDefault();
+			$(this).toggleClass('item-expanded')
+				.parent().find('.faq-detail').slideToggle(300);
+		});
+});
+</script>
+{% endaddtoblock %}
