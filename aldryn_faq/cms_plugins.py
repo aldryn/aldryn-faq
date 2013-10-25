@@ -14,11 +14,11 @@ class FAQPlugin(CMSPluginBase):
     module = "FAQ"
 
 
-class QuestionListPlugin(CMSPluginBase):
+class QuestionListPlugin(FAQPlugin):
+
+    render_template = 'aldryn_faq/plugins/question_list.html'
     name = _('Question List')
     model = models.QuestionListPlugin
-    render_template = 'aldryn_faq/plugins/question_list.html'
-    module = _('project')
 
     def render(self, context, instance, placeholder):
         context['instance'] = instance
