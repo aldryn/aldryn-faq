@@ -1,5 +1,7 @@
 {% extends "aldryn_faq/base.html" %}
 
 {% block content_faq %}
-	{% with list="full" %}{% include "aldryn_faq/includes/question_list.html" %}{% endwith %}
+	{% with list="full" title="true" %}
+	{% include "aldryn_faq/includes/question_list.html" %}
+	{% endwith %}
 {% endblock %}

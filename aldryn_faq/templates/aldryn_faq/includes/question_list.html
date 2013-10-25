@@ -2,8 +2,9 @@
 
 {% regroup object_list|dictsort:"category_id" by category as qgroups %}
 {% for qgroup in qgroups %}
-{% if list %}<h2>{{ qgroup.grouper }}</h2>{% endif %}
+{% if list and title %}<h2>{{ qgroup.grouper }}</h2>{% endif %}
 {% endfor %}
+
 <ul class="faq-items">
 	{% for qgroup in qgroups %}
 	{% for question in qgroup.list %}
@@ -24,7 +25,7 @@
 	{% endfor %}
 </ul>
 
-{% if list %}
+{% if list and title %}
 <p class="faq-back"><a href="../">{% trans "Back" %}</a></p>
 {% endif %}
 
