@@ -17,7 +17,7 @@ class FAQPlugin(CMSPluginBase):
 class QuestionListPlugin(CMSPluginBase):
     name = _('Question List')
     model = models.QuestionListPlugin
-    render_template = 'aldryn_faq/plugins/questions.html'
+    render_template = 'aldryn_faq/plugins/question_list.html'
     module = _('project')
 
     def render(self, context, instance, placeholder):
