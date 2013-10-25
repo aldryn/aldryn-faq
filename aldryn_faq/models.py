@@ -1,16 +1,22 @@
-from adminsortable.fields import SortableForeignKey
-from adminsortable.models import Sortable
-from cms.models.fields import PlaceholderField
-from cms.models.pluginmodel import CMSPlugin
-from cms.utils.i18n import get_current_language, force_language
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import get_language, ugettext_lazy as _
-from djangocms_text_ckeditor.fields import HTMLField
+
+from cms.models.fields import PlaceholderField
+from cms.models.pluginmodel import CMSPlugin
+from cms.utils.i18n import get_current_language, force_language
+
 from hvad.manager import TranslationManager
 from hvad.models import TranslatableModel, TranslatedFields
 from hvad.utils import get_translation
+
+from adminsortable.fields import SortableForeignKey
+from adminsortable.models import Sortable
+
+from djangocms_text_ckeditor.fields import HTMLField
+
+from sortedm2m.fields import SortedManyToManyField
 
 
 def get_slug_in_language(record, language):
@@ -107,6 +113,19 @@ class QuestionsPlugin(models.Model):
 
     class Meta:
         abstract = True
+
+
+class QuestionListPlugin(CMSPlugin):
+    questions = SortedManyToManyField(Question, limit_choices_to={'language': get_language})
+
+    def __unicode__(self):
+        return str(self.questions.count())
+
+    def copy_relations(self, oldinstance):
+        self.questions = oldinstance.questions.all()
+
+    def get_questions(self):
+        return self.questions.all()
 
 
 class CategoryListPlugin(CMSPlugin):

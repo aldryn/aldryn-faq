@@ -14,6 +14,17 @@ class FAQPlugin(CMSPluginBase):
     module = "FAQ"
 
 
+class QuestionListPlugin(CMSPluginBase):
+    name = _('Question List')
+    model = models.QuestionListPlugin
+    render_template = 'aldryn_faq/plugins/questions.html'
+    module = _('project')
+
+    def render(self, context, instance, placeholder):
+        context['instance'] = instance
+        return context
+
+
 class LatestQuestionsPlugin(FAQPlugin):
 
     render_template = 'aldryn_faq/plugins/latest_questions.html'
@@ -59,6 +70,7 @@ class CategoryListPlugin(FAQPlugin):
         return context
 
 
-plugin_pool.register_plugin(LatestQuestionsPlugin)
-plugin_pool.register_plugin(TopQuestionsPlugin)
 plugin_pool.register_plugin(CategoryListPlugin)
+plugin_pool.register_plugin(LatestQuestionsPlugin)
+plugin_pool.register_plugin(QuestionListPlugin)
+plugin_pool.register_plugin(TopQuestionsPlugin)
