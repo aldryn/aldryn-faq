@@ -29,6 +29,7 @@ Add below apps to ``INSTALLED_APPS``:
         'aldryn_faq',
         'djangocms_text_ckeditor',
         'adminsortable',
+        'django-sortedm2m',
         'hvad',
         …
     ]
