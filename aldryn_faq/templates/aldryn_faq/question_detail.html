@@ -5,5 +5,6 @@
 <h2>{{ object.category }}</h2>
 <h3>{{ object.title }}</h3>
 {% if question.answer_text %}{{ question.answer_text|safe }}{% else %}{% trans "No answer available." %}{% endif %}
+{% render_placeholder object.answer 660 %}
 <p class="faq-back"><a href="{% url 'aldryn_faq:faq-category' object.category.slug %}">{% blocktrans with object.category as category %}Back to {{ category }}{% endblocktrans %}</a></p>
 {% endblock %}
