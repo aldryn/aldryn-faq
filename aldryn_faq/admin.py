@@ -23,7 +23,7 @@ class CategoryAdmin(TranslatableAdmin):
         return fieldsets
 
 
-class QuestionAdmin(PlaceholderAdmin, SortableAdmin):
+class QuestionAdmin(SortableAdmin, PlaceholderAdmin):
 
     render_placeholder_language_tabs = False
     list_display = ['title', 'language', 'category', 'is_top']
