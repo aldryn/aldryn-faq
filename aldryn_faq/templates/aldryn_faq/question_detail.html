@@ -1,11 +1,13 @@
 {% extends "aldryn_faq/base.html" %}
-{% load i18n placeholder_tags %}
+{% load i18n cms_tags %}
 {% load url from future %}
 
 {% block content_faq %}
-<h2>{{ object.category }}</h2>
-<h3>{{ object.title }}</h3>
-{% if question.answer_text %}{{ question.answer_text|safe }}{% else %}{% trans "No answer available." %}{% endif %}
-{% render_placeholder object.answer 660 %}
-<p class="faq-back"><a href="{% url 'aldryn_faq:faq-category' object.category.slug %}">{% blocktrans with object.category as category %}Back to {{ category }}{% endblocktrans %}</a></p>
+<div class="faq-detail">
+	<h2>{% show_editable_model object "category" "category" %}</h2>
+	<h3>{% show_editable_model object "title" %}</h3>
+	{% if question.answer_text %}<div class="faq-answer">{% show_editable_model object "answer_text" "answer_text" "" safe %}</div>{% endif %}
+	<div class="faq-content">{% render_placeholder object.answer 660 %}</div>
+	<p class="faq-back"><a href="{% url 'aldryn_faq:faq-category' object.category.slug %}">{% trans "Back" %}</a></p>
+</div>
 {% endblock %}

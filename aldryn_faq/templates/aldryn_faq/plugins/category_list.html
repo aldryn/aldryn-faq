@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<div class="plugin-faq">
+<div class="plugin plugin-faq">
 	<ul class="faq-categories">
 		{% for category in categories %}
 		<li><a href="{{ category.get_absolute_url }}">{{ category }} <span>({{ category.count }})</span></a></li>

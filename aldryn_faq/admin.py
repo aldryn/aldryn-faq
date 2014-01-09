@@ -9,6 +9,7 @@ import cms
 
 from . import models
 from aldryn_faq.forms import CategoryForm
+from cms.admin.placeholderadmin import FrontendEditableAdmin
 
 
 class CategoryAdmin(TranslatableAdmin):
@@ -23,10 +24,11 @@ class CategoryAdmin(TranslatableAdmin):
         return fieldsets
 
 
-class QuestionAdmin(SortableAdmin, PlaceholderAdmin):
+class QuestionAdmin(FrontendEditableAdmin, SortableAdmin, PlaceholderAdmin):
 
     render_placeholder_language_tabs = False
     list_display = ['title', 'language', 'category', 'is_top']
+    frontend_editable_fields = ('title', 'category', 'answer_text')
 
     def get_fieldsets(self, request, obj=None):
         fieldsets = [
