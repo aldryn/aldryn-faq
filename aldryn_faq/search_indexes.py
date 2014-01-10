@@ -3,7 +3,7 @@ from aldryn_search.utils import strip_tags
 from django.template import RequestContext
 from haystack import indexes
 
-from .models import Question
+from .models import Question, Category
 
 
 class QuestionIndex(AldrynIndexBase, indexes.Indexable):
@@ -34,3 +34,23 @@ class QuestionIndex(AldrynIndexBase, indexes.Indexable):
             else:
                 text += strip_tags(instance.render_plugin(context=RequestContext(request))) + u' '
         return text
+
+
+class CategoryIndex(AldrynIndexBase, indexes.Indexable):
+
+    INDEX_TITLE = True
+
+    def get_title(self, obj):
+        return ''
+
+    def get_index_kwargs(self, language):
+        return {'translations__language_code': language}
+
+    def get_index_queryset(self, language):
+        return self.get_model().objects.all()
+
+    def get_model(self):
+        return Category
+
+    def get_search_data(self, obj, language, request):
+        return strip_tags(obj.name)
