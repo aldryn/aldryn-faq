@@ -12,11 +12,11 @@
 	{% for question in qgroup.list %}
 	<li{% if list %} class="faq-expandable"{% endif %}>
 		{% if not list %}<a href="{{ qgroup.grouper.get_absolute_url }}" class="category">{{ qgroup.grouper }}</a>{% endif %}
-		<a href="{% url 'aldryn_faq:faq-answer' question.category.slug question.pk %}" class="item">{% show_editable_model question "title" %}</a>
+		<a href="{% url 'aldryn_faq:faq-answer' question.category.slug question.pk %}" class="item">{% render_model question "title" %}</a>
 
 		{% if list %}
 		<div class="faq-detail"{% if list %} hidden="hidden"{% endif %}>
-			{% if question.answer_text %}{% show_editable_model question "answer_text" "answer_text" "" safe %}{% else %}{% trans "No answer available." %}{% endif %}
+			{% if question.answer_text %}{% render_model question "answer_text" "answer_text" "" safe %}{% else %}{% trans "No answer available." %}{% endif %}
 			<p><a href="{% url 'aldryn_faq:faq-answer' question.category.slug question.pk %}">{% trans "Read more" %}</a></p>
 		</div>
 		{% endif %}
