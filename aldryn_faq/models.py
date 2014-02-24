@@ -144,9 +144,14 @@ class CategoryListPlugin(CMSPlugin):
         categories = Category.objects.get_categories(language=self.language)
 
         if self.selected_categories.exists():
-            category_ids =  self.selected_categories.values_list('category__pk', flat=True)
+            category_ids = self.selected_categories.values_list('category__pk', flat=True)
             # categories is a list, and a sorted one so no need for another db call.
-            categories = [category for category in categories if category.pk in category_ids]
+            selected_categories = []
+            for id in category_ids:
+                category = next((x for x in categories if x.pk == id), None)
+                if category:
+                    selected_categories.append(category)
+            return selected_categories
         return categories
 
 
