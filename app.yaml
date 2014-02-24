@@ -9,7 +9,7 @@ installed-apps:
   - adminsortable
   - djangocms_text_ckeditor
   - aldryn_faq
-version: 0.1.0
+version: 0.2.4
 description: FAQ addon for django CMS
 license:
   name: BSD
