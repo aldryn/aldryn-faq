@@ -17,7 +17,9 @@
 		{% if list %}
 		<div class="faq-detail"{% if list %} hidden="hidden"{% endif %}>
 			{% if question.answer_text %}{% render_model question "answer_text" "answer_text" "" safe %}{% else %}{% trans "No answer available." %}{% endif %}
+			{% if question.answer.cmsplugin_set.count %}
 			<p><a href="{% url 'aldryn_faq:faq-answer' question.category.slug question.pk %}">{% trans "Read more" %}</a></p>
+			{% endif %}
 		</div>
 		{% endif %}
 	</li>
