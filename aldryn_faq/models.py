@@ -33,7 +33,7 @@ def get_slug_in_language(record, language):
             return translation.slug
 
 
-class RelatedManager(models.Manager):
+class RelatedManager(TranslationManager):
     def filter_by_language(self, language):
         qs = self.get_query_set()
         return qs.filter(language=language)
@@ -79,11 +79,13 @@ class Category(TranslatableModel):
             return reverse('aldryn_faq:faq-category', kwargs=kwargs)
 
 
-class Question(Sortable):
-    title = models.CharField(_('Title'), max_length=255)
-    language = models.CharField(_('language'), max_length=5, choices=settings.LANGUAGES)
+class Question(TranslatableModel, Sortable):
+    translations = TranslatedFields(
+        title=models.CharField(_('Title'), max_length=255),
+        answer_text=HTMLField(_('answer'), blank=True, null=True)
+    )
     category = SortableForeignKey(Category, related_name='questions')
-    answer_text = HTMLField(_('answer'), blank=True, null=True)
+
     answer = PlaceholderField('faq_question_answer', related_name='faq_questions')
     is_top = models.BooleanField(default=False)
 
@@ -92,13 +94,14 @@ class Question(Sortable):
     class Meta(Sortable.Meta):
         verbose_name = _('question')
         verbose_name_plural = _('questions')
-        ordering = ('title',)
 
     def __unicode__(self):
-        return self.title
+        return self.lazy_translation_getter('name', str(self.pk))
 
-    def get_absolute_url(self):
-        return reverse('aldryn_faq:faq-answer', args=(self.category.slug, self.pk))
+    def get_absolute_url(self, language):
+        language = language or get_current_language()
+        with force_language(language):
+            return reverse('aldryn_faq:faq-answer', args=(self.category.slug, self.pk))
 
 
 class QuestionsPlugin(models.Model):
