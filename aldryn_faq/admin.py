@@ -28,6 +28,7 @@ class QuestionAdmin(FrontendEditableAdminMixin, SortableAdmin, PlaceholderAdmin,
 
     render_placeholder_language_tabs = False
     list_display = ['__unicode__', 'category', 'is_top']
+    list_filter = ['category', 'translations__language_code']
     frontend_editable_fields = ('title', 'category', 'answer_text')
 
     def get_fieldsets(self, request, obj=None):
