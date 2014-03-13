@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import get_object_or_404
+from django.utils.translation import get_language
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
 from menus.utils import set_language_changer
@@ -16,8 +17,9 @@ class FaqByCategoryView(ListView):
         return response
 
     def get_object(self):
+        language = get_language()
         return get_object_or_404(models.Category.objects.language(),
-                                 slug=self.kwargs['category_slug'])
+                                 slug=self.kwargs['category_slug'], translations__language_code=language)
 
     def get_queryset(self):
         return (models.Question.objects
@@ -35,7 +37,8 @@ class FaqAnswerView(DetailView):
         return response
 
     def get_object(self):
-        return get_object_or_404(models.Question, pk=self.kwargs['id'])
+        language = get_language()
+        return get_object_or_404(models.Question, pk=self.kwargs['id'], translations__language_code=language)
 
     def get_queryset(self):
         return (models.Question.objects
