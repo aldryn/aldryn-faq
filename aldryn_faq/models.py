@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db import models
 from django.utils.translation import get_language, ugettext_lazy as _
@@ -68,6 +69,9 @@ class Category(TranslatableModel):
     def __unicode__(self):
         return self.lazy_translation_getter('name', str(self.pk))
 
+    def model_type_id(self):
+        return ContentType.objects.get_for_model(self.__class__).id
+
     def get_absolute_url(self, language=None):
         language = language or get_current_language()
         slug = get_slug_in_language(self, language)
@@ -97,6 +101,9 @@ class Question(TranslatableModel, Sortable):
 
     def __unicode__(self):
         return self.lazy_translation_getter('title', str(self.pk))
+
+    def model_type_id(self):
+        return ContentType.objects.get_for_model(self.__class__).id
 
     def get_absolute_url(self, language=None):
         language = language or get_current_language()

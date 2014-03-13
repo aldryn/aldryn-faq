@@ -21,7 +21,7 @@ class FaqByCategoryView(ListView):
 
     def get_queryset(self):
         return (models.Question.objects
-        .filter_by_current_language().filter(category=self.object))
+        .filter_by_current_language().filter(category=self.object)).order_by('order')
 
 
 class FaqAnswerView(DetailView):
