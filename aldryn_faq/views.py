@@ -27,6 +27,8 @@ class FaqByCategoryView(ListView):
 class FaqAnswerView(DetailView):
     def get(self, *args, **kwargs):
         self.object = self.get_object()
+        if hasattr(self.request, 'toolbar'):
+            self.request.toolbar.set_object(self.object)
         setattr(self.request, request_faq_category_identifier, self.object.category)
         setattr(self.request, request_faq_question_identifier, self.object)
         response = super(FaqAnswerView, self).get(*args, **kwargs)

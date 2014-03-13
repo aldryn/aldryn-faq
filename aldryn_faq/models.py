@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db import models
 from django.utils.translation import get_language, ugettext_lazy as _
 
@@ -33,10 +33,9 @@ def get_slug_in_language(record, language):
             return translation.slug
 
 
-class RelatedManager(models.Manager):
+class RelatedManager(TranslationManager):
     def filter_by_language(self, language):
-        qs = self.get_query_set()
-        return qs.filter(language=language)
+        return self.language(language)
 
     def filter_by_current_language(self):
         return self.filter_by_language(get_language())
@@ -74,16 +73,19 @@ class Category(TranslatableModel):
         slug = get_slug_in_language(self, language)
         with force_language(language):
             if not slug:  # category not translated in given language
-                return '/'
+                return '/%s/' % language
             kwargs = {'category_slug': slug}
             return reverse('aldryn_faq:faq-category', kwargs=kwargs)
 
 
-class Question(Sortable):
-    title = models.CharField(_('Title'), max_length=255)
-    language = models.CharField(_('language'), max_length=5, choices=settings.LANGUAGES)
+
+class Question(TranslatableModel, Sortable):
+    translations = TranslatedFields(
+        title=models.CharField(_('Title'), max_length=255),
+        answer_text=HTMLField(_('answer'), blank=True, null=True)
+    )
     category = SortableForeignKey(Category, related_name='questions')
-    answer_text = HTMLField(_('answer'), blank=True, null=True)
+
     answer = PlaceholderField('faq_question_answer', related_name='faq_questions')
     is_top = models.BooleanField(default=False)
 
@@ -92,13 +94,23 @@ class Question(Sortable):
     class Meta(Sortable.Meta):
         verbose_name = _('question')
         verbose_name_plural = _('questions')
-        ordering = ('title',)
 
     def __unicode__(self):
-        return self.title
+        return self.lazy_translation_getter('title', str(self.pk))
 
-    def get_absolute_url(self):
-        return reverse('aldryn_faq:faq-answer', args=(self.category.slug, self.pk))
+    def get_absolute_url(self, language=None):
+        language = language or get_current_language()
+        category = self.category
+        try:
+            translation = get_translation(self, language_code=language)
+        except models.ObjectDoesNotExist:
+            translation = None
+        cat_slug = get_slug_in_language(category, language)
+        if translation and cat_slug:
+            with force_language(language):
+                return reverse('aldryn_faq:faq-answer', args=(cat_slug, self.pk))
+        else:
+            return category.get_absolute_url(language)
 
 
 class QuestionsPlugin(models.Model):
