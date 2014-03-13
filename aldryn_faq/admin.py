@@ -24,10 +24,10 @@ class CategoryAdmin(TranslatableAdmin):
         return fieldsets
 
 
-class QuestionAdmin(FrontendEditableAdminMixin, SortableAdmin, PlaceholderAdmin):
+class QuestionAdmin(FrontendEditableAdminMixin, SortableAdmin, PlaceholderAdmin, TranslatableAdmin):
 
     render_placeholder_language_tabs = False
-    list_display = ['title', 'category', 'is_top']
+    list_display = ['__unicode__', 'category', 'is_top']
     frontend_editable_fields = ('title', 'category', 'answer_text')
 
     def get_fieldsets(self, request, obj=None):

@@ -5,13 +5,14 @@ from south.v2 import DataMigration
 from django.db import models
 
 class Migration(DataMigration):
+    no_dry_run = True
 
     def forwards(self, orm):
         for question in orm['aldryn_faq.Question'].objects.all():
             trans = orm['aldryn_faq.QuestionTranslation']()
             trans.language_code = question.language
             trans.title = question.title
-            trans.answer_text = question.answet_text
+            trans.answer_text = question.answer_text
             trans.master = question
             trans.save()
 
@@ -48,7 +49,8 @@ class Migration(DataMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_top': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'language': ('django.db.models.fields.CharField', [], {'max_length': '5'}),
-            'order': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1', 'db_index': 'True'})
+            'order': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1', 'db_index': 'True'}),
+             'title': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         u'aldryn_faq.questionlistplugin': {
             'Meta': {'object_name': 'QuestionListPlugin', '_ormbases': ['cms.CMSPlugin']},

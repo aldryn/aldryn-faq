@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db import models
 from django.utils.translation import get_language, ugettext_lazy as _
 
@@ -35,8 +35,7 @@ def get_slug_in_language(record, language):
 
 class RelatedManager(TranslationManager):
     def filter_by_language(self, language):
-        qs = self.get_query_set()
-        return qs.filter(language=language)
+        return self.language(language)
 
     def filter_by_current_language(self):
         return self.filter_by_language(get_language())
@@ -74,9 +73,10 @@ class Category(TranslatableModel):
         slug = get_slug_in_language(self, language)
         with force_language(language):
             if not slug:  # category not translated in given language
-                return '/'
+                return '/%s/' % language
             kwargs = {'category_slug': slug}
             return reverse('aldryn_faq:faq-category', kwargs=kwargs)
+
 
 
 class Question(TranslatableModel, Sortable):
@@ -96,12 +96,21 @@ class Question(TranslatableModel, Sortable):
         verbose_name_plural = _('questions')
 
     def __unicode__(self):
-        return self.lazy_translation_getter('name', str(self.pk))
+        return self.lazy_translation_getter('title', str(self.pk))
 
-    def get_absolute_url(self, language):
+    def get_absolute_url(self, language=None):
         language = language or get_current_language()
-        with force_language(language):
-            return reverse('aldryn_faq:faq-answer', args=(self.category.slug, self.pk))
+        category = self.category
+        try:
+            translation = get_translation(self, language_code=language)
+        except models.ObjectDoesNotExist:
+            translation = None
+        cat_slug = get_slug_in_language(category, language)
+        if translation and cat_slug:
+            with force_language(language):
+                return reverse('aldryn_faq:faq-answer', args=(cat_slug, self.pk))
+        else:
+            return category.get_absolute_url(language)
 
 
 class QuestionsPlugin(models.Model):
