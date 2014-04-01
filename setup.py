@@ -7,6 +7,7 @@ REQUIREMENTS = [
     'django-admin-sortable',
     'djangocms-text-ckeditor',
     'django-sortedm2m',
+    'unidecode',
 ]
 
 CLASSIFIERS = [

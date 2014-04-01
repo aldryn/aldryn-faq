@@ -9,6 +9,7 @@
         "adminsortable",
         "djangocms_text_ckeditor",
 	    "sortedm2m",
+        "unidecode",
         "aldryn_faq"
     ],
     "author": {
