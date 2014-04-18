@@ -1,8 +1,11 @@
 from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext, get_language
+from django import forms
 from hvad.forms import TranslatableModelForm
 from unidecode import unidecode
+
+from .models import QuestionListPlugin, Question
 
 
 class AutoSlugForm(TranslatableModelForm):
@@ -71,3 +74,14 @@ class CategoryForm(AutoSlugForm):
 
     class Meta:
         fields = ['name', 'slug']
+
+
+class QuestionListPluginForm(forms.ModelForm):
+
+    class Meta:
+        model = QuestionListPlugin
+
+    def __init__(self, *args, **kwargs):
+        super(QuestionListPluginForm, self).__init__(*args, **kwargs)
+        questions_field = self.fields['questions']
+        questions_field.queryset = Question.objects.language()
