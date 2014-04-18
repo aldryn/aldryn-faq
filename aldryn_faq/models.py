@@ -82,7 +82,6 @@ class Category(TranslatableModel):
             return reverse('aldryn_faq:faq-category', kwargs=kwargs)
 
 
-
 class Question(TranslatableModel, Sortable):
     translations = TranslatedFields(
         title=models.CharField(_('Title'), max_length=255),
@@ -135,7 +134,7 @@ class QuestionsPlugin(models.Model):
 
 
 class QuestionListPlugin(CMSPlugin):
-    questions = SortedManyToManyField(Question, limit_choices_to={'language': get_language})
+    questions = SortedManyToManyField(Question)
 
     def __unicode__(self):
         return str(self.questions.count())
