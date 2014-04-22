@@ -22,11 +22,11 @@ class FaqByCategoryView(ListView):
                                  slug=self.kwargs['category_slug'], translations__language_code=language)
 
     def get_queryset(self):
-        return (models.Question.objects
-        .filter_by_current_language().filter(category=self.object)).order_by('order')
+        return models.Question.objects.filter_by_current_language().filter(category=self.object).order_by('order')
 
 
 class FaqAnswerView(DetailView):
+
     def get(self, *args, **kwargs):
         self.object = self.get_object()
         if hasattr(self.request, 'toolbar'):
@@ -34,6 +34,8 @@ class FaqAnswerView(DetailView):
         setattr(self.request, request_faq_category_identifier, self.object.category)
         setattr(self.request, request_faq_question_identifier, self.object)
         response = super(FaqAnswerView, self).get(*args, **kwargs)
+        self.object.number_of_visits += 1
+        self.object.save(update_fields=['number_of_visits'])
         return response
 
     def get_object(self):
@@ -41,5 +43,4 @@ class FaqAnswerView(DetailView):
         return get_object_or_404(models.Question, pk=self.kwargs['id'], translations__language_code=language)
 
     def get_queryset(self):
-        return (models.Question.objects
-        .filter_by_current_language().filter(category=self.object))
+        return models.Question.objects.filter_by_current_language().filter(category=self.object)
