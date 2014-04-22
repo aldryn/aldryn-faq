@@ -86,7 +86,7 @@ class Category(TranslatableModel):
 class Question(TranslatableModel, Sortable):
     translations = TranslatedFields(
         title=models.CharField(_('Title'), max_length=255),
-        answer_text=HTMLField(_('answer'), blank=True, null=True)
+        answer_text=HTMLField(_('answer'))
     )
     category = SortableForeignKey(Category, related_name='questions')
 
