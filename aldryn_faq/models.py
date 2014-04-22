@@ -82,7 +82,6 @@ class Category(TranslatableModel):
             return reverse('aldryn_faq:faq-category', kwargs=kwargs)
 
 
-
 class Question(TranslatableModel, Sortable):
     translations = TranslatedFields(
         title=models.CharField(_('Title'), max_length=255),
@@ -92,6 +91,7 @@ class Question(TranslatableModel, Sortable):
 
     answer = PlaceholderField('faq_question_answer', related_name='faq_questions')
     is_top = models.BooleanField(default=False)
+    number_of_visits = models.PositiveIntegerField(default=0, editable=False)
 
     objects = RelatedManager()
 
@@ -193,6 +193,14 @@ class SelectedCategory(models.Model):
 
 
 class TopQuestionsPlugin(CMSPlugin, QuestionsPlugin):
+
     def get_queryset(self):
         qs = super(TopQuestionsPlugin, self).get_queryset()
         return qs.filter(is_top=True)
+
+
+class MostReadQuestionsPlugin(CMSPlugin, QuestionsPlugin):
+
+    def get_queryset(self):
+        qs = super(MostReadQuestionsPlugin, self).get_queryset()
+        return qs.order_by('-number_of_visits')
