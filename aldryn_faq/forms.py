@@ -90,7 +90,12 @@ class HvadFriendlySortedMultipleChoiceField(SortedMultipleChoiceField):
 
 class QuestionListPluginForm(forms.ModelForm):
 
-    questions = HvadFriendlySortedMultipleChoiceField(queryset=Question.objects.language())
+    questions = HvadFriendlySortedMultipleChoiceField(queryset=Question.objects.none())
 
     class Meta:
         model = QuestionListPlugin
+
+    def __init__(self, *args, **kwargs):
+        super(QuestionListPluginForm, self).__init__(*args, **kwargs)
+        questions_field = self.fields['questions']
+        questions_field.queryset = Question.objects.language()
