@@ -27,14 +27,15 @@ class CategoryAdmin(TranslatableAdmin):
 class QuestionAdmin(FrontendEditableAdminMixin, SortableAdmin, PlaceholderAdmin, TranslatableAdmin):
 
     render_placeholder_language_tabs = False
-    list_display = ['__unicode__', 'category', 'is_top']
+    list_display = ['__unicode__', 'category', 'is_top', 'number_of_visits']
     list_filter = ['category', 'translations__language_code']
-    frontend_editable_fields = ('title', 'category', 'answer_text')
+    frontend_editable_fields = ('title', 'category', 'answer_text'),
+    readonly_fields = ['number_of_visits']
 
     def get_fieldsets(self, request, obj=None):
         fieldsets = [
             (None, {
-                'fields': ['title', 'category', 'answer_text', 'is_top']
+                'fields': ['title', 'category', 'answer_text', 'is_top', 'number_of_visits']
             })
         ]
 
