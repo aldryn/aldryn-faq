@@ -85,7 +85,9 @@ class HvadFriendlySortedMultipleChoiceField(SortedMultipleChoiceField):
         queryset = super(SortedMultipleChoiceField, self).clean(value)
         if value is None or not isinstance(queryset, QuerySet):
             return queryset
-        return queryset.filter(id__in=value)
+        queryset = queryset.filter(id__in=value)
+        # sort questions with order in value list
+        return sorted(queryset, key=lambda question: value.index(str(question.pk)))
 
 
 class QuestionListPluginForm(forms.ModelForm):
