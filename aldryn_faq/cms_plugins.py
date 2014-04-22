@@ -47,6 +47,18 @@ class TopQuestionsPlugin(FAQPlugin):
         return context
 
 
+class MostReadQuestionsPlugin(FAQPlugin):
+
+    render_template = 'aldryn_faq/plugins/most_read_questions.html'
+    name = _('Most read questions')
+    model = models.MostReadQuestionsPlugin
+    cache = False
+
+    def render(self, context, instance, placeholder):
+        context['instance'] = instance
+        return context
+
+
 class SelectedCategoryInline(TabularInline):
     model = models.SelectedCategory
     extra = 0
@@ -74,3 +86,4 @@ plugin_pool.register_plugin(CategoryListPlugin)
 plugin_pool.register_plugin(LatestQuestionsPlugin)
 plugin_pool.register_plugin(QuestionListPlugin)
 plugin_pool.register_plugin(TopQuestionsPlugin)
+plugin_pool.register_plugin(MostReadQuestionsPlugin)
