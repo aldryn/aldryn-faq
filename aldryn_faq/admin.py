@@ -1,27 +1,40 @@
 # -*- coding: utf-8 -*-
-from adminsortable.admin import SortableAdmin
-from cms.admin.placeholderadmin import PlaceholderAdmin
-from django.contrib import admin
 from distutils.version import LooseVersion
+
+from django.contrib import admin
+from django.templatetags.static import static
+from cms.admin.placeholderadmin import PlaceholderAdmin
+
+from adminsortable.admin import SortableAdmin
+
 from hvad.admin import TranslatableAdmin
 
 import cms
 
-from . import models
-from aldryn_faq.forms import CategoryForm
+from .models import Category, Question
+from .forms import CategoryAdminForm
+
 from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 
 
 class CategoryAdmin(TranslatableAdmin):
 
     list_display = ['__unicode__', 'all_translations']
-    form = CategoryForm
+
+    form = CategoryAdminForm
+
+    _fieldsets = [(None, {'fields': ['name', 'slug']})]
+
+    class Media:
+        # Django BUG - Django only checks for self.prepopulated_fields to determine if it should include
+        # these files. But it never checks get_prepopulated_fields()
+        js = [static('admin/js/%s' % url) for url in ('urlify.js', 'prepopulate.min.js')]
+
+    def get_prepopulated_fields(self, request, obj=None):
+        return {'slug': ['name']}
 
     def get_fieldsets(self, request, obj=None):
-        fieldsets = [
-            (None, {'fields': ['name', 'slug']}),
-        ]
-        return fieldsets
+        return self._fieldsets
 
 
 class QuestionAdmin(FrontendEditableAdminMixin, SortableAdmin, PlaceholderAdmin, TranslatableAdmin):
@@ -49,5 +62,6 @@ class QuestionAdmin(FrontendEditableAdminMixin, SortableAdmin, PlaceholderAdmin,
 
         return fieldsets
 
-admin.site.register(models.Question, QuestionAdmin)
-admin.site.register(models.Category, CategoryAdmin)
+
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Question, QuestionAdmin)

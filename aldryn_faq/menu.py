@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import get_language_from_request, ugettext_lazy as _
 from django.db.models.signals import post_save, post_delete
 
 from cms.menu_bases import CMSAttachMenu
@@ -7,7 +7,7 @@ from cms.menu_bases import CMSAttachMenu
 from menus.base import NavigationNode
 from menus.menu_pool import menu_pool
 
-from aldryn_faq.models import Category
+from .models import Category
 
 
 class FaqCategoryMenu(CMSAttachMenu):
@@ -16,7 +16,9 @@ class FaqCategoryMenu(CMSAttachMenu):
 
     def get_nodes(self, request):
         nodes = []
-        categories = Category.objects.language()
+        language = get_language_from_request(request)
+        categories = Category.objects.language(language)
+
         for category in categories:
             node = NavigationNode(category.name,
                                   category.get_absolute_url(),

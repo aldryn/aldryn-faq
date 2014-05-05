@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from cms.app_base import CMSApp
-from cms.apphook_pool import apphook_pool
 from django.utils.translation import ugettext_lazy as _
 
-from aldryn_faq.menu import FaqCategoryMenu
+from cms.app_base import CMSApp
+from cms.apphook_pool import apphook_pool
+
+from .menu import FaqCategoryMenu
 
 
 class FaqApp(CMSApp):

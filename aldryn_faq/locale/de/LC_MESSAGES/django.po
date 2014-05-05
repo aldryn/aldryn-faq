@@ -1,0 +1,114 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-05-05 19:54-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: cms_app.py:11 cms_toolbar.py:20 menu.py:15
+msgid "FAQ"
+msgstr ""
+
+#: cms_plugins.py:20
+msgid "Question List"
+msgstr ""
+
+#: cms_plugins.py:32
+msgid "Latest questions"
+msgstr ""
+
+#: cms_plugins.py:43
+msgid "Top questions"
+msgstr ""
+
+#: cms_plugins.py:54
+msgid "Most read questions"
+msgstr ""
+
+#: cms_plugins.py:77
+msgid "List of categories"
+msgstr ""
+
+#: cms_toolbar.py:22
+msgid "Add category"
+msgstr ""
+
+#: cms_toolbar.py:29
+msgid "Add question"
+msgstr ""
+
+#: cms_toolbar.py:32
+msgid "Edit category"
+msgstr ""
+
+#: cms_toolbar.py:38
+msgid "Edit question"
+msgstr ""
+
+#: models.py:59
+msgid "Slug"
+msgstr ""
+
+#: models.py:65 models.py:183
+msgid "category"
+msgstr ""
+
+#: models.py:66
+msgid "categories"
+msgstr ""
+
+#: models.py:86
+msgid "Title"
+msgstr ""
+
+#: models.py:87
+msgid "answer"
+msgstr ""
+
+#: models.py:98
+msgid "question"
+msgstr ""
+
+#: models.py:99
+msgid "questions"
+msgstr ""
+
+#: models.py:123
+msgid "The number of questions to be displayed."
+msgstr ""
+
+#: models.py:184
+msgid "position"
+msgstr ""
+
+#: templates/aldryn_faq/question_detail.html:11
+#: templates/aldryn_faq/includes/question_list.html:33
+msgid "Back"
+msgstr ""
+
+#: templates/aldryn_faq/includes/question_groups.html:14
+#: templates/aldryn_faq/includes/question_list.html:28
+#: templates/aldryn_faq/plugins/category_list.html:8
+msgid "No entry found."
+msgstr ""
+
+#: templates/aldryn_faq/includes/question_list.html:19
+msgid "No answer available."
+msgstr ""
+
+#: templates/aldryn_faq/includes/question_list.html:21
+msgid "Read more"
+msgstr ""

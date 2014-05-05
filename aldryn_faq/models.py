@@ -35,6 +35,7 @@ def get_slug_in_language(record, language):
 
 
 class RelatedManager(TranslationManager):
+
     def filter_by_language(self, language):
         return self.language(language)
 
@@ -55,9 +56,7 @@ class CategoryManager(TranslationManager):
 class Category(TranslatableModel):
     translations = TranslatedFields(
         name=models.CharField(max_length=255),
-        slug=models.SlugField(_('Slug'), max_length=255, blank=True,
-                              help_text=_('Auto-generated. Clean it to have it re-created. '
-                                          'WARNING! Used in the URL. If changed, the URL will change. ')),
+        slug=models.SlugField(verbose_name=_('Slug'), max_length=255),
     )
 
     objects = CategoryManager()

@@ -1,6 +1,8 @@
 from aldryn_search.base import AldrynIndexBase
 from aldryn_search.utils import strip_tags
+
 from django.template import RequestContext
+
 from haystack import indexes
 
 from .models import Question, Category
@@ -14,7 +16,7 @@ class QuestionIndex(AldrynIndexBase, indexes.Indexable):
         return obj.title
 
     def get_index_kwargs(self, language):
-        return {'language': language}
+        return {'translations__language_code': language}
 
     def get_index_queryset(self, language):
         return self.get_model().objects.all()
