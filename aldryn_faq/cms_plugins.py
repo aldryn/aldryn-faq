@@ -2,11 +2,11 @@
 from django.contrib.admin import TabularInline
 from django.utils.translation import ugettext_lazy as _
 
-from cms.models.pluginmodel import CMSPlugin
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
-from aldryn_faq import models
+from . import models
+from .forms import QuestionListPluginForm
 
 
 class FAQPlugin(CMSPluginBase):
@@ -19,6 +19,7 @@ class QuestionListPlugin(FAQPlugin):
     render_template = 'aldryn_faq/plugins/question_list.html'
     name = _('Question List')
     model = models.QuestionListPlugin
+    form = QuestionListPluginForm
 
     def render(self, context, instance, placeholder):
         context['instance'] = instance

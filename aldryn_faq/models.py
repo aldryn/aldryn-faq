@@ -135,7 +135,7 @@ class QuestionsPlugin(models.Model):
 
 
 class QuestionListPlugin(CMSPlugin):
-    questions = SortedManyToManyField(Question, limit_choices_to={'language': get_language})
+    questions = SortedManyToManyField(Question)
 
     def __unicode__(self):
         return str(self.questions.count())

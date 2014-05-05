@@ -1,8 +1,13 @@
+from django.db.models.query import QuerySet
 from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext, get_language
+from django import forms
 from hvad.forms import TranslatableModelForm
 from unidecode import unidecode
+from sortedm2m.forms import SortedMultipleChoiceField
+
+from .models import QuestionListPlugin, Question
 
 
 class AutoSlugForm(TranslatableModelForm):
@@ -71,3 +76,28 @@ class CategoryForm(AutoSlugForm):
 
     class Meta:
         fields = ['name', 'slug']
+
+
+class HvadFriendlySortedMultipleChoiceField(SortedMultipleChoiceField):
+
+    def clean(self, value):
+        '''Hvad doesn't implement in_bulk method but clean depends on it'''
+        queryset = super(SortedMultipleChoiceField, self).clean(value)
+        if value is None or not isinstance(queryset, QuerySet):
+            return queryset
+        queryset = queryset.filter(id__in=value)
+        # sort questions with order in value list
+        return sorted(queryset, key=lambda question: value.index(str(question.pk)))
+
+
+class QuestionListPluginForm(forms.ModelForm):
+
+    questions = HvadFriendlySortedMultipleChoiceField(queryset=Question.objects.none())
+
+    class Meta:
+        model = QuestionListPlugin
+
+    def __init__(self, *args, **kwargs):
+        super(QuestionListPluginForm, self).__init__(*args, **kwargs)
+        questions_field = self.fields['questions']
+        questions_field.queryset = Question.objects.language()
