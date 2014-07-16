@@ -8,7 +8,7 @@ from .models import Question, Category
 
 class QuestionIndex(get_index_base()):
 
-    haystack_use_for_indexing = getattr(settings, "ALDRYN_FAQ_SEARCH", True)
+    haystack_use_for_indexing = getattr(settings, "ALDRYN_FAQ_QUESTION_SEARCH", True)
 
     INDEX_TITLE = True
 
@@ -38,7 +38,7 @@ class QuestionIndex(get_index_base()):
 
 class CategoryIndex(get_index_base()):
 
-    haystack_use_for_indexing = getattr(settings, "ALDRYN_FAQ_SEARCH", True)
+    haystack_use_for_indexing = getattr(settings, "ALDRYN_FAQ_CATEGORY_SEARCH", True)
 
     INDEX_TITLE = True
 
