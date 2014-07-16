@@ -1,3 +1,3 @@
-__version__ = '0.6'
+__version__ = '0.7'
 request_faq_category_identifier = 'aldryn_faq_current_category'
 request_faq_question_identifier = 'aldryn_faq_current_question'
