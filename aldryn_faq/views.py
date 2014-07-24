@@ -17,7 +17,7 @@ class FaqMixin(object):
     model = Question
 
     def dispatch(self, request, *args, **kwargs):
-        self.current_language = get_language_from_request(self.request)
+        self.current_language = get_language_from_request(self.request, check_path=True)
         return super(FaqMixin, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
