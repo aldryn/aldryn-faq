@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
+from cms.utils import get_language_from_request
 
 from . import models
 from .forms import QuestionListPluginForm
@@ -66,8 +67,10 @@ class SelectedCategoryInline(TabularInline):
 
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
         field = super(SelectedCategoryInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
         if db_field.name == 'category':
-            field.queryset = models.Category.objects.language()
+            language = get_language_from_request(request)
+            field.queryset = models.Category.objects.language(language)
         return field
 
 

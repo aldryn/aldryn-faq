@@ -3,18 +3,19 @@ from distutils.version import LooseVersion
 
 from django.contrib import admin
 from django.templatetags.static import static
+
+import cms
 from cms.admin.placeholderadmin import PlaceholderAdmin
+from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 
 from adminsortable.admin import SortableAdmin
 
 from hvad.admin import TranslatableAdmin
 
-import cms
+
 
 from .models import Category, Question
 from .forms import CategoryAdminForm
-
-from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 
 
 class CategoryAdmin(TranslatableAdmin):
@@ -51,15 +52,14 @@ class QuestionAdmin(FrontendEditableAdminMixin, SortableAdmin, PlaceholderAdmin,
                 'fields': ['title', 'category', 'answer_text', 'is_top', 'number_of_visits']
             })
         ]
+        cms_compat_fieldset ={
+            'classes': ['plugin-holder', 'plugin-holder-nopage'],
+            'fields': ['answer']
+        }
 
         # show placeholder field if not CMS 3.0
         if LooseVersion(cms.__version__) < LooseVersion('3.0'):
-            fieldsets.append(
-                ('Answer', {
-                    'classes': ['plugin-holder', 'plugin-holder-nopage'],
-                    'fields': ['answer']
-                }))
-
+            fieldsets.append(('Answer', cms_compat_fieldset))
         return fieldsets
 
 

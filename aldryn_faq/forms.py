@@ -1,5 +1,4 @@
 from django import forms
-from django.db.models.query import QuerySet
 
 from hvad.forms import TranslatableModelForm
 
@@ -27,21 +26,9 @@ class CategoryAdminForm(TranslatableModelForm):
         return slug
 
 
-class HvadFriendlySortedMultipleChoiceField(SortedMultipleChoiceField):
-
-    def clean(self, value):
-        '''Hvad doesn't implement in_bulk method but clean depends on it'''
-        queryset = super(SortedMultipleChoiceField, self).clean(value)
-        if value is None or not isinstance(queryset, QuerySet):
-            return queryset
-        queryset = queryset.filter(id__in=value)
-        # sort questions with order in value list
-        return sorted(queryset, key=lambda question: value.index(str(question.pk)))
-
-
 class QuestionListPluginForm(forms.ModelForm):
 
-    questions = HvadFriendlySortedMultipleChoiceField(queryset=Question.objects.none())
+    questions = SortedMultipleChoiceField(queryset=Question.objects.none())
 
     class Meta:
         model = QuestionListPlugin

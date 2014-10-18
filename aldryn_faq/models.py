@@ -1,14 +1,12 @@
-from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from django.core.urlresolvers import reverse, NoReverseMatch
+from django.core.urlresolvers import reverse
 from django.db import models
-from django.utils.translation import get_language, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from cms.utils.i18n import get_current_language, force_language
 
-from hvad.manager import TranslationManager
 from hvad.models import TranslatableModel, TranslatedFields
 from hvad.utils import get_translation
 
@@ -18,6 +16,8 @@ from adminsortable.models import Sortable
 from djangocms_text_ckeditor.fields import HTMLField
 
 from sortedm2m.fields import SortedManyToManyField
+
+from .managers import CategoryManager, RelatedManager
 
 
 def get_slug_in_language(record, language):
@@ -34,25 +34,6 @@ def get_slug_in_language(record, language):
             return translation.slug
 
 
-class RelatedManager(TranslationManager):
-
-    def filter_by_language(self, language):
-        return self.language(language)
-
-    def filter_by_current_language(self):
-        return self.filter_by_language(get_language())
-
-
-class CategoryManager(TranslationManager):
-    def get_categories(self, language):
-        categories = self.language(language).prefetch_related('questions')
-
-        for category in categories:
-            category.count = (category.questions
-            .filter_by_language(language).count())
-        return sorted(categories, key=lambda x: -x.count)
-
-
 class Category(TranslatableModel):
     translations = TranslatedFields(
         name=models.CharField(max_length=255),
@@ -66,7 +47,7 @@ class Category(TranslatableModel):
         verbose_name_plural = _('categories')
 
     def __unicode__(self):
-        return self.lazy_translation_getter('name', str(self.pk))
+        return self.lazy_translation_getter('name', unicode(self.pk))
 
     def model_type_id(self):
         return ContentType.objects.get_for_model(self.__class__).id
@@ -120,7 +101,10 @@ class Question(TranslatableModel, Sortable):
 
 
 class QuestionsPlugin(models.Model):
-    questions = models.IntegerField(default=5, help_text=_('The number of questions to be displayed.'))
+    questions = models.IntegerField(
+        default=5,
+        help_text=_('The number of questions to be displayed.')
+    )
 
     def get_queryset(self):
         return Question.objects.filter_by_language(self.language)
@@ -174,6 +158,7 @@ class CategoryListPlugin(CMSPlugin):
 
 
 class LatestQuestionsPlugin(CMSPlugin, QuestionsPlugin):
+
     def get_queryset(self):
         qs = super(LatestQuestionsPlugin, self).get_queryset()
         return qs.order_by('-id')
@@ -186,6 +171,8 @@ class SelectedCategory(models.Model):
 
     class Meta:
         ordering = ['position']
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
 
     def __unicode__(self):
         return self.category.name
