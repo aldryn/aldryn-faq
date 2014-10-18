@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 from aldryn_faq import __version__
 
 REQUIREMENTS = [
-    'django-hvad',
+    'django-hvad>=0.4.1',
     'django-admin-sortable',
     'djangocms-text-ckeditor',
     'django-sortedm2m',
