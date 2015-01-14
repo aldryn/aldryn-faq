@@ -15,7 +15,6 @@ djangocms-admin-style
 djangocms-helper
 djangocms_text_ckeditor
 docopt
-flake8
 html5lib
 flake8
 selenium
