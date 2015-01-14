@@ -1,0 +1,30 @@
+-e git+http://github.com/aldryn/aldryn-apphooks-config.git#egg=aldryn-apphooks-config
+# -e git+http://github.com/aldryn/aldryn-categories.git#egg=aldryn-categories
+# aldryn-common
+# aldryn-people
+# dj-database-url
+django>=1.6,<1.7
+django-admin-sortable
+# django-appdata
+django-classy-tags
+-e git+http://github.com/yakky/django-cms/@feature/appspaced_apphooks#egg=django-cms
+# django-filer
+# Looking to remove this dependency
+django-hvad
+django-mptt
+django-parler
+django-reversion>=1.8.2,<1.9
+django-sekizai
+django-sortedm2m
+# django-taggit
+# django-treebeard>=2.0
+djangocms-admin-style
+djangocms-helper
+djangocms_text_ckeditor
+docopt
+flake8
+html5lib
+pyflakes
+selenium
+six
+South
