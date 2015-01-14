@@ -1,5 +1,6 @@
 # -e git+http://github.com/aldryn/aldryn-apphooks-config.git#egg=aldryn-apphooks-config
 coverage==3.7.1
+python-coveralls==2.4.2
 django>=1.6,<1.7
 django-admin-sortable
 django-classy-tags
