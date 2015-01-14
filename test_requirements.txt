@@ -2,7 +2,7 @@
 django>=1.6,<1.7
 django-admin-sortable
 django-classy-tags
--e git+http://github.com/yakky/django-cms/@feature/appspaced_apphooks#egg=django-cms
+# -e git+http://github.com/yakky/django-cms/@feature/appspaced_apphooks#egg=django-cms
 # Looking to remove this dependency!
 django-hvad
 django-mptt
