@@ -35,4 +35,4 @@ install:
 script: $CMD
 
 # TODO: Add coverage reporting
-# after_success: coveralls
+after_success: coveralls
