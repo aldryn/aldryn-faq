@@ -1,4 +1,4 @@
--e git+http://github.com/aldryn/aldryn-apphooks-config.git#egg=aldryn-apphooks-config
+# -e git+http://github.com/aldryn/aldryn-apphooks-config.git#egg=aldryn-apphooks-config
 django>=1.6,<1.7
 django-admin-sortable
 django-classy-tags
