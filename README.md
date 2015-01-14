@@ -1,4 +1,4 @@
-[![](https://travis-ci.org/mkoistinen/aldryn-faq.svg?branch=master)](https://travis-ci.org/mkoistinen/aldryn-faq/)
+[![Build Status](https://travis-ci.org/mkoistinen/aldryn-faq.svg?branch=master)](https://travis-ci.org/mkoistinen/aldryn-faq)
 
 Aldryn FAQ App
 ===============
