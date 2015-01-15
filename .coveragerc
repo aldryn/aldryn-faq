@@ -2,8 +2,8 @@
 source = aldryn_faq
 branch = False
 omit =
-    aldryn_faq/migrations/*
-    aldryn_faq/south_migrations/*
+    *migrations*
+    *south_migrations*
 
 [report]
 exclude_lines =
