@@ -12,7 +12,7 @@ from hvad.test_utils.context_managers import LanguageOverride
 
 from aldryn_faq.models import Category, Question, get_slug_in_language
 
-from . import AldrynFaqTestMixin
+from . import AldrynFaqTestMixin, TestUtilityMixin
 
 
 class TestCategory(AldrynFaqTestMixin, TestCase):
@@ -82,7 +82,7 @@ class TestCategory(AldrynFaqTestMixin, TestCase):
         )
 
 
-class TestQuestion(AldrynFaqTestMixin, TestCase):
+class TestQuestion(AldrynFaqTestMixin, TestUtilityMixin, TestCase):
 
     def test_unicode(self):
         with LanguageOverride('en'):

@@ -2,13 +2,13 @@
 
 from __future__ import unicode_literals
 
-from django.contrib.auth import get_user_model
+import random
+import string
 
-# from cms.utils.i18n import get_language_list
+from django.contrib.auth import get_user_model
 from hvad.test_utils.context_managers import LanguageOverride
 
 from aldryn_faq.models import Category, Question
-
 User = get_user_model()
 
 
@@ -71,9 +71,15 @@ class AldrynFaqTestMixin(object):
             self.question2.category = self.category2
             self.question2.save()
 
+
+class TestUtilityMixin(object):
+
     def assertListContentsEqual(self, a, b):
         """Tests that both lists contain the same element without regard to
         their order."""
         return self.assertEqual(
             sorted(a), sorted(b)
         )
+
+    def rand_str(prefix='', length=16, chars=string.ascii_letters):
+        return prefix + ''.join(random.choice(chars) for _ in range(length))
