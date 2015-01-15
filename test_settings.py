@@ -13,3 +13,11 @@ HELPER_SETTINGS = {
         'sortedm2m',
     ],
 }
+
+
+def run():
+    from djangocms_helper import runner
+    runner.cms('aldryn_faq')
+
+if __name__ == "__main__":
+    run()
