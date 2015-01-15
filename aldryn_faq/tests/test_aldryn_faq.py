@@ -2,11 +2,15 @@
 
 from __future__ import unicode_literals
 
+from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase  # , TransactionTestCase
-# from django.utils import translation
+from django.utils.encoding import force_text
+
+# from cms.utils.i18n import force_language
+
 from hvad.test_utils.context_managers import LanguageOverride
 
-from aldryn_faq.models import Category, Question
+from aldryn_faq.models import Category, Question, get_slug_in_language
 
 EN_CAT_NAME = "Example"
 EN_CAT_SLUG = "example"
@@ -59,6 +63,75 @@ class AldrynFaqTestMixin(object):
             "title": DE_QUE_TITLE,
             "answer_text": DE_QUE_ANSWER_TEXT,
         })
+
+
+class TestCategory(AldrynFaqTestMixin, TestCase):
+
+    def test_unicode(self):
+        with LanguageOverride('en'):
+            category = self.reload(self.category)
+            self.assertEqual(force_text(category), EN_CAT_NAME)
+        with LanguageOverride('de'):
+            category = self.reload(self.category)
+            self.assertEqual(force_text(category), DE_CAT_NAME)
+
+    def test_get_slug_in_language(self):
+        self.assertIsNone(get_slug_in_language(None, 'en'), None)
+        self.assertIsNone(get_slug_in_language(object, 'en'), None)
+        self.assertEqual(
+            get_slug_in_language(self.category, 'en'),
+            EN_CAT_SLUG
+        )
+        self.assertEqual(
+            get_slug_in_language(self.category, 'de'),
+            DE_CAT_SLUG
+        )
+        # Test non-existent translation
+        self.assertEqual(
+            get_slug_in_language(self.category, 'qq'),
+            None
+        )
+
+    def test_model_type_id(self):
+        ct = ContentType.objects.get(app_label='aldryn_faq', model='category')
+        self.assertEqual(
+            self.category.model_type_id(),
+            ct.id
+        )
+
+    def test_get_absolue_url(self):
+        # TODO: Make these tests run.
+        pass
+        # self.assertEqual(
+        #     self.category.get_absolute_url(),
+        #     ""
+        # )
+
+
+class TestQuestion(AldrynFaqTestMixin, TestCase):
+
+    def test_unicode(self):
+        with LanguageOverride('en'):
+            question = self.reload(self.question)
+            self.assertEqual(force_text(question), EN_QUE_TITLE)
+        with LanguageOverride('de'):
+            question = self.reload(self.question)
+            self.assertEqual(force_text(question), DE_QUE_TITLE)
+
+    def test_model_type_id(self):
+        ct = ContentType.objects.get(app_label='aldryn_faq', model='question')
+        self.assertEqual(
+            self.question.model_type_id(),
+            ct.id
+        )
+
+    def test_get_absolue_url(self):
+        # TODO: Make these tests run.
+        pass
+        # self.assertEqual(
+        #     self.category.get_absolute_url(),
+        #     ""
+        # )
 
 
 class TestFAQTranslations(AldrynFaqTestMixin, TestCase):
