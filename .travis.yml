@@ -34,5 +34,4 @@ install:
 
 script: coverage run test_settings.py
 
-# TODO: Add coverage reporting
 after_success: coveralls
