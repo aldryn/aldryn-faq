@@ -23,6 +23,8 @@ from .managers import CategoryManager, RelatedManager
 def get_slug_in_language(record, language):
     if not record:
         return None
+    if not hasattr(record, "language_code"):
+        return None
     if language == record.language_code:
         return record.lazy_translation_getter('slug')
     else:  # hit db
