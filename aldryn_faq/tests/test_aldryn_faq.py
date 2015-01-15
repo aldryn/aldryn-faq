@@ -135,7 +135,10 @@ class TestCategory(AldrynFaqTestMixin, TestCase):
     def test_manager_get_categories(self):
         # Test case when no language is passed.
         # TODO: This doesn't actually pass
-        # self.assertEqual(Category.objects.get_categories(), 2)
+        # self.assertEqual(
+        #     set(Category.objects.get_categories()),
+        #     set([self.category, self.category2])
+        # )
 
         # Test case of requesting objects of only a single language
         categories = Category.objects.get_categories('en')
@@ -196,6 +199,11 @@ class TestQuestion(AldrynFaqTestMixin, TestCase):
             questions = Question.objects.filter_by_current_language()
             qids = set([question.id for question in questions])
             self.assertEqual(qids, set([self.question.id]))
+
+        with LanguageOverride("de"):
+            questions = Question.objects.filter_by_current_language()
+            qids = set([question.id for question in questions])
+            self.assertEqual(qids, set([self.question.id, self.question2.id]))
 
 
 class TestFAQTranslations(AldrynFaqTestMixin, TestCase):
