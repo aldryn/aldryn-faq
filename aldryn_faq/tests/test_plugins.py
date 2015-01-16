@@ -6,6 +6,7 @@ from django.template import RequestContext
 
 from cms.api import add_plugin
 
+from aldryn_faq.models import SelectedCategory
 from . import AldrynFaqTest, CMSRequestBasedTest
 
 
@@ -32,6 +33,16 @@ class TestQuestionListPlugin(AldrynFaqTest, CMSRequestBasedTest):
         context = RequestContext(request, {})
         rendered = plugin.render_plugin(context, ph)
         self.assertTrue(rendered.find(question1.title) > -1)
+
+        # Test its unicode method
+        self.assertEqual(str(plugin), str(1))
+
+        # Test its copy_relations. To do this, we'll create another instance
+        # that is empty, then copy_relations to it, and prove that it contains
+        # questions.
+        plugin2 = add_plugin(ph, 'QuestionListPlugin', language='en')
+        plugin2.copy_relations(plugin)
+        self.assertTrue(plugin.get_questions(), plugin2.get_questions())
 
 
 class TestLatestQuestionsPlugin(AldrynFaqTest, CMSRequestBasedTest):
@@ -104,11 +115,33 @@ class TestCategoryListPlugin(AldrynFaqTest, CMSRequestBasedTest):
     def test_plugin(self):
         page1 = self.get_or_create_page("Page One")
         ph = page1.placeholders.get(slot='content')
-        plugin = add_plugin(ph, 'CategoryListPlugin', language='en')
+        plugin = add_plugin(ph, 'CategoryListPlugin', language='de')
 
         request = self.get_page_request(
-            page1, self.user, None, lang_code='en', edit=False)
+            page1, self.user, None, lang_code='de', edit=False)
         context = RequestContext(request, {})
-        url = self.reload(self.category1, "en").get_absolute_url()
+        url = self.reload(self.category1, "de").get_absolute_url()
         rendered = plugin.render_plugin(context, ph)
+        # Why does this work? Probably because if there were no selected
+        # categories, it returns all of them, and we only have 1 EN category?
         self.assertTrue(rendered.find(url) > -1)
+
+        # Add some selected categories
+        categories = [self.category1, self.category2]
+        sc = None
+        for idx, category in enumerate(categories):
+            sc = SelectedCategory(
+                category=category, position=idx, cms_plugin=plugin)
+            sc.save()
+        self.assertItemsEqual(plugin.get_categories(), categories)
+
+        # While we're here, let's test that SelectedCategory's unicode works
+        self.assertEqual(unicode(sc), categories[-1].name)
+
+        # Test that copy_relations works
+        plugin2 = add_plugin(ph, "CategoryListPlugin", language="de")
+        plugin2.copy_relations(plugin)
+        self.assertItemsEqual(
+            plugin.get_categories(),
+            plugin2.get_categories()
+        )
