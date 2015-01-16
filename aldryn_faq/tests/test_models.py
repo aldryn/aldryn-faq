@@ -49,20 +49,23 @@ class TestCategory(AldrynFaqTest):
         )
 
     def test_get_absolue_url(self):
-        # TODO: Make these tests run.
-        pass
-        # self.assertEqual(
-        #     self.category.get_absolute_url(),
-        #     ""
-        # )
+        self.assertEqual(
+            self.category1.get_absolute_url("en"),
+            "/en/faq/example/"
+        )
+        self.assertEqual(
+            self.category1.get_absolute_url("de"),
+            "/de/faq/beispiel/"
+        )
 
     def test_manager_get_categories(self):
-        # Test case when no language is passed.
-        # TODO: This doesn't actually pass
-        # self.assertEqual(
-        #     set(Category.objects.get_categories()),
-        #     set([self.category, self.category2])
-        # )
+        # Test case when no language is passed. Apparently, this returns only
+        # those objects that have the default language translations.
+        # TODO: Verify that this is the intended behavior.
+        self.assertItemsEqual(
+            [c.id for c in Category.objects.get_categories()],
+            [self.category1.id, ]
+        )
 
         # Test case of requesting objects of only a single language
         categories = Category.objects.get_categories('en')
@@ -105,17 +108,21 @@ class TestQuestion(TestUtilityMixin, AldrynFaqTest):
         )
 
     def test_get_absolue_url(self):
-        # TODO: Make these tests run.
-        pass
-        # self.assertEqual(
-        #     self.category.get_absolute_url(),
-        #     ""
-        # )
+        self.assertEqual(
+            self.question1.get_absolute_url("en"),
+            "/en/faq/example/1/"
+        )
+        self.assertEqual(
+            self.question1.get_absolute_url("de"),
+            "/de/faq/beispiel/1/"
+        )
 
     def test_manager_filter_by_language(self):
-        # TODO: This fails, why?
-        # questions = Question.objects.filter_by_language('en')
-        # self.assertEqual(questions, [self.question])
+        questions = Question.objects.filter_by_language('en')
+        self.assertItemsEqual(
+            [q.id for q in questions],
+            [self.question1.id]
+        )
 
         questions = Question.objects.filter_by_language('de')
         self.assertItemsEqual(
