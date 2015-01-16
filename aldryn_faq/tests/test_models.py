@@ -118,16 +118,25 @@ class TestQuestion(TestUtilityMixin, AldrynFaqTest):
         # self.assertEqual(questions, [self.question])
 
         questions = Question.objects.filter_by_language('de')
-        self.assertItemsEqual(questions, [self.question1, self.question2])
+        self.assertItemsEqual(
+            [q.id for q in questions],
+            [self.question1.id, self.question2.id]
+        )
 
     def test_manager_filter_by_current_language(self):
         with LanguageOverride("en"):
             questions = Question.objects.filter_by_current_language()
-            self.assertItemsEqual(questions, [self.question1])
+            self.assertItemsEqual(
+                [q.id for q in questions],
+                [self.question1.id]
+            )
 
         with LanguageOverride("de"):
             questions = Question.objects.filter_by_current_language()
-            self.assertItemsEqual(questions, [self.question1, self.question2])
+            self.assertItemsEqual(
+                [q.id for q in questions],
+                [self.question1.id, self.question2.id]
+            )
 
 
 class TestFAQTranslations(AldrynFaqTest):
