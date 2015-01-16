@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
@@ -48,8 +51,10 @@ class FaqToolbar(CMSToolbar):
                 )
                 menu.add_modal_item(_('Edit category'), url, active=True)
 
-            question = getattr(self.request, request_faq_question_identifier, None)
+            question = getattr(
+                self.request, request_faq_question_identifier, None)
 
             if question and can('change', 'question'):
-                url = reverse('admin:aldryn_faq_question_change', args=(question.pk,))
+                url = reverse(
+                    'admin:aldryn_faq_question_change', args=(question.pk,))
                 menu.add_modal_item(_('Edit question'), url, active=True)

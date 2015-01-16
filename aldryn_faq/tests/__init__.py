@@ -133,7 +133,8 @@ class CMSRequestBasedTest(TestCase):
                 page.publish(lang)
         return page.get_draft_object()
 
-    def get_page_request(self, page, user, path=None, edit=False, lang_code='en'):
+    def get_page_request(
+            self, page, user, path=None, edit=False, lang_code='en'):
         from cms.middleware.toolbar import ToolbarMiddleware
         path = path or page and page.get_absolute_url()
         if edit:

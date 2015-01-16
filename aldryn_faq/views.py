@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 from django.core.urlresolvers import resolve
 from django.db import models
 from django.shortcuts import get_list_or_404
@@ -17,7 +20,8 @@ class FaqMixin(object):
     model = Question
 
     def dispatch(self, request, *args, **kwargs):
-        self.current_language = get_language_from_request(self.request, check_path=True)
+        self.current_language = get_language_from_request(
+            self.request, check_path=True)
         return super(FaqMixin, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -57,7 +61,8 @@ class FaqByCategoryView(FaqMixin, ListView):
         category = translated_category.master
 
         # set the translated category in the internal hvad cache.
-        setattr(category, category._meta.translations_cache, translated_category)
+        setattr(
+            category, category._meta.translations_cache, translated_category)
         return category
 
     def get_queryset(self):
@@ -73,13 +78,15 @@ class FaqAnswerView(FaqMixin, DetailView):
         question = self.get_object()
         if hasattr(self.request, 'toolbar'):
             self.request.toolbar.set_object(question)
-        setattr(self.request, request_faq_category_identifier, question.category)
+        setattr(
+            self.request, request_faq_category_identifier, question.category)
         setattr(self.request, request_faq_question_identifier, question)
         response = super(FaqAnswerView, self).get(*args, **kwargs)
 
         # FIXME: We should check for unique visitors using sessions.
         # update number of visits
         question_only_queryset = self.get_queryset().filter(pk=question.pk)
-        question_only_queryset.update(number_of_visits=models.F('number_of_visits') + 1)
+        question_only_queryset.update(
+            number_of_visits=models.F('number_of_visits') + 1)
 
         return response

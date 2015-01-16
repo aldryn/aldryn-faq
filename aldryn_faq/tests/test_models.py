@@ -19,10 +19,12 @@ class TestCategory(AldrynFaqTest):
     def test_unicode(self):
         with LanguageOverride('en'):
             category1 = self.reload(self.category1)
-            self.assertEqual(force_text(category1), self.data["category1"]["en"]["name"])
+            self.assertEqual(
+                force_text(category1), self.data["category1"]["en"]["name"])
         with LanguageOverride('de'):
             category1 = self.reload(self.category1)
-            self.assertEqual(force_text(category1), self.data["category1"]["de"]["name"])
+            self.assertEqual(
+                force_text(category1), self.data["category1"]["de"]["name"])
 
     def test_get_slug_in_language(self):
         self.assertIsNone(get_slug_in_language(None, 'en'), None)

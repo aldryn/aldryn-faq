@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 from django.utils.translation import get_language_from_request, ugettext_lazy as _
 from django.db.models.signals import post_save, post_delete
 

@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -71,7 +75,8 @@ class Question(TranslatableModel, Sortable):
     )
     category = SortableForeignKey(Category, related_name='questions')
 
-    answer = PlaceholderField('faq_question_answer', related_name='faq_questions')
+    answer = PlaceholderField(
+        'faq_question_answer', related_name='faq_questions')
     is_top = models.BooleanField(default=False)
     number_of_visits = models.PositiveIntegerField(default=0, editable=False)
 
@@ -97,7 +102,8 @@ class Question(TranslatableModel, Sortable):
         cat_slug = get_slug_in_language(category, language)
         if translation and cat_slug:
             with force_language(language):
-                return reverse('aldryn_faq:faq-answer', args=(cat_slug, self.pk))
+                return reverse(
+                    'aldryn_faq:faq-answer', args=(cat_slug, self.pk))
         else:
             return category.get_absolute_url(language)
 
@@ -148,8 +154,10 @@ class CategoryListPlugin(CMSPlugin):
         categories = Category.objects.get_categories(language=self.language)
 
         if self.selected_categories.exists():
-            category_ids = self.selected_categories.values_list('category__pk', flat=True)
-            # categories is a list, and a sorted one so no need for another db call.
+            category_ids = self.selected_categories.values_list(
+                'category__pk', flat=True)
+            # categories is a list, and a sorted one so no need for another db
+            # call.
             selected_categories = []
             for id in category_ids:
                 category = next((x for x in categories if x.pk == id), None)
@@ -168,8 +176,10 @@ class LatestQuestionsPlugin(CMSPlugin, QuestionsPlugin):
 
 class SelectedCategory(models.Model):
     category = models.ForeignKey(to=Category, verbose_name=_('category'))
-    position = models.PositiveIntegerField(verbose_name=_('position'), blank=True, null=True)
-    cms_plugin = models.ForeignKey(to=CategoryListPlugin, related_name='selected_categories')
+    position = models.PositiveIntegerField(
+        verbose_name=_('position'), blank=True, null=True)
+    cms_plugin = models.ForeignKey(
+        to=CategoryListPlugin, related_name='selected_categories')
 
     class Meta:
         ordering = ['position']
