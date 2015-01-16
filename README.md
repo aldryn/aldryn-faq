@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/mkoistinen/aldryn-faq.svg?branch=master)](https://travis-ci.org/mkoistinen/aldryn-faq)
-[![Coverage Status](https://coveralls.io/repos/mkoistinen/aldryn-faq/badge.svg)](https://coveralls.io/r/mkoistinen/aldryn-faq)
+[![Build Status](https://travis-ci.org/aldryn/aldryn-faq.svg?branch=develop)](https://travis-ci.org/aldryn/aldryn-faq)
+[![Coverage Status](https://coveralls.io/repos/aldryn/aldryn-faq/badge.svg)](https://coveralls.io/r/aldryn/aldryn-faq)
 
 Aldryn FAQ App
 ===============
@@ -28,7 +28,6 @@ Add below apps to ``INSTALLED_APPS``:
 
     INSTALLED_APPS = [
         …
-        
         'aldryn_faq',
         'djangocms_text_ckeditor',
         'adminsortable',
