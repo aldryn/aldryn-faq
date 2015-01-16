@@ -3,22 +3,13 @@
 from __future__ import unicode_literals
 
 from django.template import RequestContext
-from cms.api import add_plugin
-from aldryn_faq.models import Question  # , Category, get_slug_in_language
 
-# from cms.utils.i18n import force_language
-# from hvad.test_utils.context_managers import LanguageOverride
+from cms.api import add_plugin
 
 from . import AldrynFaqTest, CMSRequestBasedTest
 
 
-class PluginBaseTest(AldrynFaqTest, CMSRequestBasedTest):
-    def setUp(self):
-        super(PluginBaseTest, self).setUp()
-        pass
-
-
-class TestQuestionListPlugin(PluginBaseTest):
+class TestQuestionListPlugin(AldrynFaqTest, CMSRequestBasedTest):
     # TODO, this plugin doesn't appear to work!
     pass
     # def test_plugin(self):
@@ -34,7 +25,7 @@ class TestQuestionListPlugin(PluginBaseTest):
     #     self.assertTrue(rendered.find(question1.title) > -1)
 
 
-class TestLatestQuestionsPlugin(PluginBaseTest):
+class TestLatestQuestionsPlugin(AldrynFaqTest, CMSRequestBasedTest):
 
     def test_plugin(self):
         page1 = self.get_or_create_page("Page One")
@@ -52,7 +43,7 @@ class TestLatestQuestionsPlugin(PluginBaseTest):
         self.assertTrue(rendered.find(url2) < rendered.find(url1))
 
 
-class TestTopQuestionsPlugin(PluginBaseTest):
+class TestTopQuestionsPlugin(AldrynFaqTest, CMSRequestBasedTest):
     def test_plugin(self):
         page1 = self.get_or_create_page("Page One")
         ph = page1.placeholders.get(slot='content')
@@ -76,7 +67,7 @@ class TestTopQuestionsPlugin(PluginBaseTest):
         self.assertTrue(rendered.find(question1.title) > -1)
 
 
-class TestMostReadQuestionsPlugin(PluginBaseTest):
+class TestMostReadQuestionsPlugin(AldrynFaqTest, CMSRequestBasedTest):
     def test_plugin(self):
         # Prepare the questions...
         self.question1.number_of_visits = 5
@@ -100,8 +91,7 @@ class TestMostReadQuestionsPlugin(PluginBaseTest):
         self.assertTrue(rendered.find(url2) < rendered.find(url1))
 
 
-class TestCategoryListPlugin(PluginBaseTest):
-
+class TestCategoryListPlugin(AldrynFaqTest, CMSRequestBasedTest):
     def test_plugin(self):
         page1 = self.get_or_create_page("Page One")
         ph = page1.placeholders.get(slot='content')
