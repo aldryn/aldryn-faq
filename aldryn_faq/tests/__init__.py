@@ -19,12 +19,13 @@ User = get_user_model()
 
 
 class TestUtilityMixin(object):
-
+    """Just adds some common test utilities to the testing class."""
     def rand_str(prefix='', length=16, chars=string.ascii_letters):
         return prefix + ''.join(random.choice(chars) for _ in range(length))
 
 
 class AldrynFaqTest(TestCase):
+    """Sets up basic Category and Question objects for testing."""
     data = {
         "category1": {
             "en": {"name": "Example", "slug": "example", },
@@ -75,6 +76,7 @@ class AldrynFaqTest(TestCase):
         # Make a DE translation of the category
         self.mktranslation(self.category1, "de",
             **self.data["category1"]["de"])
+
         # Make a DE translation of the question
         self.mktranslation(self.question1, "de",
             **self.data["question1"]["de"])
@@ -91,7 +93,7 @@ class AldrynFaqTest(TestCase):
 
 
 class CMSRequestBasedTest(TestCase):
-
+    """Sets-up User(s) and CMS Pages for testing."""
     languages = get_language_list()
 
     @classmethod
@@ -105,6 +107,8 @@ class CMSRequestBasedTest(TestCase):
         User.objects.all().delete()
 
     def get_or_create_page(self, base_title=None, languages=None):
+        """Creates a page with a given title, or, if it already exists, just
+        retrieves and returns it."""
         from cms.api import create_page, create_title
         if not base_title:
             # No title? Create one.
