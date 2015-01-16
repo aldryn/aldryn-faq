@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals
 
+import six
+
 from django.template import RequestContext
 
 from cms.api import add_plugin
@@ -133,18 +135,21 @@ class TestCategoryListPlugin(AldrynFaqTest, CMSRequestBasedTest):
             sc = SelectedCategory(
                 category=category, position=idx, cms_plugin=plugin)
             sc.save()
-        self.assertItemsEqual(
+        self.assertEqualItems(
             [c.id for c in plugin.get_categories()],
             [c.id for c in categories]
         )
 
-        # While we're here, let's test that SelectedCategory's unicode works
-        self.assertEqual(unicode(sc), categories[-1].name)
+        # While we're here, let's test that SelectedCategory's __str__ works
+        if six.PY2:
+            self.assertEqual(unicode(sc), categories[-1].name)
+        else:
+            self.assertEqual(str(sc), categories[-1].name)
 
         # Test that copy_relations works
         plugin2 = add_plugin(ph, "CategoryListPlugin", language="de")
         plugin2.copy_relations(plugin)
-        self.assertItemsEqual(
+        self.assertEqualItems(
             plugin.get_categories(),
             plugin2.get_categories()
         )

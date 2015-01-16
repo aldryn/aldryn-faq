@@ -25,12 +25,12 @@ class TestQuestionIndex(AldrynFaqTest):
         # NOTE: This passes, but only serves to prove that the search_index
         # should be returning only objects that have the given translation!
         # TODO: Fix the above in search_indexes.py
-        self.assertItemsEqual(
+        self.assertEqualItems(
             [q.id for q in idx_obj.get_index_queryset("en")],
             [self.question1.id, self.question2.id],
         )
         # This one is OK.
-        self.assertItemsEqual(
+        self.assertEqualItems(
             [q.id for q in idx_obj.get_index_queryset("de")],
             [self.question1.id, self.question2.id],
         )
@@ -68,12 +68,12 @@ class TestCategoryIndex(AldrynFaqTest):
         # NOTE: This passes, but only serves to prove that the search_index
         # should be returning only objects that have the given translation!
         # TODO: Fix the above in search_indexes.py
-        self.assertItemsEqual(
+        self.assertEqualItems(
             [q.id for q in idx_obj.get_index_queryset("en")],
             [self.category1.id, self.category2.id],
         )
         # This one is OK.
-        self.assertItemsEqual(
+        self.assertEqualItems(
             [q.id for q in idx_obj.get_index_queryset("de")],
             [self.category1.id, self.category2.id],
         )

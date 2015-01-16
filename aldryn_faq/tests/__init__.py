@@ -23,8 +23,16 @@ class TestUtilityMixin(object):
     def rand_str(prefix='', length=16, chars=string.ascii_letters):
         return prefix + ''.join(random.choice(chars) for _ in range(length))
 
+    def assertEqualItems(self, a, b):
+        try:
+            # In Python3, this method has been renamed (poorly)
+            return self.assertCountEqual(a, b)
+        except:
+            # In 2.6, assertItemsEqual() doesn't sort first
+            return self.assertItemsEqual(sorted(a), sorted(b))
 
-class AldrynFaqTest(TestCase):
+
+class AldrynFaqTest(TestUtilityMixin, TestCase):
     """Sets up basic Category and Question objects for testing."""
     data = {
         "category1": {
@@ -59,7 +67,7 @@ class AldrynFaqTest(TestCase):
     def mktranslation(self, obj, lang, **kwargs):
         """Simple method of adding a translation to an existing object."""
         obj.translate(lang)
-        for k, v in kwargs.iteritems():
+        for k, v in kwargs.items():
             setattr(obj, k, v)
         obj.save()
 
@@ -92,7 +100,7 @@ class AldrynFaqTest(TestCase):
             self.question2.save()
 
 
-class CMSRequestBasedTest(TestCase):
+class CMSRequestBasedTest(TestUtilityMixin, TestCase):
     """Sets-up User(s) and CMS Pages for testing."""
     languages = get_language_list()
 

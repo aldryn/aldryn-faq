@@ -22,4 +22,4 @@ flake8
 selenium
 six
 South
-aldryn_search
+-e git+https://github.com/aldryn/aldryn-search.git#egg=aldryn-search

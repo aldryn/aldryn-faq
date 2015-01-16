@@ -11,7 +11,7 @@ from hvad.test_utils.context_managers import LanguageOverride
 
 from aldryn_faq.models import Category, Question, get_slug_in_language
 
-from . import AldrynFaqTest, TestUtilityMixin
+from . import AldrynFaqTest
 
 
 class TestCategory(AldrynFaqTest):
@@ -64,7 +64,7 @@ class TestCategory(AldrynFaqTest):
         # Test case when no language is passed. Apparently, this returns only
         # those objects that have the default language translations.
         # TODO: Verify that this is the intended behavior.
-        self.assertItemsEqual(
+        self.assertEqualItems(
             [c.id for c in Category.objects.get_categories()],
             [self.category1.id, ]
         )
@@ -86,7 +86,7 @@ class TestCategory(AldrynFaqTest):
         )
 
 
-class TestQuestion(TestUtilityMixin, AldrynFaqTest):
+class TestQuestion(AldrynFaqTest):
 
     def test_unicode(self):
         with LanguageOverride('en'):
@@ -121,13 +121,13 @@ class TestQuestion(TestUtilityMixin, AldrynFaqTest):
 
     def test_manager_filter_by_language(self):
         questions = Question.objects.filter_by_language('en')
-        self.assertItemsEqual(
+        self.assertEqualItems(
             [q.id for q in questions],
             [self.question1.id]
         )
 
         questions = Question.objects.filter_by_language('de')
-        self.assertItemsEqual(
+        self.assertEqualItems(
             [q.id for q in questions],
             [self.question1.id, self.question2.id]
         )
@@ -135,14 +135,14 @@ class TestQuestion(TestUtilityMixin, AldrynFaqTest):
     def test_manager_filter_by_current_language(self):
         with LanguageOverride("en"):
             questions = Question.objects.filter_by_current_language()
-            self.assertItemsEqual(
+            self.assertEqualItems(
                 [q.id for q in questions],
                 [self.question1.id]
             )
 
         with LanguageOverride("de"):
             questions = Question.objects.filter_by_current_language()
-            self.assertItemsEqual(
+            self.assertEqualItems(
                 [q.id for q in questions],
                 [self.question1.id, self.question2.id]
             )

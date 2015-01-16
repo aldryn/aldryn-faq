@@ -21,7 +21,7 @@ from .forms import CategoryAdminForm
 
 class CategoryAdmin(TranslatableAdmin):
 
-    list_display = ['__unicode__', 'all_translations']
+    list_display = ['__str__', 'all_translations']
 
     form = CategoryAdminForm
 
@@ -45,7 +45,7 @@ class QuestionAdmin(FrontendEditableAdminMixin, SortableAdmin,
                     PlaceholderAdmin, TranslatableAdmin):
 
     render_placeholder_language_tabs = False
-    list_display = ['__unicode__', 'category', 'is_top', 'number_of_visits']
+    list_display = ['__str__', 'category', 'is_top', 'number_of_visits']
     list_filter = ['category', 'translations__language_code']
     frontend_editable_fields = ('title', 'category', 'answer_text')
     readonly_fields = ['number_of_visits']

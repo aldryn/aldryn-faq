@@ -18,7 +18,7 @@ class TestFaqByCategoryView(AldrynFaqTest, CMSRequestBasedTest):
         factory = RequestFactory()
         request = factory.get(category1_url)
         response = FaqByCategoryView.as_view()(request, **kwargs)
-        self.assertItemsEqual(
+        self.assertEqualItems(
             response.context_data['object_list'],
             [question1, ],
         )
