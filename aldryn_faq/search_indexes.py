@@ -8,7 +8,8 @@ from .models import Question, Category
 
 class QuestionIndex(get_index_base()):
 
-    haystack_use_for_indexing = getattr(settings, "ALDRYN_FAQ_QUESTION_SEARCH", True)
+    haystack_use_for_indexing = getattr(
+        settings, "ALDRYN_FAQ_QUESTION_SEARCH", True)
 
     INDEX_TITLE = True
 
@@ -29,8 +30,9 @@ class QuestionIndex(get_index_base()):
         plugins = obj.answer.cmsplugin_set.filter(language=language)
         for base_plugin in plugins:
             instance, plugin_type = base_plugin.get_plugin_instance()
-            if not instance is None:
-                plugin_content = strip_tags(instance.render_plugin(context=RequestContext(request)))
+            if instance is not None:
+                plugin_content = strip_tags(
+                    instance.render_plugin(context=RequestContext(request)))
                 text_bits.append(plugin_content)
 
         return ' '.join(text_bits)
@@ -38,7 +40,8 @@ class QuestionIndex(get_index_base()):
 
 class CategoryIndex(get_index_base()):
 
-    haystack_use_for_indexing = getattr(settings, "ALDRYN_FAQ_CATEGORY_SEARCH", True)
+    haystack_use_for_indexing = getattr(
+        settings, "ALDRYN_FAQ_CATEGORY_SEARCH", True)
 
     INDEX_TITLE = True
 
