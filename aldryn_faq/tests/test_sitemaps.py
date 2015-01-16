@@ -10,9 +10,11 @@ from . import AldrynFaqTest
 class TestSitemap(AldrynFaqTest):
 
     def test_categories_sitemap_items(self):
-        categories = FAQCategoriesSitemap().items()
-        self.assertItemsEqual(categories, [self.category1, self.category2])
+        categories = [cat.id for cat in FAQCategoriesSitemap().items()]
+        self.assertItemsEqual(categories,
+            [self.category1.id, self.category2.id])
 
     def test_questions_sitemap_items(self):
-        questions = FAQQuestionsSitemap().items()
-        self.assertItemsEqual(questions, [self.question1, self.question2])
+        questions = [que.id for que in FAQQuestionsSitemap().items()]
+        self.assertItemsEqual(questions,
+            [self.question1.id, self.question2.id])
