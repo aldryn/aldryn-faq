@@ -120,8 +120,8 @@ class TestQuestion(AldrynFaqTestMixin, TestUtilityMixin, TestCase):
 
         questions = Question.objects.filter_by_language('de')
         self.assertListContentsEqual(
-            list(questions),
-            [self.question1, self.question2]
+            [question.id for question in questions],
+            [self.question1.id, self.question2.id]
         )
         pass
 
