@@ -133,7 +133,10 @@ class TestCategoryListPlugin(AldrynFaqTest, CMSRequestBasedTest):
             sc = SelectedCategory(
                 category=category, position=idx, cms_plugin=plugin)
             sc.save()
-        self.assertItemsEqual(plugin.get_categories(), categories)
+        self.assertItemsEqual(
+            [c.id for c in plugin.get_categories()],
+            [c.id for c in categories]
+        )
 
         # While we're here, let's test that SelectedCategory's unicode works
         self.assertEqual(unicode(sc), categories[-1].name)
