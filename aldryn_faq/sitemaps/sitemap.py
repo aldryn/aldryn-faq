@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 from django.contrib.sitemaps import Sitemap
 
 from ..models import Category, Question

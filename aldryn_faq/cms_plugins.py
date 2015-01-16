@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 from django.contrib.admin import TabularInline
 from django.utils.translation import ugettext_lazy as _
 
@@ -66,7 +69,8 @@ class SelectedCategoryInline(TabularInline):
     extra = 0
 
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
-        field = super(SelectedCategoryInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        field = super(SelectedCategoryInline, self).formfield_for_foreignkey(
+            db_field, request, **kwargs)
 
         if db_field.name == 'category':
             language = get_language_from_request(request)
