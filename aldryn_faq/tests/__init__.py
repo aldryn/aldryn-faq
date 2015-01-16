@@ -45,9 +45,15 @@ class AldrynFaqTest(TestCase):
     }
 
     @staticmethod
-    def reload(object):
-        """Simple convenience method for re-fetching an object from the ORM."""
-        return object.__class__.objects.get(id=object.id)
+    def reload(obj, language=None):
+        """Simple convenience method for re-fetching an object from the ORM,
+        optionally "as" a specified language."""
+        if language:
+            with LanguageOverride(language):
+                new_obj = obj.__class__.objects.get(id=obj.id)
+        else:
+            new_obj = obj.__class__.objects.get(id=obj.id)
+        return new_obj
 
     def mktranslation(self, obj, lang, **kwargs):
         """Simple method of adding a translation to an existing object."""
