@@ -3,7 +3,6 @@
 from __future__ import unicode_literals
 
 from django.contrib.contenttypes.models import ContentType
-from django.test import TestCase  # , TransactionTestCase
 from django.utils.encoding import force_text
 
 # from cms.utils.i18n import force_language
@@ -12,10 +11,10 @@ from hvad.test_utils.context_managers import LanguageOverride
 
 from aldryn_faq.models import Category, Question, get_slug_in_language
 
-from . import AldrynFaqTestMixin, TestUtilityMixin
+from . import AldrynFaqTest, TestUtilityMixin
 
 
-class TestCategory(AldrynFaqTestMixin, TestCase):
+class TestCategory(AldrynFaqTest):
 
     def test_unicode(self):
         with LanguageOverride('en'):
@@ -82,7 +81,7 @@ class TestCategory(AldrynFaqTestMixin, TestCase):
         )
 
 
-class TestQuestion(AldrynFaqTestMixin, TestUtilityMixin, TestCase):
+class TestQuestion(TestUtilityMixin, AldrynFaqTest):
 
     def test_unicode(self):
         with LanguageOverride('en'):
@@ -119,29 +118,19 @@ class TestQuestion(AldrynFaqTestMixin, TestUtilityMixin, TestCase):
         # self.assertEqual(questions, [self.question])
 
         questions = Question.objects.filter_by_language('de')
-        self.assertListContentsEqual(
-            [question.id for question in questions],
-            [self.question1.id, self.question2.id]
-        )
-        pass
+        self.assertItemsEqual(questions, [self.question1, self.question2])
 
     def test_manager_filter_by_current_language(self):
         with LanguageOverride("en"):
             questions = Question.objects.filter_by_current_language()
-            self.assertListContentsEqual(
-                [question.id for question in questions],
-                [self.question1.id]
-            )
+            self.assertItemsEqual(questions, [self.question1])
 
         with LanguageOverride("de"):
             questions = Question.objects.filter_by_current_language()
-            self.assertListContentsEqual(
-                [question.id for question in questions],
-                [self.question1.id, self.question2.id]
-            )
+            self.assertItemsEqual(questions, [self.question1, self.question2])
 
 
-class TestFAQTranslations(AldrynFaqTestMixin, TestCase):
+class TestFAQTranslations(AldrynFaqTest):
 
     def test_fetch_faq_translations(self):
         """Test we can fetch arbitrary translations of the question and

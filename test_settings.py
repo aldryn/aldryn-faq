@@ -1,4 +1,7 @@
+# -*- coding: utf-8 -*-
+
 HELPER_SETTINGS = {
+    'ROOT_URLCONF': 'aldryn_faq.tests.urls',
     'TIME_ZONE': 'Europe/Zurich',
     'LANGUAGES': (
         ('en', 'English'),
