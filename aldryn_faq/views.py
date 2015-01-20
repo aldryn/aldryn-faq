@@ -60,7 +60,7 @@ class FaqByCategoryView(FaqMixin, ListView):
         # actual category instance
         category = translated_category.master
 
-        # set the translated category in the internal hvad cache.
+        # set the translated category in the internal parler cache.
         setattr(
             category, category._meta.translations_cache, translated_category)
         return category

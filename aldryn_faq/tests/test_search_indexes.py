@@ -2,8 +2,8 @@
 
 from __future__ import unicode_literals
 
-# from aldryn_faq.models import Category, Question, get_slug_in_language
 from aldryn_faq.search_indexes import QuestionIndex, CategoryIndex
+
 from . import AldrynFaqTest
 
 
