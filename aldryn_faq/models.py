@@ -26,26 +26,18 @@ from sortedm2m.fields import SortedManyToManyField
 from .managers import CategoryManager, RelatedManager
 
 
-def get_translation(obj, lang):
+def get_translation(obj, language_code):
     """This is an adapter from django-hvad.utils.get_translation(), a function
     to django-parler.models.get_translation() (a model instance method)."""
-    return obj.get_translation(lang)
+    return obj.get_translation(language_code)
 
 
 def get_slug_in_language(record, language):
+    """This is an adapter from django-hvad's lazy_translation_getter."""
     if not record:
         return None
-    if not hasattr(record, "language_code"):
-        return None
-    if language == record.language_code:
-        return record.lazy_translation_getter('slug')
-    else:  # hit db
-        try:
-            translation = get_translation(record, language_code=language)
-        except models.ObjectDoesNotExist:
-            return None
-        else:
-            return translation.slug
+    return record.safe_translation_getter(
+        field="slug", language_code=language, default=None, )
 
 
 @python_2_unicode_compatible
