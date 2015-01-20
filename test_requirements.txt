@@ -5,11 +5,8 @@ django>=1.6,<1.7
 django-admin-sortable
 django-classy-tags
 # -e git+http://github.com/yakky/django-cms/@feature/appspaced_apphooks#egg=django-cms
-# Looking to remove this dependency!
-django-hvad
 django-mptt
-# Looking to add this soon
-# django-parler
+django-parler
 django-reversion>=1.8.2,<1.9
 django-sekizai
 django-sortedm2m
