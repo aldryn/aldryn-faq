@@ -9,13 +9,11 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import override, ugettext_lazy as _
-
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from cms.utils.i18n import get_current_language
 
-from hvad.models import TranslatableModel, TranslatedFields
-from hvad.utils import get_translation
+from parler.models import TranslatableModel, TranslatedFields
 
 from adminsortable.fields import SortableForeignKey
 from adminsortable.models import Sortable
@@ -27,20 +25,20 @@ from sortedm2m.fields import SortedManyToManyField
 from .managers import CategoryManager, RelatedManager
 
 
+def get_translation(obj, language_code):
+    """This is an adapter from django-hvad.utils.get_translation(), a function
+    to django-parler.models.get_translation() (a model instance method)."""
+    if not obj or not hasattr(obj, "get_translation"):
+        return None
+    return obj.get_translation(language_code)
+
+
 def get_slug_in_language(record, language):
-    if not record:
+    """This is an adapter from django-hvad's lazy_translation_getter."""
+    if not record or not hasattr(record, "safe_translation_getter"):
         return None
-    if not hasattr(record, "language_code"):
-        return None
-    if language == record.language_code:
-        return record.lazy_translation_getter('slug')
-    else:  # hit db
-        try:
-            translation = get_translation(record, language_code=language)
-        except models.ObjectDoesNotExist:
-            return None
-        else:
-            return translation.slug
+    return record.safe_translation_getter(
+        field="slug", language_code=language, default=None, )
 
 
 @python_2_unicode_compatible
@@ -58,9 +56,9 @@ class Category(TranslatableModel):
 
     def __str__(self):
         if six.PY2:
-            return self.lazy_translation_getter('name', unicode(self.pk))
+            return self.safe_translation_getter('name', default=unicode(self.pk))
         else:
-            return self.lazy_translation_getter('name', str(self.pk))
+            return self.safe_translation_getter('name', default=str(self.pk))
 
     def model_type_id(self):
         return ContentType.objects.get_for_model(self.__class__).id
@@ -95,7 +93,7 @@ class Question(TranslatableModel, Sortable):
         verbose_name_plural = _('questions')
 
     def __str__(self):
-        return self.lazy_translation_getter('title', str(self.pk))
+        return self.safe_translation_getter('title', default=str(self.pk))
 
     def model_type_id(self):
         return ContentType.objects.get_for_model(self.__class__).id

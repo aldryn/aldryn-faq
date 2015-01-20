@@ -8,11 +8,11 @@ import string
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.test import RequestFactory, TestCase
+from django.utils.translation import override
 
 from cms.models import Title
 from cms.utils.i18n import get_language_list
 from djangocms_helper.utils import create_user
-from hvad.test_utils.context_managers import LanguageOverride
 
 from aldryn_faq.models import Category, Question
 User = get_user_model()
@@ -58,7 +58,7 @@ class AldrynFaqTest(TestUtilityMixin, TestCase):
         """Simple convenience method for re-fetching an object from the ORM,
         optionally "as" a specified language."""
         if language:
-            with LanguageOverride(language):
+            with override(language):
                 new_obj = obj.__class__.objects.get(id=obj.id)
         else:
             new_obj = obj.__class__.objects.get(id=obj.id)
@@ -66,7 +66,7 @@ class AldrynFaqTest(TestUtilityMixin, TestCase):
 
     def mktranslation(self, obj, lang, **kwargs):
         """Simple method of adding a translation to an existing object."""
-        obj.translate(lang)
+        obj.set_current_language(lang)
         for k, v in kwargs.items():
             setattr(obj, k, v)
         obj.save()
@@ -74,7 +74,7 @@ class AldrynFaqTest(TestUtilityMixin, TestCase):
     def setUp(self):
         """Setup a prebuilt and translated Question with Category
         for testing."""
-        with LanguageOverride("en"):
+        with override("en"):
             self.category1 = Category(**self.data["category1"]["en"])
             self.category1.save()
             self.question1 = Question(**self.data["question1"]["en"])
@@ -89,7 +89,7 @@ class AldrynFaqTest(TestUtilityMixin, TestCase):
         self.mktranslation(self.question1, "de",
             **self.data["question1"]["de"])
 
-        with LanguageOverride("de"):
+        with override("de"):
             # Make a DE-only Category
             self.category2 = Category(**self.data["category2"]["de"])
             self.category2.save()

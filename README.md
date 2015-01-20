@@ -32,7 +32,7 @@ Add below apps to ``INSTALLED_APPS``:
         'djangocms_text_ckeditor',
         'adminsortable',
         'sortedm2m',
-        'hvad',
+        'parler',
         …
     ]
 

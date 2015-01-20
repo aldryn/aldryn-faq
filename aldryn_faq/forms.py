@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django import forms
 
-from hvad.forms import TranslatableModelForm
+from parler.forms import TranslatableModelForm
 
 from sortedm2m.forms import SortedMultipleChoiceField
 
@@ -16,20 +16,20 @@ class CategoryAdminForm(TranslatableModelForm):
     class Meta:
         model = Category
 
-    def clean_slug(self):
-        slug = self.cleaned_data['slug']
-        translations_model = Category._meta.translations_model
-        categories_with_slug = translations_model.objects.filter(slug=slug)
+    # def clean_slug(self):
+    #     slug = self.cleaned_data['slug']
+    #     translations_model = Category._meta.translations_model
+    #     categories_with_slug = translations_model.objects.filter(slug=slug)
 
-        if self.instance.pk:
-            # Make sure to exclude references from this master :)
-            categories_with_slug = categories_with_slug.exclude(
-                master_id=self.instance.pk)
+    #     if self.instance.pk:
+    #         # Make sure to exclude references from this master :)
+    #         categories_with_slug = categories_with_slug.exclude(
+    #             master_id=self.instance.pk)
 
-        if categories_with_slug.exists():
-            raise forms.ValidationError(
-                'A category with this slug already exists.')
-        return slug
+    #     if categories_with_slug.exists():
+    #         raise forms.ValidationError(
+    #             'A category with this slug already exists.')
+    #     return slug
 
 
 class QuestionListPluginForm(forms.ModelForm):

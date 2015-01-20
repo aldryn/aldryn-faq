@@ -45,25 +45,9 @@ class FaqByCategoryView(FaqMixin, ListView):
         return response
 
     def get_category(self):
-        # translated category model
-        TranslatedCategory = Category._meta.translations_model
-
-        language = get_language_from_request(self.request)
-
-        # translated category instance
-        translated_category = get_list_or_404(
-            TranslatedCategory.objects.select_related('master'),
-            slug=self.kwargs['category_slug'],
-            language_code=language
+        return Category.objects.translated(
+            slug=self.kwargs['category_slug']
         )[0]
-
-        # actual category instance
-        category = translated_category.master
-
-        # set the translated category in the internal hvad cache.
-        setattr(
-            category, category._meta.translations_cache, translated_category)
-        return category
 
     def get_queryset(self):
         queryset = super(FaqByCategoryView, self).get_queryset()
