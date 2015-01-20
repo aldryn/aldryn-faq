@@ -12,7 +12,7 @@ Simple faq application. It allows you to:
 Installation
 ============
 
-Aldryn Platrofm Users
+Aldryn Platform Users
 ---------------------
 
 Choose a site you want to install the add-on to from the dashboard. Then go to ``Apps -> Install app`` and click ``Install`` next to ``FAQ`` app.
@@ -32,7 +32,7 @@ Add below apps to ``INSTALLED_APPS``:
         'djangocms_text_ckeditor',
         'adminsortable',
         'sortedm2m',
-        'hvad',
+        'parler',
         …
     ]
 
