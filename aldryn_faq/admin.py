@@ -13,7 +13,7 @@ from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 
 from adminsortable.admin import SortableAdmin
 
-from hvad.admin import TranslatableAdmin
+from parler.admin import TranslatableAdmin
 
 from .models import Category, Question
 from .forms import CategoryAdminForm
