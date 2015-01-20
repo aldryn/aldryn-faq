@@ -3,6 +3,7 @@ coverage==3.7.1
 python-coveralls==2.4.2
 django>=1.6,<1.7
 django-admin-sortable
+django-appconf==0.6
 django-classy-tags
 # -e git+http://github.com/yakky/django-cms/@feature/appspaced_apphooks#egg=django-cms
 django-mptt
