@@ -9,7 +9,6 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import override, ugettext_lazy as _
-
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from cms.utils.i18n import get_current_language
