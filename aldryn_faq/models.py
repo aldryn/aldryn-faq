@@ -57,9 +57,9 @@ class Category(TranslatableModel):
 
     def __str__(self):
         if six.PY2:
-            return self.safe_translation_getter('name', unicode(self.pk))
+            return self.safe_translation_getter('name', default=unicode(self.pk))
         else:
-            return self.safe_translation_getter('name', str(self.pk))
+            return self.safe_translation_getter('name', default=str(self.pk))
 
     def model_type_id(self):
         return ContentType.objects.get_for_model(self.__class__).id
@@ -94,7 +94,7 @@ class Question(TranslatableModel, Sortable):
         verbose_name_plural = _('questions')
 
     def __str__(self):
-        return self.lazy_translation_getter('title', str(self.pk))
+        return self.safe_translation_getter('title', default=str(self.pk))
 
     def model_type_id(self):
         return ContentType.objects.get_for_model(self.__class__).id
