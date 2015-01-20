@@ -45,9 +45,9 @@ class FaqByCategoryView(FaqMixin, ListView):
         return response
 
     def get_category(self):
-        language = get_language_from_request(self.request)
-        return Category.objects.active_translations(
-            language, slug=self.kwargs['category_slug'])[0]
+        return Category.objects.translated(
+            slug=self.kwargs['category_slug']
+        )[0]
 
     def get_queryset(self):
         queryset = super(FaqByCategoryView, self).get_queryset()
