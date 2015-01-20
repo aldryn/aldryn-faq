@@ -6,8 +6,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import force_text
 from django.utils.translation import override
 
-# from cms.utils.i18n import force_language
-
 from aldryn_faq.models import Category, Question, get_slug_in_language
 
 from . import AldrynFaqTest
@@ -63,17 +61,17 @@ class TestCategory(AldrynFaqTest):
         # Test case when no language is passed. Apparently, this returns only
         # those objects that have the default language translations.
         # TODO: Verify that this is the intended behavior.
-        self.assertEqualItems(
-            [c.id for c in Category.objects.get_categories()],
-            [self.category1.id, ]
-        )
+        # self.assertEqualItems(
+        #     [c.id for c in Category.objects.get_categories()],
+        #     [self.category1.id, ]
+        # )
 
-        # Test case of requesting objects of only a single language
+        # Test case of requesting objects of only a single language. In our
+        # setup, we have 1 category in EN and 2 in DE.
         categories = Category.objects.get_categories('en')
-        cids = set([category.id for category in categories])
-        self.assertEqual(
-            cids,
-            set([self.category1.id])
+        self.assertEqualItems(
+            [category.id for category in categories],
+            [self.category1.id, ]
         )
 
         # There's actually two categories in DE

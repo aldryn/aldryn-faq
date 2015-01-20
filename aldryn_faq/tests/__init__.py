@@ -66,7 +66,7 @@ class AldrynFaqTest(TestUtilityMixin, TestCase):
 
     def mktranslation(self, obj, lang, **kwargs):
         """Simple method of adding a translation to an existing object."""
-        obj.translate(lang)
+        obj.set_current_language(lang)
         for k, v in kwargs.items():
             setattr(obj, k, v)
         obj.save()

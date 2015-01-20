@@ -29,12 +29,14 @@ from .managers import CategoryManager, RelatedManager
 def get_translation(obj, language_code):
     """This is an adapter from django-hvad.utils.get_translation(), a function
     to django-parler.models.get_translation() (a model instance method)."""
+    if not obj or not hasattr(obj, "get_translation"):
+        return None
     return obj.get_translation(language_code)
 
 
 def get_slug_in_language(record, language):
     """This is an adapter from django-hvad's lazy_translation_getter."""
-    if not record:
+    if not record or not hasattr(record, "safe_translation_getter"):
         return None
     return record.safe_translation_getter(
         field="slug", language_code=language, default=None, )
@@ -55,9 +57,9 @@ class Category(TranslatableModel):
 
     def __str__(self):
         if six.PY2:
-            return self.lazy_translation_getter('name', unicode(self.pk))
+            return self.safe_translation_getter('name', unicode(self.pk))
         else:
-            return self.lazy_translation_getter('name', str(self.pk))
+            return self.safe_translation_getter('name', str(self.pk))
 
     def model_type_id(self):
         return ContentType.objects.get_for_model(self.__class__).id
