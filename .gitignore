@@ -7,3 +7,4 @@ dist/*
 build/*
 *.egg-info/*
 local_settings.py
+.coverage
