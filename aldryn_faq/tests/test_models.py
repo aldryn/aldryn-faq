@@ -4,10 +4,9 @@ from __future__ import unicode_literals
 
 from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import force_text
+from django.utils.translation import override
 
 # from cms.utils.i18n import force_language
-
-from hvad.test_utils.context_managers import LanguageOverride
 
 from aldryn_faq.models import Category, Question, get_slug_in_language
 
@@ -17,11 +16,11 @@ from . import AldrynFaqTest
 class TestCategory(AldrynFaqTest):
 
     def test_unicode(self):
-        with LanguageOverride('en'):
+        with override('en'):
             category1 = self.reload(self.category1)
             self.assertEqual(
                 force_text(category1), self.data["category1"]["en"]["name"])
-        with LanguageOverride('de'):
+        with override('de'):
             category1 = self.reload(self.category1)
             self.assertEqual(
                 force_text(category1), self.data["category1"]["de"]["name"])
@@ -89,13 +88,13 @@ class TestCategory(AldrynFaqTest):
 class TestQuestion(AldrynFaqTest):
 
     def test_unicode(self):
-        with LanguageOverride('en'):
+        with override('en'):
             question1 = self.reload(self.question1)
             self.assertEqual(
                 force_text(question1),
                 self.data["question1"]["en"]["title"]
             )
-        with LanguageOverride('de'):
+        with override('de'):
             question1 = self.reload(self.question1)
             self.assertEqual(
                 force_text(question1),
@@ -133,14 +132,14 @@ class TestQuestion(AldrynFaqTest):
         )
 
     def test_manager_filter_by_current_language(self):
-        with LanguageOverride("en"):
+        with override("en"):
             questions = Question.objects.filter_by_current_language()
             self.assertEqualItems(
                 [q.id for q in questions],
                 [self.question1.id]
             )
 
-        with LanguageOverride("de"):
+        with override("de"):
             questions = Question.objects.filter_by_current_language()
             self.assertEqualItems(
                 [q.id for q in questions],
@@ -154,7 +153,7 @@ class TestFAQTranslations(AldrynFaqTest):
         """Test we can fetch arbitrary translations of the question and
         its category."""
         # Can we target the EN values?
-        with LanguageOverride("en"):
+        with override("en"):
             question1 = self.reload(self.question1)
             category1 = self.reload(self.question1.category)
             self.assertEqual(
@@ -175,7 +174,7 @@ class TestFAQTranslations(AldrynFaqTest):
             )
 
         # And the DE values?
-        with LanguageOverride("de"):
+        with override("de"):
             question1 = self.reload(self.question1)
             category1 = self.reload(self.question1.category)
             self.assertEqual(
