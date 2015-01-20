@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django import forms
 
-from hvad.forms import TranslatableModelForm
+from parler.forms import TranslatableModelForm
 
 from sortedm2m.forms import SortedMultipleChoiceField
 
