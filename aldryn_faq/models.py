@@ -14,8 +14,7 @@ from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from cms.utils.i18n import get_current_language
 
-from hvad.models import TranslatableModel, TranslatedFields
-from hvad.utils import get_translation
+from parler.models import TranslatableModel, TranslatedFields
 
 from adminsortable.fields import SortableForeignKey
 from adminsortable.models import Sortable
@@ -25,6 +24,12 @@ from djangocms_text_ckeditor.fields import HTMLField
 from sortedm2m.fields import SortedManyToManyField
 
 from .managers import CategoryManager, RelatedManager
+
+
+def get_translation(obj, lang):
+    """This is an adapter from django-hvad.utils.get_translation(), a function
+    to django-parler.models.get_translation() (a model instance method)."""
+    return obj.get_translation(lang)
 
 
 def get_slug_in_language(record, language):
