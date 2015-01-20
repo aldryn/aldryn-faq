@@ -8,11 +8,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import override, ugettext_lazy as _
 
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
-from cms.utils.i18n import get_current_language, force_language
+from cms.utils.i18n import get_current_language
 
 from hvad.models import TranslatableModel, TranslatedFields
 from hvad.utils import get_translation
@@ -68,7 +68,7 @@ class Category(TranslatableModel):
     def get_absolute_url(self, language=None):
         language = language or get_current_language()
         slug = get_slug_in_language(self, language)
-        with force_language(language):
+        with override(language):
             if not slug:  # category not translated in given language
                 return '/%s/' % language
             kwargs = {'category_slug': slug}
@@ -109,7 +109,7 @@ class Question(TranslatableModel, Sortable):
             translation = None
         cat_slug = get_slug_in_language(category, language)
         if translation and cat_slug:
-            with force_language(language):
+            with override(language):
                 return reverse(
                     'aldryn_faq:faq-answer', args=(cat_slug, self.pk))
         else:
