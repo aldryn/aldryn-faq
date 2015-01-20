@@ -4,10 +4,10 @@ from __future__ import unicode_literals
 
 from django.utils.translation import get_language
 
-from hvad.manager import TranslationManager
+from parler.manager import TranslatableManager
 
 
-class RelatedManager(TranslationManager):
+class RelatedManager(TranslatableManager):
 
     def filter_by_language(self, language):
         return self.language(language)
@@ -16,7 +16,7 @@ class RelatedManager(TranslationManager):
         return self.filter_by_language(get_language())
 
 
-class CategoryManager(TranslationManager):
+class CategoryManager(TranslatableManager):
 
     def get_categories(self, language=None):
         categories = self.language(language).prefetch_related('questions')
