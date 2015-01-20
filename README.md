@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/aldryn/aldryn-faq.svg?branch=develop)](https://travis-ci.org/aldryn/aldryn-faq)
+[![Coverage Status](https://coveralls.io/repos/aldryn/aldryn-faq/badge.svg)](https://coveralls.io/r/aldryn/aldryn-faq)
+
 Aldryn FAQ App
 ===============
 

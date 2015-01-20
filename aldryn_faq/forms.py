@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 from django import forms
 
 from hvad.forms import TranslatableModelForm
@@ -19,10 +23,12 @@ class CategoryAdminForm(TranslatableModelForm):
 
         if self.instance.pk:
             # Make sure to exclude references from this master :)
-            categories_with_slug = categories_with_slug.exclude(master_id=self.instance.pk)
+            categories_with_slug = categories_with_slug.exclude(
+                master_id=self.instance.pk)
 
         if categories_with_slug.exists():
-            raise forms.ValidationError('A category with this slug already exists.')
+            raise forms.ValidationError(
+                'A category with this slug already exists.')
         return slug
 
 
