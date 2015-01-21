@@ -150,6 +150,6 @@ class TestCategoryListPlugin(AldrynFaqTest, CMSRequestBasedTest):
         plugin2 = add_plugin(ph, "CategoryListPlugin", language="de")
         plugin2.copy_relations(plugin)
         self.assertEqualItems(
-            plugin.get_categories(),
-            plugin2.get_categories()
+            [c.id for c in plugin.get_categories()],
+            [c.id for c in plugin2.get_categories()]
         )
