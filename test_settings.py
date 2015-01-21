@@ -37,7 +37,7 @@ HELPER_SETTINGS = {
         'adminsortable',
         'aldryn_faq',
         'djangocms_text_ckeditor',
-        'hvad',
+        'parler',
         'sortedm2m',
     ],
     "HAYSTACK_CONNECTIONS": HAYSTACK_CONNECTIONS
