@@ -1,3 +1,5 @@
+.. image:: https://badge.fury.io/py/aldryn_faq.svg
+    :target: http://badge.fury.io/py/aldryn_faq
 .. image:: https://travis-ci.org/aldryn/aldryn-faq.svg
     :target: https://travis-ci.org/aldryn/aldryn-faq
 .. image:: https://coveralls.io/repos/aldryn/aldryn-faq/badge.svg
