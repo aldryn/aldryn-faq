@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 
 from django.core.urlresolvers import resolve
 from django.db import models
-from django.shortcuts import get_list_or_404
 from django.utils.translation import get_language_from_request
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
