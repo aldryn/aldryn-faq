@@ -9,9 +9,11 @@ from django.views.generic import DetailView
 from django.views.generic.list import ListView
 
 from menus.utils import set_language_changer
+from aldryn_apphooks_config.mixins import AppConfigMixin
+
+from .models import Category, Question
 
 from . import request_faq_category_identifier, request_faq_question_identifier
-from .models import Category, Question
 
 
 class FaqMixin(object):
@@ -32,7 +34,7 @@ class FaqMixin(object):
         return self.model.objects.language(self.current_language)
 
 
-class FaqByCategoryView(FaqMixin, ListView):
+class FaqByCategoryView(FaqMixin, AppConfigMixin, ListView):
 
     template_name = 'aldryn_faq/questiontranslation_list.html'
 
@@ -50,10 +52,13 @@ class FaqByCategoryView(FaqMixin, ListView):
 
     def get_queryset(self):
         queryset = super(FaqByCategoryView, self).get_queryset()
-        return queryset.filter(category=self.category).order_by('order')
+        return queryset.filter(
+            category=self.category,
+            category__namespace__namespace=self.namespace
+        ).order_by('order')
 
 
-class FaqAnswerView(FaqMixin, DetailView):
+class FaqAnswerView(FaqMixin, AppConfigMixin, DetailView):
 
     template_name = 'aldryn_faq/question_detail.html'
 

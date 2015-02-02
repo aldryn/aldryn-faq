@@ -8,17 +8,17 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib import admin
 from django.templatetags.static import static
-from django.utils.translation import get_language
+from django.utils.translation import get_language, ugettext as _
 
 import cms
 from cms.admin.placeholderadmin import PlaceholderAdmin
 from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 
-from adminsortable.admin import SortableAdminMixin
+from aldryn_apphooks_config.admin import BaseAppHookConfig
 
 from parler.admin import TranslatableAdmin
 
-from .models import Category, Question
+from .models import Category, Question, FaqConfig
 from .forms import CategoryAdminForm
 
 
@@ -54,11 +54,18 @@ class AllTranslationsAdminMixin(object):
 
 class CategoryAdmin(AllTranslationsAdminMixin, TranslatableAdmin):
 
-    list_display = ['__str__', 'all_translations']
+    list_display = ('__str__', 'all_translations', 'namespace', )
 
     form = CategoryAdminForm
 
-    _fieldsets = [(None, {'fields': ['name', 'slug']})]
+    _fieldsets = [
+        (None, {
+            'fields': ('name', 'slug', )
+        }),
+        (_('Language Independent Fields'), {
+            'fields': ('namespace', )
+        }),
+    ]
 
     class Media:
         # Django BUG - Django only checks for self.prepopulated_fields to
@@ -104,3 +111,10 @@ class QuestionAdmin(FrontendEditableAdminMixin, SortableAdminMixin,
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Question, QuestionAdmin)
+
+
+class FaqConfigAdmin(TranslatableAdmin, BaseAppHookConfig):
+    def get_config_fields(self):
+        return ('app_title', )
+
+admin.site.register(FaqConfig, FaqConfigAdmin)

@@ -9,16 +9,16 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import override, ugettext_lazy as _
+
+from aldryn_apphooks_config.models import AppHookConfig
+
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from cms.utils.i18n import get_current_language
 
-from parler.models import TranslatableModel, TranslatedFields
-
 from djangocms_text_ckeditor.fields import HTMLField
-
+from parler.models import TranslatableModel, TranslatedFields
 from sortedm2m.fields import SortedManyToManyField
-
 from .managers import CategoryManager, RelatedManager
 
 
@@ -38,13 +38,20 @@ def get_slug_in_language(record, language):
         field="slug", language_code=language, default=None, )
 
 
+class FaqConfig(TranslatableModel, AppHookConfig):
+    """Adds some translatable, per-app-instance fields."""
+    translations = TranslatedFields(
+        app_title=models.CharField(_('application title'), max_length=234),
+    )
+
+
 @python_2_unicode_compatible
 class Category(TranslatableModel):
     translations = TranslatedFields(
         name=models.CharField(max_length=255),
         slug=models.SlugField(verbose_name=_('Slug'), max_length=255),
     )
-
+    namespace = models.ForeignKey(FaqConfig, verbose_name=_('namespace'))
     objects = CategoryManager()
 
     class Meta:
