@@ -3,10 +3,11 @@ from setuptools import setup, find_packages
 from aldryn_faq import __version__
 
 REQUIREMENTS = [
-    'django-parler',
+    'aldryn-search',
     'django-admin-sortable',
-    'djangocms-text-ckeditor',
+    'django-parler',
     'django-sortedm2m',
+    'djangocms-text-ckeditor',
     'unidecode',
 ]
 
