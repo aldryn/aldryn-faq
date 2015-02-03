@@ -3,3 +3,4 @@
 
 * multi-boilerplate support
   new requirement: aldryn-boilerplates (needs configuration)
+* added bootstrap templates
