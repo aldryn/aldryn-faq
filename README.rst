@@ -49,8 +49,13 @@ Manual Installation
            …
        ]
 
+3) Configure ``aldryn-boilerplates`` (https://pypi.python.org/pypi/aldryn-boilerplates/).
 
-3) Run migrations: `python manage.py migrate aldryn_faq`.
+   To use the old templates, set ``ALDRYN_BOILERPLATE_NAME='legacy'``.
+   To use https://github.com/aldryn/aldryn-boilerplate-standard (recommended, will be renamed to
+   ``aldryn-boilerplate-bootstrap3``) set ``ALDRYN_BOILERPLATE_NAME='bootstrap3'``.
+
+4) Run migrations: `python manage.py migrate aldryn_faq`.
 
    NOTE: aldryn_faq supports both South and Django 1.7 migrations. However, if
    your project uses a version of South older than 1.0.2, you may need to add
@@ -62,7 +67,7 @@ Manual Installation
            …
        ]
 
-4) (Re-)Start your application server.
+5) (Re-)Start your application server.
 
 
 Listing

@@ -1,0 +1,26 @@
+{% load i18n placeholder_tags cms_tags %}
+{% load url from future %}
+
+{% regroup object_list|dictsort:"category_id" by category as qgroups %}
+
+<div class="list-group">
+    {% for qgroup in qgroups %}
+        {% if list %}<p class="list-group-item disabled"><strong>{{ qgroup.grouper }}</strong></p>{% endif %}
+
+        {% for question in qgroup.list %}
+            <a href="{% url 'aldryn_faq:faq-answer' question.category.slug question.pk %}" class="list-group-item">
+                {% render_model question "title" %}
+                {% if not list %}<span class="badge pull-right">{{ qgroup.grouper }}</span>{% endif %}
+            </a>
+        {% endfor %}
+    {% empty %}
+        {% if list %}<p class="list-group-item disabled"><strong>{{ qgroup.grouper|default:_("Category") }}</strong></p>{% endif %}
+        <p class="list-group-item">{% trans "No entry found." %}</p>
+    {% endfor %}
+</div>
+
+{% if list and title %}
+    <ul class="pager">
+        <li class="previous"><a href="../"><span aria-hidden="true">&larr;</span> {% trans "Back" %}</a></li>
+    </ul>
+{% endif %}

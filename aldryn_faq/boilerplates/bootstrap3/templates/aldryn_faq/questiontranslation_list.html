@@ -1,0 +1,7 @@
+{% extends "aldryn_faq/base.html" %}
+
+{% block faq_content %}
+    {% with list="true" %}
+        {% include "aldryn_faq/includes/question_list.html" %}
+    {% endwith %}
+{% endblock %}

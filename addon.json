@@ -1,14 +1,14 @@
 {
     "name": "Aldryn FAQ",
     "description": "FAQ addon for Aldryn",
-    "version": "0.9.1",
+    "version": "0.11.0",
     "url": "https://github.com/aldryn/aldryn-faq",
     "package-name": "aldryn-faq",
     "installed-apps": [
         "hvad",
         "adminsortable",
         "djangocms_text_ckeditor",
-	    "sortedm2m",
+        "sortedm2m",
         "unidecode",
         "aldryn_faq"
     ],
