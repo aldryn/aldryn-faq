@@ -23,16 +23,17 @@ class FaqCategoryMenu(CMSAttachMenu):
         lang = get_language_from_request(request, check_path=True)
         categories = Category.objects.translated(lang)
 
-        if hasattr(self, 'instance'):
-            app = apphook_pool.get_apphook(self.instance.application_urls)
-            config = app.get_config(self.instance.application_namespace)
-            if config:
-                categories = categories.filter(
-                    namespace__namespace=config.namespace
-                )
-        else:
-            raise ImproperlyConfigured('Aldryn-FAQ requires a newer version '
-                                       'of django CMS.')
+        try:
+            if self.instance:
+                app = apphook_pool.get_apphook(self.instance.application_urls)
+                config = app.get_config(self.instance.application_namespace)
+                if config:
+                    categories = categories.filter(
+                        namespace__namespace=config.namespace
+                    )
+        except AttributeError:
+            raise ImproperlyConfigured('This version of Aldryn-FAQ requires a '
+                                       'newer version of django CMS.')
 
         for category in categories:
             node = NavigationNode(
