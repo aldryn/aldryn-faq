@@ -54,7 +54,7 @@ class FaqByCategoryView(FaqMixin, AppConfigMixin, ListView):
         queryset = super(FaqByCategoryView, self).get_queryset()
         return queryset.filter(
             category=self.category,
-            category__namespace__namespace=self.namespace
+            category__appconfig__namespace=self.namespace
         ).order_by('order')
 
 

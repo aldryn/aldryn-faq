@@ -23,8 +23,10 @@ from .managers import CategoryManager, RelatedManager
 
 
 def get_translation(obj, language_code):
-    """This is an adapter from django-hvad.utils.get_translation(), a function
-    to django-parler.models.get_translation() (a model instance method)."""
+    """
+    This is an adapter from django-hvad.utils.get_translation(), a function
+    to django-parler.models.get_translation() (a model instance method).
+    """
     if not obj or not hasattr(obj, "get_translation"):
         return None
     return obj.get_translation(language_code)
@@ -51,7 +53,8 @@ class Category(TranslatableModel):
         name=models.CharField(max_length=255),
         slug=models.SlugField(verbose_name=_('Slug'), max_length=255),
     )
-    namespace = models.ForeignKey(FaqConfig, verbose_name=_('namespace'))
+    appconfig = models.ForeignKey(FaqConfig, verbose_name=_('appconfig'),
+        blank=True, null=True)
     objects = CategoryManager()
 
     class Meta:
