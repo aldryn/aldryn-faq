@@ -75,11 +75,8 @@ class AldrynFaqTest(TestUtilityMixin, TestCase):
     def setUp(self):
         """Setup a prebuilt and translated Question with Category
         for testing."""
-        self.appconfig = FaqConfig(namespace="aldryn_faq")
-        self.appconfig.save()
         with override("en"):
             self.category1 = Category(**self.data["category1"]["en"])
-            self.category1.appconfig = self.appconfig
             self.category1.save()
             self.question1 = Question(**self.data["question1"]["en"])
             self.question1.category = self.category1
@@ -96,7 +93,6 @@ class AldrynFaqTest(TestUtilityMixin, TestCase):
         with override("de"):
             # Make a DE-only Category
             self.category2 = Category(**self.data["category2"]["de"])
-            self.category2.appconfig = self.appconfig
             self.category2.save()
 
             # Make a DE-only Question
