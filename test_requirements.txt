@@ -4,7 +4,7 @@ python-coveralls==2.4.2
 django>=1.6,<1.7
 django-admin-sortable2
 django-classy-tags
--e git+http://github.com/yakky/django-cms/@feature/appspaced_apphooks#egg=django-cms
+-e git+http://github.com/yakky/django-cms/@future/appspaced_apphooks#egg=django-cms
 django-mptt
 django-parler
 django-reversion>=1.8.2,<1.9
