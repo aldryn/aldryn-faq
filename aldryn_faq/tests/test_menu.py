@@ -6,7 +6,7 @@ from aldryn_faq.menu import FaqCategoryMenu
 from django.utils.translation import (
     get_language_from_request,
 )
-from . import AldrynFaqTest, CMSRequestBasedTest
+from .test_base import AldrynFaqTest, CMSRequestBasedTest
 
 
 class TestMenu(AldrynFaqTest, CMSRequestBasedTest):

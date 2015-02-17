@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from aldryn_faq.sitemaps import FAQCategoriesSitemap, FAQQuestionsSitemap
 
-from . import AldrynFaqTest
+from .test_base import AldrynFaqTest
 
 
 class TestSitemap(AldrynFaqTest):

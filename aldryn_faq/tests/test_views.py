@@ -8,7 +8,7 @@ from django.utils.translation import override
 
 from aldryn_faq.views import FaqByCategoryView, FaqAnswerView
 
-from . import AldrynFaqTest, CMSRequestBasedTest
+from .test_base import AldrynFaqTest, CMSRequestBasedTest
 
 
 class TestFaqByCategoryView(AldrynFaqTest, CMSRequestBasedTest):
