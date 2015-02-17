@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from django.core.urlresolvers import reverse
 from django.test.client import RequestFactory
+from django.utils.translation import override
 
 from aldryn_faq.views import FaqByCategoryView, FaqAnswerView
 
@@ -16,7 +17,8 @@ class TestFaqByCategoryView(AldrynFaqTest, CMSRequestBasedTest):
         category1 = self.reload(self.category1, "en")
         question1 = self.reload(self.question1, "en")
         kwargs = {"category_slug": category1.slug}
-        category1_url = reverse('aldryn_faq:faq-category', kwargs=kwargs)
+        with override('en'):
+            category1_url = reverse('aldryn_faq:faq-category', kwargs=kwargs)
         factory = RequestFactory()
         request = factory.get(category1_url)
         response = FaqByCategoryView.as_view()(request, **kwargs)
@@ -32,7 +34,8 @@ class TestFaqAnswerView(AldrynFaqTest, CMSRequestBasedTest):
         category1 = self.reload(self.category1, "en")
         question1 = self.reload(self.question1, "en")
         kwargs = {"category_slug": category1.slug, "pk": question1.id}
-        url = reverse('aldryn_faq:faq-answer', kwargs=kwargs)
+        with override('en'):
+            url = reverse('aldryn_faq:faq-answer', kwargs=kwargs)
         factory = RequestFactory()
         request = factory.get(url)
         response = FaqAnswerView.as_view()(request, **kwargs)
