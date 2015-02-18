@@ -29,7 +29,7 @@ class FaqCategoryMenu(CMSAttachMenu):
                 config = app.get_config(self.instance.application_namespace)
                 if config:
                     categories = categories.filter(
-                        namespace__namespace=config.namespace
+                        appconfig__namespace=config.namespace
                     )
         except AttributeError:
             raise ImproperlyConfigured('This version of Aldryn-FAQ requires a '

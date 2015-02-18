@@ -54,7 +54,7 @@ class AllTranslationsAdminMixin(object):
 
 class CategoryAdmin(AllTranslationsAdminMixin, TranslatableAdmin):
 
-    list_display = ('__str__', 'all_translations', 'namespace', )
+    list_display = ('__str__', 'all_translations', 'appconfig', )
 
     form = CategoryAdminForm
 
@@ -63,7 +63,7 @@ class CategoryAdmin(AllTranslationsAdminMixin, TranslatableAdmin):
             'fields': ('name', 'slug', )
         }),
         (_('Language Independent Fields'), {
-            'fields': ('namespace', )
+            'fields': ('appconfig', )
         }),
     ]
 
