@@ -47,10 +47,6 @@ class FaqByCategoryView(FaqMixin, AppConfigMixin, ListView):
 
     def get_category_or_404(self, namespace=None):
         list = Category.objects.translated(slug=self.kwargs['category_slug'])
-        if namespace:
-            list = list.filter(appconfig__namespace=namespace)
-        else:
-            list = list.filter(appconfig__isnull=True)
         if not list:
             raise Http404("Category not found")
         return list[0]
