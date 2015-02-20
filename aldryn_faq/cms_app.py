@@ -14,7 +14,7 @@ from .models import FaqConfig
 class FaqApp(CMSConfigApp):
     name = _('FAQ')
     urls = ['aldryn_faq.urls']
-    menus = [FaqCategoryMenu]
+    menus = [FaqCategoryMenu, ]
     app_name = 'aldryn_faq'
     app_config = FaqConfig
 
