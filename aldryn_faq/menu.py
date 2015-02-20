@@ -36,8 +36,6 @@ class FaqCategoryMenu(CMSAttachMenu):
                 categories = categories.filter(
                     appconfig__namespace=config.namespace
                 )
-        else:
-            print('FaqCategoryMenu does not have the property: instance!')
 
         for category in categories:
             node = NavigationNode(
