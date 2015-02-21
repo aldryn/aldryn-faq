@@ -34,7 +34,7 @@ HELPER_SETTINGS = {
         ('fr', 'French'),
     ),
     'INSTALLED_APPS': [
-        'adminsortable',
+        'adminsortable2',
         'aldryn_faq',
         'djangocms_text_ckeditor',
         'parler',
