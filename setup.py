@@ -4,7 +4,7 @@ from aldryn_faq import __version__
 
 REQUIREMENTS = [
     'aldryn-search',
-    'django-admin-sortable',
+    'django-admin-sortable2',
     'django-parler',
     'django-sortedm2m',
     'djangocms-text-ckeditor',
