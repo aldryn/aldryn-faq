@@ -15,9 +15,6 @@ from cms.utils.i18n import get_current_language
 
 from parler.models import TranslatableModel, TranslatedFields
 
-from adminsortable.fields import SortableForeignKey
-from adminsortable.models import Sortable
-
 from djangocms_text_ckeditor.fields import HTMLField
 
 from sortedm2m.fields import SortedManyToManyField
@@ -74,12 +71,12 @@ class Category(TranslatableModel):
 
 
 @python_2_unicode_compatible
-class Question(TranslatableModel, Sortable):
+class Question(TranslatableModel):
     translations = TranslatedFields(
         title=models.CharField(_('Title'), max_length=255),
         answer_text=HTMLField(_('answer'))
     )
-    category = SortableForeignKey(Category, related_name='questions')
+    category = models.ForeignKey(Category, related_name='questions')
 
     answer = PlaceholderField(
         'faq_question_answer', related_name='faq_questions')
@@ -88,9 +85,12 @@ class Question(TranslatableModel, Sortable):
 
     objects = RelatedManager()
 
-    class Meta(Sortable.Meta):
+    order = models.PositiveIntegerField(default=1, db_index=True)
+
+    class Meta:
         verbose_name = _('question')
         verbose_name_plural = _('questions')
+        ordering = ('order', )
 
     def __str__(self):
         return self.safe_translation_getter('title', default=str(self.pk))

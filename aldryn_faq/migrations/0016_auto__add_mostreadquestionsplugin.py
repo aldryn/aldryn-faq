@@ -51,7 +51,7 @@ class Migration(SchemaMigration):
         u'aldryn_faq.question': {
             'Meta': {'ordering': "['order']", 'object_name': 'Question'},
             'answer': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'faq_questions'", 'null': 'True', 'to': "orm['cms.Placeholder']"}),
-            'category': ('adminsortable.fields.SortableForeignKey', [], {'related_name': "'questions'", 'to': u"orm['aldryn_faq.Category']"}),
+            'category': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'questions'", 'to': u"orm['aldryn_faq.Category']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_top': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'number_of_visits': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),

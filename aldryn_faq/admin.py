@@ -14,7 +14,7 @@ import cms
 from cms.admin.placeholderadmin import PlaceholderAdmin
 from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 
-from adminsortable.admin import SortableAdmin
+from adminsortable.admin import SortableAdminMixin
 
 from parler.admin import TranslatableAdmin
 
@@ -74,7 +74,7 @@ class CategoryAdmin(AllTranslationsAdminMixin, TranslatableAdmin):
         return self._fieldsets
 
 
-class QuestionAdmin(FrontendEditableAdminMixin, SortableAdmin,
+class QuestionAdmin(FrontendEditableAdminMixin, SortableAdminMixin,
                     PlaceholderAdmin, TranslatableAdmin):
 
     render_placeholder_language_tabs = False
