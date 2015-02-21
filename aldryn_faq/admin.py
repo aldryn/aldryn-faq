@@ -14,8 +14,8 @@ import cms
 from cms.admin.placeholderadmin import PlaceholderAdmin
 from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 
+from adminsortable.admin import SortableAdminMixin
 from aldryn_apphooks_config.admin import BaseAppHookConfig
-
 from parler.admin import TranslatableAdmin
 
 from .models import Category, Question, FaqConfig
