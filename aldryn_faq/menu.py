@@ -23,7 +23,7 @@ class FaqCategoryMenu(CMSAttachMenu):
         lang = get_language_from_request(request, check_path=True)
         categories = Category.objects.translated(lang)
 
-        if hasattr(self, 'instance'):
+        if hasattr(self, 'instance') and self.instance:
             #
             # If self has a property `instance`, then we're using django CMS
             # 3.1.0 or later, which supports using CMSAttachMenus on multiple,
