@@ -11,12 +11,13 @@ from django.templatetags.static import static
 from django.utils.translation import get_language, ugettext as _
 
 import cms
-from cms.admin.placeholderadmin import PlaceholderAdmin
 from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 
 from adminsortable.admin import SortableAdminMixin
 from aldryn_apphooks_config.admin import BaseAppHookConfig
+from aldryn_reversion.admin import VersionedPlaceholderAdminMixin
 from parler.admin import TranslatableAdmin
+# from reversion import VersionAdminm
 
 from .models import Category, Question, FaqConfig
 from .forms import CategoryAdminForm
@@ -30,7 +31,7 @@ class AllTranslationsAdminMixin(object):
         """This is an adapter for the functionality that was in HVAD."""
         available = list(obj.get_available_languages())
         langs = []
-        for lang, _ in settings.LANGUAGES:
+        for lang, _language_name in settings.LANGUAGES:
             if lang in available:
                 langs.append(lang)
                 available.remove(lang)
@@ -81,8 +82,9 @@ class CategoryAdmin(AllTranslationsAdminMixin, TranslatableAdmin):
         return self._fieldsets
 
 
-class QuestionAdmin(FrontendEditableAdminMixin, SortableAdminMixin,
-                    PlaceholderAdmin, TranslatableAdmin):
+class QuestionAdmin(VersionedPlaceholderAdminMixin,
+                    FrontendEditableAdminMixin,
+                    SortableAdminMixin, TranslatableAdmin):
 
     render_placeholder_language_tabs = False
     list_display = ['__str__', 'category', 'is_top', 'number_of_visits']

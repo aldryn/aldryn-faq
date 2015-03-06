@@ -5,7 +5,7 @@ django>=1.6,<1.7
 django-admin-sortable2
 django-classy-tags
 https://github.com/yakky/django-cms/archive/future/aldryn.zip
-# -e git+http://github.com/yakky/django-cms/@future/appspaced_apphooks#egg=django-cms
+django-cms>=3.0.12
 django-mptt
 django-parler
 django-reversion>=1.8.2,<1.9

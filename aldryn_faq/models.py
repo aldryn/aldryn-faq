@@ -11,6 +11,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import override, ugettext_lazy as _
 
 from aldryn_apphooks_config.models import AppHookConfig
+from aldryn_reversion.core import version_controlled_content
 
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
@@ -19,6 +20,7 @@ from cms.utils.i18n import get_current_language
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 from sortedm2m.fields import SortedManyToManyField
+
 from .managers import CategoryManager, RelatedManager
 
 
@@ -48,6 +50,7 @@ class FaqConfig(TranslatableModel, AppHookConfig):
 
 
 @python_2_unicode_compatible
+@version_controlled_content
 class Category(TranslatableModel):
     translations = TranslatedFields(
         name=models.CharField(max_length=255),
@@ -81,6 +84,7 @@ class Category(TranslatableModel):
 
 
 @python_2_unicode_compatible
+@version_controlled_content
 class Question(TranslatableModel):
     translations = TranslatedFields(
         title=models.CharField(_('Title'), max_length=255),
