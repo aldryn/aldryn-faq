@@ -42,6 +42,7 @@ Manual Installation
        INSTALLED_APPS = [
            …
            'aldryn_faq',
+           'aldryn_reversion',
            'djangocms_text_ckeditor',
            'adminsortable',
            'sortedm2m',

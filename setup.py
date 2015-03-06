@@ -4,6 +4,7 @@ from aldryn_faq import __version__
 
 REQUIREMENTS = [
     'aldryn-boilerplates>=0.6',
+    'aldryn-reversion',
     'aldryn-search',
     'django-admin-sortable2',
     'django-parler',

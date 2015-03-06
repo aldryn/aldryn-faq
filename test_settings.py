@@ -36,6 +36,7 @@ HELPER_SETTINGS = {
     'INSTALLED_APPS': [
         'adminsortable',
         'aldryn_faq',
+        'aldryn_reversion',
         'djangocms_text_ckeditor',
         'parler',
         'sortedm2m',
