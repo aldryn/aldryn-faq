@@ -9,25 +9,24 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import override, ugettext_lazy as _
+
+from aldryn_apphooks_config.models import AppHookConfig
+
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from cms.utils.i18n import get_current_language
 
-from parler.models import TranslatableModel, TranslatedFields
-
-from adminsortable.fields import SortableForeignKey
-from adminsortable.models import Sortable
-
 from djangocms_text_ckeditor.fields import HTMLField
-
+from parler.models import TranslatableModel, TranslatedFields
 from sortedm2m.fields import SortedManyToManyField
-
 from .managers import CategoryManager, RelatedManager
 
 
 def get_translation(obj, language_code):
-    """This is an adapter from django-hvad.utils.get_translation(), a function
-    to django-parler.models.get_translation() (a model instance method)."""
+    """
+    This is an adapter from django-hvad.utils.get_translation(), a function
+    to django-parler.models.get_translation() (a model instance method).
+    """
     if not obj or not hasattr(obj, "get_translation"):
         return None
     return obj.get_translation(language_code)
@@ -41,13 +40,21 @@ def get_slug_in_language(record, language):
         field="slug", language_code=language, default=None, )
 
 
+class FaqConfig(TranslatableModel, AppHookConfig):
+    """Adds some translatable, per-app-instance fields."""
+    translations = TranslatedFields(
+        app_title=models.CharField(_('application title'), max_length=234),
+    )
+
+
 @python_2_unicode_compatible
 class Category(TranslatableModel):
     translations = TranslatedFields(
         name=models.CharField(max_length=255),
         slug=models.SlugField(verbose_name=_('Slug'), max_length=255),
     )
-
+    appconfig = models.ForeignKey(FaqConfig, verbose_name=_('appconfig'),
+        blank=True, null=True)
     objects = CategoryManager()
 
     class Meta:
@@ -74,12 +81,12 @@ class Category(TranslatableModel):
 
 
 @python_2_unicode_compatible
-class Question(TranslatableModel, Sortable):
+class Question(TranslatableModel):
     translations = TranslatedFields(
         title=models.CharField(_('Title'), max_length=255),
         answer_text=HTMLField(_('answer'))
     )
-    category = SortableForeignKey(Category, related_name='questions')
+    category = models.ForeignKey(Category, related_name='questions')
 
     answer = PlaceholderField(
         'faq_question_answer', related_name='faq_questions')
@@ -88,9 +95,12 @@ class Question(TranslatableModel, Sortable):
 
     objects = RelatedManager()
 
-    class Meta(Sortable.Meta):
+    order = models.PositiveIntegerField(default=1, db_index=True)
+
+    class Meta:
         verbose_name = _('question')
         verbose_name_plural = _('questions')
+        ordering = ('order', )
 
     def __str__(self):
         return self.safe_translation_getter('title', default=str(self.pk))

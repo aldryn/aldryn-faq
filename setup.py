@@ -5,11 +5,9 @@ from aldryn_faq import __version__
 REQUIREMENTS = [
     'aldryn-boilerplates>=0.6',
     'aldryn-search',
-    'django-admin-sortable',
+    'django-admin-sortable2',
     'django-parler',
     'django-sortedm2m',
-    'djangocms-text-ckeditor',
-    'unidecode',
 ]
 
 CLASSIFIERS = [

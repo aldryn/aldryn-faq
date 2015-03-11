@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime
+from south.utils import datetime_utils as datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
@@ -8,22 +8,29 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'MostReadQuestionsPlugin'
-        db.create_table(u'aldryn_faq_mostreadquestionsplugin', (
-            (u'cmsplugin_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['cms.CMSPlugin'], unique=True, primary_key=True)),
-            ('questions', self.gf('django.db.models.fields.IntegerField')(default=5)),
-        ))
-        db.send_create_signal(u'aldryn_faq', ['MostReadQuestionsPlugin'])
+        # Deleting field 'Category.namespace'
+        db.delete_column(u'aldryn_faq_category', 'namespace_id')
+
+        # Adding field 'Category.appconfig'
+        db.add_column(u'aldryn_faq_category', 'appconfig',
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['aldryn_faq.FaqConfig'], null=True, blank=True),
+                      keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting model 'MostReadQuestionsPlugin'
-        db.delete_table(u'aldryn_faq_mostreadquestionsplugin')
+        # Adding field 'Category.namespace'
+        db.add_column(u'aldryn_faq_category', 'namespace',
+                      self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['aldryn_faq.FaqConfig']),
+                      keep_default=False)
+
+        # Deleting field 'Category.appconfig'
+        db.delete_column(u'aldryn_faq_category', 'appconfig_id')
 
 
     models = {
         u'aldryn_faq.category': {
             'Meta': {'object_name': 'Category'},
+            'appconfig': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_faq.FaqConfig']", 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         u'aldryn_faq.categorylistplugin': {
@@ -31,12 +38,26 @@ class Migration(SchemaMigration):
             u'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['cms.CMSPlugin']", 'unique': 'True', 'primary_key': 'True'})
         },
         u'aldryn_faq.categorytranslation': {
-            'Meta': {'unique_together': "[('language_code', 'master')]", 'object_name': 'CategoryTranslation', 'db_table': "u'aldryn_faq_category_translation'"},
+            'Meta': {'unique_together': "[(u'language_code', u'master')]", 'object_name': 'CategoryTranslation', 'db_table': "u'aldryn_faq_category_translation'"},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'language_code': ('django.db.models.fields.CharField', [], {'max_length': '15', 'db_index': 'True'}),
-            'master': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'translations'", 'null': 'True', 'to': u"orm['aldryn_faq.Category']"}),
+            u'master': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'translations'", 'null': 'True', 'to': u"orm['aldryn_faq.Category']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255', 'blank': 'True'})
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'})
+        },
+        u'aldryn_faq.faqconfig': {
+            'Meta': {'object_name': 'FaqConfig'},
+            'app_data': ('app_data.fields.AppDataField', [], {'default': "'{}'"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'namespace': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '100'}),
+            'type': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+        u'aldryn_faq.faqconfigtranslation': {
+            'Meta': {'unique_together': "[(u'language_code', u'master')]", 'object_name': 'FaqConfigTranslation', 'db_table': "u'aldryn_faq_faqconfig_translation'"},
+            'app_title': ('django.db.models.fields.CharField', [], {'max_length': '234'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'language_code': ('django.db.models.fields.CharField', [], {'max_length': '15', 'db_index': 'True'}),
+            u'master': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'translations'", 'null': 'True', 'to': u"orm['aldryn_faq.FaqConfig']"})
         },
         u'aldryn_faq.latestquestionsplugin': {
             'Meta': {'object_name': 'LatestQuestionsPlugin', '_ormbases': ['cms.CMSPlugin']},
@@ -50,8 +71,8 @@ class Migration(SchemaMigration):
         },
         u'aldryn_faq.question': {
             'Meta': {'ordering': "['order']", 'object_name': 'Question'},
-            'answer': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'faq_questions'", 'null': 'True', 'to': "orm['cms.Placeholder']"}),
-            'category': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'questions'", 'to': u"orm['aldryn_faq.Category']"}),
+            'answer': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'faq_questions'", 'null': 'True', 'to': "orm['cms.Placeholder']"}),
+            'category': ('adminsortable.fields.SortableForeignKey', [], {'related_name': "u'questions'", 'to': u"orm['aldryn_faq.Category']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_top': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'number_of_visits': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
@@ -63,17 +84,17 @@ class Migration(SchemaMigration):
             'questions': ('sortedm2m.fields.SortedManyToManyField', [], {'to': u"orm['aldryn_faq.Question']", 'symmetrical': 'False'})
         },
         u'aldryn_faq.questiontranslation': {
-            'Meta': {'unique_together': "[('language_code', 'master')]", 'object_name': 'QuestionTranslation', 'db_table': "u'aldryn_faq_question_translation'"},
+            'Meta': {'unique_together': "[(u'language_code', u'master')]", 'object_name': 'QuestionTranslation', 'db_table': "u'aldryn_faq_question_translation'"},
             'answer_text': ('djangocms_text_ckeditor.fields.HTMLField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'language_code': ('django.db.models.fields.CharField', [], {'max_length': '15', 'db_index': 'True'}),
-            'master': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'translations'", 'null': 'True', 'to': u"orm['aldryn_faq.Question']"}),
+            u'master': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'translations'", 'null': 'True', 'to': u"orm['aldryn_faq.Question']"}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         u'aldryn_faq.selectedcategory': {
-            'Meta': {'ordering': "['position']", 'object_name': 'SelectedCategory'},
+            'Meta': {'ordering': "[u'position']", 'object_name': 'SelectedCategory'},
             'category': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_faq.Category']"}),
-            'cms_plugin': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'selected_categories'", 'to': u"orm['aldryn_faq.CategoryListPlugin']"}),
+            'cms_plugin': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'selected_categories'", 'to': u"orm['aldryn_faq.CategoryListPlugin']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'position': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'})
         },
@@ -101,7 +122,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Placeholder'},
             'default_width': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'slot': ('django.db.models.fields.CharField', [], {'max_length': '50', 'db_index': 'True'})
+            'slot': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'})
         }
     }
 

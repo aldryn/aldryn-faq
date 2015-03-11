@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from aldryn_faq.search_indexes import QuestionIndex, CategoryIndex
 
-from . import AldrynFaqTest
+from .test_base import AldrynFaqTest
 
 
 class TestQuestionIndex(AldrynFaqTest):

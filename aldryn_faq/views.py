@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
-
 from django.core.urlresolvers import resolve
 from django.db import models
+from django.http import Http404
 from django.utils.translation import get_language_from_request
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
 
 from menus.utils import set_language_changer
+from aldryn_apphooks_config.mixins import AppConfigMixin
+
+from .models import Category, Question
 
 from . import request_faq_category_identifier, request_faq_question_identifier
-from .models import Category, Question
 
 
 class FaqMixin(object):
@@ -32,28 +34,33 @@ class FaqMixin(object):
         return self.model.objects.language(self.current_language)
 
 
-class FaqByCategoryView(FaqMixin, ListView):
+class FaqByCategoryView(FaqMixin, AppConfigMixin, ListView):
 
     template_name = 'aldryn_faq/questiontranslation_list.html'
 
     def get(self, *args, **kwargs):
-        self.category = self.get_category()
+        self.category = self.get_category_or_404(self.namespace)
         setattr(self.request, request_faq_category_identifier, self.category)
         response = super(FaqByCategoryView, self).get(*args, **kwargs)
         set_language_changer(self.request, self.category.get_absolute_url)
         return response
 
-    def get_category(self):
-        return Category.objects.translated(
-            slug=self.kwargs['category_slug']
-        )[0]
+    def get_category_or_404(self, namespace=None):
+        list = Category.objects.translated(slug=self.kwargs['category_slug'])
+        if not list:
+            raise Http404("Category not found")
+        return list[0]
 
     def get_queryset(self):
-        queryset = super(FaqByCategoryView, self).get_queryset()
-        return queryset.filter(category=self.category).order_by('order')
+        if self.category:
+            return super(FaqByCategoryView, self).get_queryset().filter(
+                category=self.category,
+            ).order_by('order')
+        else:
+            return []
 
 
-class FaqAnswerView(FaqMixin, DetailView):
+class FaqAnswerView(FaqMixin, AppConfigMixin, DetailView):
 
     template_name = 'aldryn_faq/question_detail.html'
 

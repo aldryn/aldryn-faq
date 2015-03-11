@@ -8,7 +8,7 @@ from django.utils.translation import override
 
 from aldryn_faq.models import Category, Question, get_slug_in_language
 
-from . import AldrynFaqTest
+from .test_base import AldrynFaqTest
 
 
 class TestCategory(AldrynFaqTest):

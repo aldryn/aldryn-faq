@@ -5,11 +5,11 @@
     "url": "https://github.com/aldryn/aldryn-faq",
     "package-name": "aldryn-faq",
     "installed-apps": [
-        "hvad",
         "adminsortable",
         "djangocms_text_ckeditor",
         "sortedm2m",
         "unidecode",
+        "parler",
         "aldryn_faq"
     ],
     "author": {

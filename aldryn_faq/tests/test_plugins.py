@@ -9,7 +9,7 @@ from django.template import RequestContext
 from cms.api import add_plugin
 
 from aldryn_faq.models import SelectedCategory
-from . import AldrynFaqTest, CMSRequestBasedTest
+from .test_base import AldrynFaqTest, CMSRequestBasedTest
 
 
 class TestQuestionListPlugin(AldrynFaqTest, CMSRequestBasedTest):
