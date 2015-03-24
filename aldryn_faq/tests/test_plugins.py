@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import six
 
 from django.template import RequestContext
+from django.utils.translation import override
 
 from cms.api import add_plugin
 
@@ -24,7 +25,7 @@ class TestQuestionListPlugin(AldrynFaqTest, CMSRequestBasedTest):
             page1, self.user, None, lang_code='en', edit=False)
         context = RequestContext(request, {})
         rendered = plugin.render_plugin(context, ph)
-        self.assertTrue(rendered.find("<p>No entry found.</p>") > -1)
+        self.assertTrue(rendered.find(">No entry found.</p>") > -1)
 
         # Now, add a question, and test that it renders.
         question1 = self.reload(self.question1, "en")
@@ -50,15 +51,16 @@ class TestQuestionListPlugin(AldrynFaqTest, CMSRequestBasedTest):
 class TestLatestQuestionsPlugin(AldrynFaqTest, CMSRequestBasedTest):
 
     def test_plugin(self):
-        page1 = self.get_or_create_page("Page One")
-        ph = page1.placeholders.get(slot="content")
-        plugin = add_plugin(ph, "LatestQuestionsPlugin", language="en")
-        request = self.get_page_request(
-            page1, self.user, None, lang_code="en", edit=False)
-        context = RequestContext(request, {})
-        url1 = self.reload(self.question1, "en").get_absolute_url()
-        url2 = self.reload(self.question2, "en").get_absolute_url()
-        rendered = plugin.render_plugin(context, ph)
+        with override('de'):
+            page1 = self.get_or_create_page("Page One")
+            ph = page1.placeholders.get(slot="content")
+            plugin = add_plugin(ph, "LatestQuestionsPlugin", language="de")
+            request = self.get_page_request(
+                page1, self.user, None, lang_code="de", edit=False)
+            context = RequestContext(request, {})
+            url1 = self.reload(self.question1, "de").get_absolute_url()
+            url2 = self.reload(self.question2, "de").get_absolute_url()
+            rendered = plugin.render_plugin(context, ph)
         self.assertTrue(rendered.find(url1) > -1)
         self.assertTrue(rendered.find(url2) > -1)
         # Test that question2 appears before question1
@@ -97,15 +99,16 @@ class TestMostReadQuestionsPlugin(AldrynFaqTest, CMSRequestBasedTest):
         self.question2.number_of_visits = 10
         self.question2.save()
 
-        page1 = self.get_or_create_page("Page One")
-        ph = page1.placeholders.get(slot="content")
-        plugin = add_plugin(ph, "MostReadQuestionsPlugin", language="en")
-        request = self.get_page_request(
-            page1, self.user, None, lang_code="en", edit=False)
-        context = RequestContext(request, {})
-        url1 = self.reload(self.question1, "en").get_absolute_url()
-        url2 = self.reload(self.question2, "en").get_absolute_url()
-        rendered = plugin.render_plugin(context, ph)
+        with override('de'):
+            page1 = self.get_or_create_page("Page One")
+            ph = page1.placeholders.get(slot="content")
+            plugin = add_plugin(ph, "MostReadQuestionsPlugin", language="de")
+            request = self.get_page_request(
+                page1, self.user, None, lang_code="de", edit=False)
+            context = RequestContext(request, {})
+            url1 = self.reload(self.question1, "de").get_absolute_url()
+            url2 = self.reload(self.question2, "de").get_absolute_url()
+            rendered = plugin.render_plugin(context, ph)
         # Ensure both questions appear...
         self.assertTrue(rendered.find(url1) > -1)
         self.assertTrue(rendered.find(url2) > -1)

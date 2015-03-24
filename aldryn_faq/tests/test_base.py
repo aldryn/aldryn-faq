@@ -7,14 +7,14 @@ import string
 
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, TestCase, TransactionTestCase
 from django.utils.translation import override
 
 from cms.models import Title
 from cms.utils.i18n import get_language_list
 from djangocms_helper.utils import create_user
 
-from aldryn_faq.models import Category, Question, FaqConfig
+from aldryn_faq.models import Category, Question
 
 User = get_user_model()
 
@@ -33,7 +33,7 @@ class TestUtilityMixin(object):
             return self.assertItemsEqual(sorted(a), sorted(b))
 
 
-class AldrynFaqTest(TestUtilityMixin, TestCase):
+class AldrynFaqTest(TestUtilityMixin, TransactionTestCase):
     """Sets up basic Category and Question objects for testing."""
     data = {
         "category1": {
@@ -101,13 +101,14 @@ class AldrynFaqTest(TestUtilityMixin, TestCase):
             self.question2.save()
 
 
-class CMSRequestBasedTest(TestUtilityMixin, TestCase):
+class CMSRequestBasedTest(TestUtilityMixin, TransactionTestCase):
     """Sets-up User(s) and CMS Pages for testing."""
     languages = get_language_list()
 
     @classmethod
     def setUpClass(cls):
         cls.request_factory = RequestFactory()
+        # if not User.objects.filter(username='normal').count():
         cls.user = create_user('normal', 'normal@admin.com', 'normal')
         cls.site1 = Site.objects.get(pk=1)
 

@@ -34,11 +34,6 @@ class TestCategory(AldrynFaqTest):
             get_slug_in_language(self.category1, 'de'),
             self.data["category1"]["de"]["slug"]
         )
-        # Test non-existent translation
-        self.assertEqual(
-            get_slug_in_language(self.category1, 'qq'),
-            None
-        )
 
     def test_model_type_id(self):
         ct = ContentType.objects.get(app_label='aldryn_faq', model='category')

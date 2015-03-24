@@ -35,12 +35,37 @@ HELPER_SETTINGS = {
     ),
     'INSTALLED_APPS': [
         'adminsortable',
+        'aldryn_boilerplates',
         'aldryn_faq',
+        'aldryn_reversion',
         'djangocms_text_ckeditor',
         'parler',
+        'reversion',
         'sortedm2m',
     ],
-    "HAYSTACK_CONNECTIONS": HAYSTACK_CONNECTIONS
+    'STATICFILES_FINDERS': [
+        'django.contrib.staticfiles.finders.FileSystemFinder',
+        # important! place right before django.contrib.staticfiles.finders.AppDirectoriesFinder
+        'aldryn_boilerplates.staticfile_finders.AppDirectoriesFinder',
+        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    ],
+    'TEMPLATE_LOADERS': [
+        'django.template.loaders.filesystem.Loader',
+        # important! place right before django.template.loaders.app_directories.Loader
+        'aldryn_boilerplates.template_loaders.AppDirectoriesLoader',
+        'django.template.loaders.app_directories.Loader',
+    ],
+    'ALDRYN_BOILERPLATE_NAME': 'bootstrap3',
+    'HAYSTACK_CONNECTIONS': HAYSTACK_CONNECTIONS,
+    'PARLER_LANGUAGES': {
+        1: (
+            {'code': 'de', },
+            {'code': 'en', },
+        ),
+        'default': {
+            'hide_untranslated': False,
+        }
+    },
 }
 
 

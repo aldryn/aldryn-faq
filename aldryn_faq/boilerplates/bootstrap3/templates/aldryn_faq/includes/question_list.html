@@ -1,4 +1,4 @@
-{% load i18n placeholder_tags cms_tags %}
+{% load i18n cms_tags %}
 {% load url from future %}
 
 {% regroup object_list|dictsort:"category_id" by category as qgroups %}

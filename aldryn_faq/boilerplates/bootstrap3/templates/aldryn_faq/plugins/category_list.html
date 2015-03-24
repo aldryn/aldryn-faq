@@ -7,8 +7,8 @@
                 {{ category }}
                 <span class="badge pull-right">{{ category.count }}</span>
             </a>
-        {% else %}
+        {% empty %}
             <p class="list-group-item">{% trans "No entry found." %}</p>
-        {% endif %}
+        {% endfor %}
     </div>
 </div>
