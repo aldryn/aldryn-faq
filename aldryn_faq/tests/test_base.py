@@ -14,7 +14,7 @@ from cms.models import Title
 from cms.utils.i18n import get_language_list
 from djangocms_helper.utils import create_user
 
-from aldryn_faq.models import Category, Question, FaqConfig
+from aldryn_faq.models import Category, Question
 
 User = get_user_model()
 
@@ -108,6 +108,7 @@ class CMSRequestBasedTest(TestUtilityMixin, TestCase):
     @classmethod
     def setUpClass(cls):
         cls.request_factory = RequestFactory()
+        # if not User.objects.filter(username='normal').count():
         cls.user = create_user('normal', 'normal@admin.com', 'normal')
         cls.site1 = Site.objects.get(pk=1)
 
