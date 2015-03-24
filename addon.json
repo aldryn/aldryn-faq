@@ -1,17 +1,16 @@
 {
     "name": "Aldryn FAQ",
     "description": "FAQ addon for Aldryn",
-    "version": "0.12.0",
+    "version": "0.10.5",
     "url": "https://github.com/aldryn/aldryn-faq",
     "package-name": "aldryn-faq",
     "installed-apps": [
         "adminsortable",
+        "aldryn_faq",
         "aldryn_reversion",
         "djangocms_text_ckeditor",
-        "sortedm2m",
-        "unidecode",
         "parler",
-        "aldryn_faq"
+        "sortedm2m"
     ],
     "author": {
         "name": "Divio AG",
