@@ -57,6 +57,15 @@ HELPER_SETTINGS = {
     ],
     'ALDRYN_BOILERPLATE_NAME': 'bootstrap3',
     'HAYSTACK_CONNECTIONS': HAYSTACK_CONNECTIONS,
+    'PARLER_LANGUAGES': {
+        1: (
+            {'code': 'de', },
+            {'code': 'en', },
+        ),
+        'default': {
+            'hide_untranslated': False,
+        }
+    },
 }
 
 
