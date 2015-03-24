@@ -1,0 +1,14 @@
+{% load i18n %}
+
+<div class="aldryn aldryn-faq aldryn-faq-list">
+    <div class="list-group">
+        {% for category in categories %}
+            <a href="{{ category.get_absolute_url }}" class="list-group-item">
+                {{ category }}
+                <span class="badge pull-right">{{ category.count }}</span>
+            </a>
+        {% else %}
+            <p class="list-group-item">{% trans "No entry found." %}</p>
+        {% endif %}
+    </div>
+</div>

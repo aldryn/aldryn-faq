@@ -3,6 +3,7 @@ from setuptools import setup, find_packages
 from aldryn_faq import __version__
 
 REQUIREMENTS = [
+    'aldryn-boilerplates>=0.6',
     'aldryn-search',
     'django-admin-sortable2',
     'django-parler',

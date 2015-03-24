@@ -1,0 +1,24 @@
+{% extends "aldryn_faq/base.html" %}
+{% load i18n cms_tags %}
+{% load url from future %}
+
+{% block faq_content %}
+<div class="aldryn aldryn-faq aldryn-faq-detail">
+    <h2>
+        <a href="#" class="label label-primary pull-right">{% render_model object "category" "category" %}</a>
+        {% render_model object "title" %}
+    </h2>
+
+    {% if question.answer_text %}
+        <div class="lead">{% render_model object "answer_text" "answer_text" "" safe %}</div>
+    {% endif %}
+
+    <div class="aldryn-faq-content">
+        {% render_placeholder object.answer 800 %}
+    </div>
+
+    <ul class="pager">
+        <li class="previous"><a href="{% url 'aldryn_faq:faq-category' object.category.slug %}"><span aria-hidden="true">&larr;</span> {% trans "Back" %}</a></li>
+    </ul>
+</div>
+{% endblock %}
