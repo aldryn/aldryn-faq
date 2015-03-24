@@ -10,3 +10,4 @@ local_settings.py
 .coverage
 aldryn-faq.sublime-project
 aldryn-faq.sublime-workspace
+env/
