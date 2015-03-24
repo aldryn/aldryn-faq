@@ -101,7 +101,7 @@ class AldrynFaqTest(TestUtilityMixin, TransactionTestCase):
             self.question2.save()
 
 
-class CMSRequestBasedTest(TestUtilityMixin, TestCase):
+class CMSRequestBasedTest(TestUtilityMixin, TransactionTestCase):
     """Sets-up User(s) and CMS Pages for testing."""
     languages = get_language_list()
 
