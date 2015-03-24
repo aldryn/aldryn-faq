@@ -7,7 +7,7 @@ import string
 
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, TestCase, TransactionTestCase
 from django.utils.translation import override
 
 from cms.models import Title
@@ -33,7 +33,7 @@ class TestUtilityMixin(object):
             return self.assertItemsEqual(sorted(a), sorted(b))
 
 
-class AldrynFaqTest(TestUtilityMixin, TestCase):
+class AldrynFaqTest(TestUtilityMixin, TransactionTestCase):
     """Sets up basic Category and Question objects for testing."""
     data = {
         "category1": {
