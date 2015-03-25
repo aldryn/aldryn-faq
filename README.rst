@@ -44,7 +44,7 @@ Manual Installation
            'aldryn_faq',
            'aldryn_reversion',
            'djangocms_text_ckeditor',
-           'adminsortable',
+           'adminsortable2',
            'sortedm2m',
            'parler',
            …
@@ -83,3 +83,14 @@ In order to display them, create a CMS page and install the app there (choose
 Now redeploy/restart the site again.
 
 The above CMS site has become a faq list view.
+
+
+NOTES
+-----
+
+django-admin-sortable2
+~~~~~~~~~~~~~~~~~~~~~~
+
+This project uses django-admin-sortable2 version 0.5.0 or later. Installing an
+earlier version of django-admin-sortable2 will cause migrations to fail due to a
+package name clash with django-admin-sortable.

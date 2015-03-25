@@ -13,7 +13,7 @@ from django.utils.translation import get_language, ugettext as _
 import cms
 from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 
-from adminsortable.admin import SortableAdminMixin
+from adminsortable2.admin import SortableAdminMixin
 from aldryn_apphooks_config.admin import BaseAppHookConfig
 from aldryn_reversion.admin import VersionedPlaceholderAdminMixin
 from parler.admin import TranslatableAdmin

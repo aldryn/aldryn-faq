@@ -34,7 +34,7 @@ HELPER_SETTINGS = {
         ('fr', 'French'),
     ),
     'INSTALLED_APPS': [
-        'adminsortable',
+        'adminsortable2',
         'aldryn_boilerplates',
         'aldryn_faq',
         'aldryn_reversion',
@@ -42,6 +42,10 @@ HELPER_SETTINGS = {
         'parler',
         'reversion',
         'sortedm2m',
+
+        # NOTE: The following is NOT required for new installs, it is, however,
+        # required for testing the migrations.
+        'adminsortable',
     ],
     'STATICFILES_FINDERS': [
         'django.contrib.staticfiles.finders.FileSystemFinder',

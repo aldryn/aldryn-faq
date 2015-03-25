@@ -5,7 +5,7 @@
     "url": "https://github.com/aldryn/aldryn-faq",
     "package-name": "aldryn-faq",
     "installed-apps": [
-        "adminsortable",
+        "adminsortable2",
         "aldryn_faq",
         "aldryn_reversion",
         "djangocms_text_ckeditor",
