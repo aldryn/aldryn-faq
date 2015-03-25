@@ -25,7 +25,7 @@ six
 # NOTE: The following is NOT required for new installs, this is only here for
 # testing migrations.
 #
-# django-admin-sortable
+django-admin-sortable
 
 # The following are for aldryn-search
 lxml
