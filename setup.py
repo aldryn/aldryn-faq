@@ -6,7 +6,8 @@ REQUIREMENTS = [
     '-e git+http://github.com/aldryn/aldryn-apphooks-config.git#egg=aldryn-apphooks-config',
     'aldryn-reversion',
     'aldryn-search',
-    'django-admin-sortable2',
+    'django-admin-sortable',
+    'https://github.com/mkoistinen/django-admin-sortable2/archive/issues/adminsortable2_namespace.zip',
     'django-parler',
     'django-sortedm2m',
 ]

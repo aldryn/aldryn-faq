@@ -3,7 +3,7 @@
 aldryn-reversion
 coverage==3.7.1
 python-coveralls==2.4.2
-django-admin-sortable2
+https://github.com/mkoistinen/django-admin-sortable2/archive/issues/adminsortable2_namespace.zip
 django-classy-tags
 https://github.com/yakky/django-cms/archive/future/aldryn.zip
 django-cms>=3.0.12
@@ -20,6 +20,12 @@ html5lib
 flake8
 selenium
 six
+
+#
+# NOTE: The following is NOT required for new installs, this is only here for
+# testing migrations.
+#
+django-admin-sortable
 
 # The following are for aldryn-search
 lxml
