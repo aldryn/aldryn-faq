@@ -1,7 +1,6 @@
 {
     "name": "Aldryn FAQ",
     "description": "FAQ addon for Aldryn",
-    "version": "0.10.5",
     "url": "https://github.com/aldryn/aldryn-faq",
     "package-name": "aldryn-faq",
     "installed-apps": [
