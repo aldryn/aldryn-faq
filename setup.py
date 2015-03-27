@@ -3,11 +3,11 @@ from setuptools import setup, find_packages
 from aldryn_faq import __version__
 
 REQUIREMENTS = [
-    '-e git+http://github.com/aldryn/aldryn-apphooks-config.git#egg=aldryn-apphooks-config',
+    'aldryn-apphooks-config',
     'aldryn-reversion',
     'aldryn-search',
-    'django-admin-sortable',
-    'https://github.com/mkoistinen/django-admin-sortable2/archive/issues/adminsortable2_namespace.zip',
+    # 'django-admin-sortable',
+    'django-admin-sortable2>=0.5.0',
     'django-parler',
     'django-sortedm2m',
 ]
