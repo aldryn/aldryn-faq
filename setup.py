@@ -6,7 +6,7 @@ REQUIREMENTS = [
     'aldryn-apphooks-config',
     'aldryn-reversion',
     'aldryn-search',
-    'django-admin-sortable',
+    # 'django-admin-sortable',
     'django-admin-sortable2>=0.5.0',
     'django-parler',
     'django-sortedm2m',
