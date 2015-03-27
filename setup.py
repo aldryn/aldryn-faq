@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 from aldryn_faq import __version__
 
 REQUIREMENTS = [
-    '-e git+http://github.com/aldryn/aldryn-apphooks-config.git#egg=aldryn-apphooks-config',
+    'aldryn-apphooks-config',
     'aldryn-reversion',
     'aldryn-search',
     'django-admin-sortable',
