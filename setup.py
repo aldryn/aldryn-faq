@@ -7,7 +7,7 @@ REQUIREMENTS = [
     'aldryn-reversion',
     'aldryn-search',
     'django-admin-sortable',
-    'admin-sortable2>=0.5.0',
+    'django-admin-sortable2>=0.5.0',
     'django-parler',
     'django-sortedm2m',
 ]
