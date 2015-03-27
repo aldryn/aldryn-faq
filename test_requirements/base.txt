@@ -1,11 +1,10 @@
--e git+http://github.com/aldryn/aldryn-apphooks-config.git#egg=aldryn-apphooks-config
--e git+http://github.com/aldryn/aldryn-boilerplates.git#egg=aldryn-boilerplates
+aldryn-apphooks-config
+aldryn-boilerplates
 aldryn-reversion
 coverage==3.7.1
 python-coveralls==2.4.2
 django-admin-sortable2>=0.5.0
 django-classy-tags
-https://github.com/yakky/django-cms/archive/future/aldryn.zip
 django-cms>=3.0.12
 django-mptt
 django-parler
