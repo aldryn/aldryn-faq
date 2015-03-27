@@ -1,6 +1,7 @@
 -e git+http://github.com/aldryn/aldryn-apphooks-config.git#egg=aldryn-apphooks-config
 -e git+http://github.com/aldryn/aldryn-boilerplates.git#egg=aldryn-boilerplates
 aldryn-reversion
+aldryn-search
 coverage==3.7.1
 python-coveralls==2.4.2
 django-admin-sortable2>=0.5.0
