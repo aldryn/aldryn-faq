@@ -3,7 +3,7 @@
 aldryn-reversion
 coverage==3.7.1
 python-coveralls==2.4.2
-https://github.com/mkoistinen/django-admin-sortable2/archive/issues/adminsortable2_namespace.zip
+admin-sortable2>=0.5.0
 django-classy-tags
 https://github.com/yakky/django-cms/archive/future/aldryn.zip
 django-cms>=3.0.12
