@@ -1,7 +1,4 @@
 {
-    "name": "Aldryn FAQ",
-    "description": "FAQ addon for Aldryn",
-    "url": "https://github.com/aldryn/aldryn-faq",
     "package-name": "aldryn-faq",
     "installed-apps": [
         "adminsortable2",
