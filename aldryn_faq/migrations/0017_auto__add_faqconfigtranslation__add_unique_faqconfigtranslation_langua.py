@@ -31,7 +31,7 @@ class Migration(SchemaMigration):
 
         # Adding field 'Category.namespace'
         db.add_column(u'aldryn_faq_category', 'namespace',
-                      self.gf('django.db.models.fields.related.ForeignKey')(default=0, to=orm['aldryn_faq.FaqConfig']),
+                      self.gf('django.db.models.fields.related.ForeignKey')(default=None, null=True, to=orm['aldryn_faq.FaqConfig']),
                       keep_default=False)
 
 
