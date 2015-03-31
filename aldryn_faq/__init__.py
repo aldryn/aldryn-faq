@@ -2,6 +2,6 @@
 
 from __future__ import unicode_literals
 
-__version__ = '0.12.1'
+__version__ = '0.12.2'
 request_faq_category_identifier = 'aldryn_faq_current_category'
 request_faq_question_identifier = 'aldryn_faq_current_question'
