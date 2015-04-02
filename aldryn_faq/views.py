@@ -17,6 +17,7 @@ from . import request_faq_category_identifier, request_faq_question_identifier
 
 
 class FaqMixin(object):
+    # Intended to be used together with AppConfigMixin
 
     model = Question
 
@@ -27,11 +28,12 @@ class FaqMixin(object):
 
     def get_context_data(self, **kwargs):
         context = super(FaqMixin, self).get_context_data(**kwargs)
-        context['current_app'] = resolve(self.request.path).namespace
+        context['current_app'] = self.namespace
         return context
 
     def get_queryset(self):
-        return self.model.objects.language(self.current_language)
+        return self.model.objects.language(self.current_language).filter(
+            category__appconfig__namespace=self.namespace)
 
 
 class FaqByCategoryView(FaqMixin, AppConfigMixin, ListView):
@@ -46,10 +48,12 @@ class FaqByCategoryView(FaqMixin, AppConfigMixin, ListView):
         return response
 
     def get_category_or_404(self, namespace=None):
-        list = Category.objects.translated(slug=self.kwargs['category_slug'])
-        if not list:
+        categories = Category.objects.filter(
+            appconfig__namespace=namespace).translated(
+                slug=self.kwargs['category_slug'])
+        if not categories:
             raise Http404("Category not found")
-        return list[0]
+        return categories[0]
 
     def get_queryset(self):
         if self.category:
