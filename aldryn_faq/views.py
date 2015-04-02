@@ -16,9 +16,7 @@ from .models import Category, Question
 from . import request_faq_category_identifier, request_faq_question_identifier
 
 
-class FaqMixin(object):
-    # Intended to be used together with AppConfigMixin
-
+class FaqMixin(AppConfigMixin):
     model = Question
 
     def dispatch(self, request, *args, **kwargs):
@@ -33,10 +31,10 @@ class FaqMixin(object):
 
     def get_queryset(self):
         return self.model.objects.language(self.current_language).filter(
-            category__appconfig__namespace=self.namespace)
+            category__appconfig=self.config)
 
 
-class FaqByCategoryView(FaqMixin, AppConfigMixin, ListView):
+class FaqByCategoryView(FaqMixin, ListView):
 
     template_name = 'aldryn_faq/questiontranslation_list.html'
 
@@ -64,7 +62,7 @@ class FaqByCategoryView(FaqMixin, AppConfigMixin, ListView):
             return []
 
 
-class FaqAnswerView(FaqMixin, AppConfigMixin, DetailView):
+class FaqAnswerView(FaqMixin, DetailView):
 
     template_name = 'aldryn_faq/question_detail.html'
 
