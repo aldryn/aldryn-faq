@@ -15,22 +15,22 @@ class QuestionIndex(get_index_base()):
     haystack_use_for_indexing = getattr(
         settings, "ALDRYN_FAQ_QUESTION_SEARCH", True)
 
-    INDEX_TITLE = True
+    index_title = True
 
     def get_title(self, obj):
-        return obj.title
-
-    def get_index_kwargs(self, language):
-        return {'translations__language_code': language}
+        return obj.safe_translation_getter('title')
 
     def get_index_queryset(self, language):
-        return self.get_model().objects.all()
+        return self.get_model().objects.language(language).translated(language)
 
     def get_model(self):
         return Question
 
     def get_search_data(self, obj, language, request):
-        text_bits = [strip_tags(obj.title), strip_tags(obj.answer_text)]
+        text_bits = [
+            strip_tags(obj.title),
+            strip_tags(obj.answer_text)
+        ]
         plugins = obj.answer.cmsplugin_set.filter(language=language)
         for base_plugin in plugins:
             instance, plugin_type = base_plugin.get_plugin_instance()
@@ -47,19 +47,16 @@ class CategoryIndex(get_index_base()):
     haystack_use_for_indexing = getattr(
         settings, "ALDRYN_FAQ_CATEGORY_SEARCH", True)
 
-    INDEX_TITLE = True
+    index_title = True
 
     def get_title(self, obj):
-        return ''
-
-    def get_index_kwargs(self, language):
-        return {'translations__language_code': language}
+        return obj.safe_translation_getter('name')
 
     def get_index_queryset(self, language):
-        return self.get_model().objects.all()
+        return self.get_model().objects.language(language).translated(language)
 
     def get_model(self):
         return Category
 
     def get_search_data(self, obj, language, request):
-        return strip_tags(obj.name)
+        return strip_tags(obj.safe_translation_getter('name'))
