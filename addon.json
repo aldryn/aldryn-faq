@@ -1,5 +1,6 @@
 {
     "package-name": "aldryn-faq",
+    "description": "Simple faq application.",
     "installed-apps": [
         "adminsortable2",
         "aldryn_faq",
