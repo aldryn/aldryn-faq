@@ -16,8 +16,7 @@ from .models import Category, Question
 from . import request_faq_category_identifier, request_faq_question_identifier
 
 
-class FaqMixin(object):
-
+class FaqMixin(AppConfigMixin):
     model = Question
 
     def dispatch(self, request, *args, **kwargs):
@@ -27,14 +26,15 @@ class FaqMixin(object):
 
     def get_context_data(self, **kwargs):
         context = super(FaqMixin, self).get_context_data(**kwargs)
-        context['current_app'] = resolve(self.request.path).namespace
+        context['current_app'] = self.namespace
         return context
 
     def get_queryset(self):
-        return self.model.objects.language(self.current_language)
+        return self.model.objects.language(self.current_language).filter(
+            category__appconfig=self.config)
 
 
-class FaqByCategoryView(FaqMixin, AppConfigMixin, ListView):
+class FaqByCategoryView(FaqMixin, ListView):
 
     template_name = 'aldryn_faq/questiontranslation_list.html'
 
@@ -46,10 +46,12 @@ class FaqByCategoryView(FaqMixin, AppConfigMixin, ListView):
         return response
 
     def get_category_or_404(self, namespace=None):
-        list = Category.objects.translated(slug=self.kwargs['category_slug'])
-        if not list:
+        categories = Category.objects.filter(
+            appconfig__namespace=namespace).translated(
+                slug=self.kwargs['category_slug'])
+        if not categories:
             raise Http404("Category not found")
-        return list[0]
+        return categories[0]
 
     def get_queryset(self):
         if self.category:
@@ -60,7 +62,7 @@ class FaqByCategoryView(FaqMixin, AppConfigMixin, ListView):
             return []
 
 
-class FaqAnswerView(FaqMixin, AppConfigMixin, DetailView):
+class FaqAnswerView(FaqMixin, DetailView):
 
     template_name = 'aldryn_faq/question_detail.html'
 
