@@ -1,3 +1,8 @@
+0.12.6 (2015-04-16)
+===================
+
+* Use get_current_language from cms instead get_language from Django because Django bug #9340
+
 0.12.0 (2015-03-25)
 ===================
 
