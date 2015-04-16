@@ -1,4 +1,5 @@
 {
+    "name": "aldryn-faq",
     "package-name": "aldryn-faq",
     "description": "Simple faq application.",
     "installed-apps": [

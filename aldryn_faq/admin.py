@@ -8,16 +8,16 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib import admin
 from django.templatetags.static import static
-from django.utils.translation import get_language, ugettext as _
+from django.utils.translation import ugettext as _
 
 import cms
 from cms.admin.placeholderadmin import FrontendEditableAdminMixin
+from cms.utils.i18n import get_current_language
 
 from adminsortable2.admin import SortableAdminMixin
 from aldryn_apphooks_config.admin import BaseAppHookConfig
 from aldryn_reversion.admin import VersionedPlaceholderAdminMixin
 from parler.admin import TranslatableAdmin
-# from reversion import VersionAdminm
 
 from .models import Category, Question, FaqConfig
 from .forms import CategoryAdminForm
@@ -45,7 +45,7 @@ class AllTranslationsAdminMixin(object):
                 url=change_form_url,
                 lang=lang,
             )
-            if lang == get_language():
+            if lang == get_current_language():
                 link = "<strong>{0}</strong>".format(link)
             langs[idx] = link
         return ', '.join(langs)
