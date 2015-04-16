@@ -30,8 +30,16 @@ class FaqMixin(AppConfigMixin):
         return context
 
     def get_queryset(self):
-        return self.model.objects.language(self.current_language).filter(
-            category__appconfig=self.config)
+        return self.model.objects.language(self.current_language)
+
+
+class FaqByCategoryListView(FaqMixin, AppConfigMixin, ListView):
+    template_name = 'aldryn_faq/category_list.html'
+    model = Category
+
+    def get_queryset(self):
+        qs = super(FaqByCategoryListView, self).get_queryset()
+        return qs.filter(appconfig=self.config)
 
 
 class FaqByCategoryView(FaqMixin, ListView):
@@ -59,7 +67,7 @@ class FaqByCategoryView(FaqMixin, ListView):
                 category=self.category,
             ).order_by('order')
         else:
-            return []
+            return 
 
 
 class FaqAnswerView(FaqMixin, DetailView):

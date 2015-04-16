@@ -1,0 +1,11 @@
+{% extends "aldryn_faq/base.html" %}
+
+{% block faq_content %}
+<div class="aldryn aldryn-faq aldryn-faq-category-list">
+    <ul>
+        {% for category in category_list %}
+        <li><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
