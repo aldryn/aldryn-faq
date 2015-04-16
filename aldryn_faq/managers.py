@@ -2,8 +2,7 @@
 
 from __future__ import unicode_literals
 
-from django.utils.translation import get_language
-
+from cms.utils.i18n import get_current_language
 from parler.managers import TranslatableManager
 
 
@@ -13,7 +12,7 @@ class RelatedManager(TranslatableManager):
         return self.active_translations(language)
 
     def filter_by_current_language(self):
-        return self.filter_by_language(get_language())
+        return self.filter_by_language(get_current_language())
 
 
 class CategoryManager(TranslatableManager):
