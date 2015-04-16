@@ -15,8 +15,7 @@ from aldryn_reversion.core import version_controlled_content
 
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
-from cms.utils.i18n import get_current_language
-
+from cms.utils.i18n import get_current_language, get_fallback_languages
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 from sortedm2m.fields import SortedManyToManyField
@@ -42,6 +41,44 @@ def get_slug_in_language(record, language):
         field="slug", language_code=language, default=None, )
 
 
+class TranslationHelperMixin(object):
+    def known_translation_getter(self, field, default=None, language_code=None,
+                                 any_language=False):
+        """
+        This is meant to act like Parler's safe_translation_getter() but returns
+        both the translated field AND the language it represents as a tuple:
+        (field_value, language).
+
+        If no language is found, then it returns (default, None)
+        """
+        # NOTE: We're using the CMS fallbacks here, rather than the Parler
+        # fallbacks, the developer should ensure that their project's Parler
+        # settings match the CMS settings.
+        object_languages = self.get_available_languages()
+        language_code = language_code or get_current_language()
+        if language_code not in object_languages:
+            # OK, we're going to have to use a fallback language
+            fallbacks = get_fallback_languages(language_code)
+            # Grab the first language that from fallbacks that is also a known
+            # translation of the article.
+            language_code = next(
+                (lang for lang in fallbacks if lang in object_languages),
+                None)
+            if not language_code:
+                if any_language:
+                    # Hmmm, we'll just use the first available_language then...
+                    language_code = next(object_languages, None)
+                    if not language_code:
+                        # Ummmm, how exactly did we get here again?
+                        return (default, None)
+                else:
+                    return (default, None)
+
+        value = self.safe_translation_getter(
+            field, default=default, language_code=language_code)
+        return (value, language_code)
+
+
 class FaqConfig(TranslatableModel, AppHookConfig):
     """Adds some translatable, per-app-instance fields."""
     translations = TranslatedFields(
@@ -51,7 +88,7 @@ class FaqConfig(TranslatableModel, AppHookConfig):
 
 @python_2_unicode_compatible
 @version_controlled_content
-class Category(TranslatableModel):
+class Category(TranslationHelperMixin, TranslatableModel):
     translations = TranslatedFields(
         name=models.CharField(max_length=255),
         slug=models.SlugField(verbose_name=_('Slug'), max_length=255),
@@ -75,12 +112,15 @@ class Category(TranslatableModel):
 
     def get_absolute_url(self, language=None):
         language = language or get_current_language()
-        slug = get_slug_in_language(self, language)
-        with override(language):
-            if not slug:  # category not translated in given language
-                return '/%s/' % language
-            kwargs = {'category_slug': slug}
-            return reverse('aldryn_faq:faq-category', kwargs=kwargs)
+        slug, language = self.known_translation_getter(
+            'slug', default=None, language_code=language)
+        try:
+            with override(language):
+                kwargs = {'category_slug': slug}
+                return reverse('{namespace}:faq-category'.format(
+                    namespace=self.appconfig.namespace), kwargs=kwargs)
+        except:
+            return ''  # NOTE: NOT None here
 
 
 @python_2_unicode_compatible
