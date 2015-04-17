@@ -56,10 +56,9 @@ class FaqByCategoryView(FaqMixin, ListView):
     def get_queryset(self):
         if self.category:
             return super(FaqByCategoryView, self).get_queryset().filter(
-                category=self.category,
-            ).order_by('order')
+                category=self.category).order_by('order')
         else:
-            return []
+            return Question.objects.none()
 
 
 class FaqAnswerView(FaqMixin, DetailView):
