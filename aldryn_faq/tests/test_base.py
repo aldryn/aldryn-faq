@@ -5,16 +5,21 @@ from __future__ import unicode_literals
 import random
 import string
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
-from django.test import RequestFactory, TestCase, TransactionTestCase
+from django.test import RequestFactory, TransactionTestCase
 from django.utils.translation import override
 
+from cms import api
 from cms.models import Title
+from cms.utils import get_cms_setting
 from cms.utils.i18n import get_language_list
 from djangocms_helper.utils import create_user
 
-from aldryn_faq.models import Category, Question
+from aldryn_search.helpers import get_request
+
+from ..models import Category, Question, FaqConfig
 
 User = get_user_model()
 
@@ -33,7 +38,7 @@ class TestUtilityMixin(object):
             return self.assertItemsEqual(sorted(a), sorted(b))
 
 
-class AldrynFaqTest(TestUtilityMixin, TransactionTestCase):
+class AldrynFaqTestMixin(TestUtilityMixin, object):
     """Sets up basic Category and Question objects for testing."""
     data = {
         "category1": {
@@ -75,6 +80,7 @@ class AldrynFaqTest(TestUtilityMixin, TransactionTestCase):
     def setUp(self):
         """Setup a prebuilt and translated Question with Category
         for testing."""
+        super(AldrynFaqTestMixin, self).setUp()
         with override("en"):
             self.category1 = Category(**self.data["category1"]["en"])
             self.category1.save()
@@ -108,13 +114,33 @@ class CMSRequestBasedTest(TestUtilityMixin, TransactionTestCase):
     @classmethod
     def setUpClass(cls):
         cls.request_factory = RequestFactory()
-        # if not User.objects.filter(username='normal').count():
-        cls.user = create_user('normal', 'normal@admin.com', 'normal')
+        if not User.objects.filter(username='normal').count():
+            cls.user = create_user('normal', 'normal@admin.com', 'normal')
         cls.site1 = Site.objects.get(pk=1)
 
     @classmethod
     def tearDownClass(cls):
         User.objects.all().delete()
+
+    def setUp(self):
+        super(CMSRequestBasedTest, self).setUp()
+        self.template = get_cms_setting('TEMPLATES')[0][0]
+        self.language = settings.LANGUAGES[0][0]
+        self.root_page = api.create_page(
+            'root page', self.template, self.language, published=True)
+        self.app_config = FaqConfig.objects.create(namespace='aldryn_faq')
+        self.page = api.create_page('faq', self.template, self.language,
+            published=True,
+            parent=self.root_page,
+            apphook='FaqApp',
+            apphook_namespace=self.app_config.namespace)
+        self.placeholder = self.page.placeholders.all()[0]
+        self.request = get_request('en')
+
+        for page in [self.root_page, self.page]:
+            for language, _ in settings.LANGUAGES[1:]:
+                api.create_title(language, page.get_slug(), page)
+                page.publish(language)
 
     def get_or_create_page(self, base_title=None, languages=None):
         """Creates a page with a given title, or, if it already exists, just
@@ -161,3 +187,7 @@ class CMSRequestBasedTest(TestUtilityMixin, TransactionTestCase):
         mid = ToolbarMiddleware()
         mid.process_request(request)
         return request
+
+
+class AldrynFaqTest(AldrynFaqTestMixin, CMSRequestBasedTest):
+    pass

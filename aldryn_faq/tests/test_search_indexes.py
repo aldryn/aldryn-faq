@@ -13,23 +13,12 @@ class TestQuestionIndex(AldrynFaqTest):
         question1 = self.reload(self.question1, "en")
         self.assertEqual(idx_obj.get_title(question1), question1.title)
 
-    def test_get_index_kwargs(self):
-        # This is a silly test, but is here for completeness.
-        idx_obj = QuestionIndex()
-        self.assertEqual(idx_obj.get_index_kwargs("en"), {
-            'translations__language_code': 'en'
-        })
-
     def test_get_index_queryset(self):
         idx_obj = QuestionIndex()
-        # NOTE: This passes, but only serves to prove that the search_index
-        # should be returning only objects that have the given translation!
-        # TODO: Fix the above in search_indexes.py
         self.assertEqualItems(
             [q.id for q in idx_obj.get_index_queryset("en")],
-            [self.question1.id, self.question2.id],
+            [self.question1.id],
         )
-        # This one is OK.
         self.assertEqualItems(
             [q.id for q in idx_obj.get_index_queryset("de")],
             [self.question1.id, self.question2.id],
@@ -51,28 +40,16 @@ class TestQuestionIndex(AldrynFaqTest):
 
 class TestCategoryIndex(AldrynFaqTest):
     def test_get_title(self):
-        # This search_index method always returns ""
         idx_obj = CategoryIndex()
         category1 = self.reload(self.category1, "en")
-        self.assertEqual(idx_obj.get_title(category1), "")
-
-    def test_get_index_kwargs(self):
-        # This is a silly test, but is here for completeness.
-        idx_obj = CategoryIndex()
-        self.assertEqual(idx_obj.get_index_kwargs("en"), {
-            'translations__language_code': 'en'
-        })
+        self.assertEqual(idx_obj.get_title(category1), category1.name)
 
     def test_get_index_queryset(self):
         idx_obj = CategoryIndex()
-        # NOTE: This passes, but only serves to prove that the search_index
-        # should be returning only objects that have the given translation!
-        # TODO: Fix the above in search_indexes.py
         self.assertEqualItems(
             [q.id for q in idx_obj.get_index_queryset("en")],
-            [self.category1.id, self.category2.id],
+            [self.category1.id],
         )
-        # This one is OK.
         self.assertEqualItems(
             [q.id for q in idx_obj.get_index_queryset("de")],
             [self.category1.id, self.category2.id],

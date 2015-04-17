@@ -21,7 +21,7 @@ class QuestionIndex(get_index_base()):
         return obj.safe_translation_getter('title')
 
     def get_index_queryset(self, language):
-        return self.get_model().objects.language(language).translated(language)
+        return self.get_model().objects.active_translations(language)
 
     def get_model(self):
         return Question
@@ -53,7 +53,7 @@ class CategoryIndex(get_index_base()):
         return obj.safe_translation_getter('name')
 
     def get_index_queryset(self, language):
-        return self.get_model().objects.language(language).translated(language)
+        return self.get_model().objects.active_translations(language)
 
     def get_model(self):
         return Category
