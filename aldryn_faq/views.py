@@ -47,16 +47,15 @@ class FaqByCategoryView(FaqMixin, ListView):
     template_name = 'aldryn_faq/questiontranslation_list.html'
 
     def get(self, *args, **kwargs):
-        self.category = self.get_category_or_404(self.namespace)
+        self.category = self.get_category_or_404(self.config)
         setattr(self.request, request_faq_category_identifier, self.category)
         response = super(FaqByCategoryView, self).get(*args, **kwargs)
         set_language_changer(self.request, self.category.get_absolute_url)
         return response
 
-    def get_category_or_404(self, namespace=None):
+    def get_category_or_404(self, config=None):
         categories = Category.objects.filter(
-            appconfig__namespace=namespace).translated(
-                slug=self.kwargs['category_slug'])
+            appconfig=config).translated(slug=self.kwargs['category_slug'])
         if not categories:
             raise Http404("Category not found")
         return categories[0]
@@ -64,10 +63,9 @@ class FaqByCategoryView(FaqMixin, ListView):
     def get_queryset(self):
         if self.category:
             return super(FaqByCategoryView, self).get_queryset().filter(
-                category=self.category,
-            ).order_by('order')
+                category=self.category).order_by('order')
         else:
-            return 
+            return Question.objects.none()
 
 
 class FaqAnswerView(FaqMixin, DetailView):
