@@ -114,13 +114,12 @@ class Category(TranslationHelperMixin, TranslatableModel):
         language = language or get_current_language()
         slug, language = self.known_translation_getter(
             'slug', default=None, language_code=language)
-        try:
-            with override(language):
-                kwargs = {'category_slug': slug}
-                return reverse('{namespace}:faq-category'.format(
-                    namespace=self.appconfig.namespace), kwargs=kwargs)
-        except:
-            return ''  # NOTE: NOT None here
+        kwargs = {'category_slug': slug}
+        with override(language):
+            return reverse(
+                '{0}:faq-category'.format(self.appconfig.namespace),
+                kwargs=kwargs
+            )
 
 
 @python_2_unicode_compatible
