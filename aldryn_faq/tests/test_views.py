@@ -2,17 +2,17 @@
 
 from __future__ import unicode_literals
 
-from django.core.urlresolvers import resolve, reverse
+from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.test.client import RequestFactory
 from django.utils.translation import override
 
 from ..views import FaqByCategoryView, FaqAnswerView
 
-from .test_base import AldrynFaqTest, CMSRequestBasedTest
+from .test_base import AldrynFaqTest
 
 
-class TestFaqByCategoryView(AldrynFaqTest, CMSRequestBasedTest):
+class TestFaqByCategoryView(AldrynFaqTest):
     def test_as_view(self):
         """Tests that the FaqByCategoryView produces the correct context."""
         category1 = self.reload(self.category1, "en")
@@ -40,7 +40,7 @@ class TestFaqByCategoryView(AldrynFaqTest, CMSRequestBasedTest):
         )
 
 
-class TestFaqAnswerView(AldrynFaqTest, CMSRequestBasedTest):
+class TestFaqAnswerView(AldrynFaqTest):
     def test_as_view(self):
         """Tests that the FaqAnswerView produces the correct context."""
         category1 = self.reload(self.category1, "en")
