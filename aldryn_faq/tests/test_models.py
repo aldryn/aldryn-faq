@@ -39,7 +39,7 @@ class TestCategory(AldrynFaqTest):
         ct = ContentType.objects.get(app_label='aldryn_faq', model='category')
         self.assertEqual(
             self.category1.model_type_id(),
-            ct.id
+            ct.pk
         )
 
     def test_get_absolute_url(self):
@@ -58,24 +58,24 @@ class TestCategory(AldrynFaqTest):
         # those objects that have the default language translations.
         # TODO: Verify that this is the intended behavior.
         # self.assertEqualItems(
-        #     [c.id for c in Category.objects.get_categories()],
-        #     [self.category1.id, ]
+        #     [c.pk for c in Category.objects.get_categories()],
+        #     [self.category1.pk, ]
         # )
 
         # Test case of requesting objects of only a single language. In our
         # setup, we have 1 category in EN and 2 in DE.
         categories = Category.objects.get_categories('en')
         self.assertEqualItems(
-            [category.id for category in categories],
-            [self.category1.id, ]
+            [category.pk for category in categories],
+            [self.category1.pk, ]
         )
 
         # There's actually two categories in DE
         categories = Category.objects.get_categories('de')
-        cids = set([category.id for category in categories])
+        cids = set([category.pk for category in categories])
         self.assertEqual(
             cids,
-            set([self.category1.id, self.category2.id])
+            set([self.category1.pk, self.category2.pk])
         )
 
 
@@ -99,45 +99,47 @@ class TestQuestion(AldrynFaqTest):
         ct = ContentType.objects.get(app_label='aldryn_faq', model='question')
         self.assertEqual(
             self.question1.model_type_id(),
-            ct.id
+            ct.pk
         )
 
     def test_get_absolue_url(self):
+        pk1 = self.question1.pk
+
         self.assertEqual(
             self.question1.get_absolute_url("en"),
-            "/en/faq/example/1/"
+            "/en/faq/example/{pk}/".format(pk=pk1)
         )
         self.assertEqual(
             self.question1.get_absolute_url("de"),
-            "/de/faq/beispiel/1/"
+            "/de/faq/beispiel/{pk}/".format(pk=pk1)
         )
 
     def test_manager_filter_by_language(self):
         questions = Question.objects.filter_by_language('en')
         self.assertEqualItems(
-            [q.id for q in questions],
-            [self.question1.id]
+            [q.pk for q in questions],
+            [self.question1.pk]
         )
 
         questions = Question.objects.filter_by_language('de')
         self.assertEqualItems(
-            [q.id for q in questions],
-            [self.question1.id, self.question2.id]
+            [q.pk for q in questions],
+            [self.question1.pk, self.question2.pk]
         )
 
     def test_manager_filter_by_current_language(self):
         with override("en"):
             questions = Question.objects.filter_by_current_language()
             self.assertEqualItems(
-                [q.id for q in questions],
-                [self.question1.id]
+                [q.pk for q in questions],
+                [self.question1.pk]
             )
 
         with override("de"):
             questions = Question.objects.filter_by_current_language()
             self.assertEqualItems(
-                [q.id for q in questions],
-                [self.question1.id, self.question2.id]
+                [q.pk for q in questions],
+                [self.question1.pk, self.question2.pk]
             )
 
 

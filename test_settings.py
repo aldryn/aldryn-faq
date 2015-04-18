@@ -48,6 +48,7 @@ HELPER_SETTINGS = {
         'adminsortable',
     ],
     'MIGRATION_MODULES': {
+        'aldryn_faq': 'aldryn_faq.migrations_django',
         'cms': 'cms.migrations_django',
         'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
     },
