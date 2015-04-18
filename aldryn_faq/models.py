@@ -12,7 +12,7 @@ from django.utils.translation import override, ugettext_lazy as _
 
 from aldryn_apphooks_config.models import AppHookConfig
 from aldryn_reversion.core import version_controlled_content
-from aldryn_translation_tools import TranslationHelperMixin
+from aldryn_translation_tools.models import TranslationHelperMixin
 
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
