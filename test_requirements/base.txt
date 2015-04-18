@@ -1,5 +1,5 @@
 aldryn-apphooks-config
-aldryn-boilerplates
+-e git+https://github.com/aldryn/aldryn-boilerplates.git#egg=aldryn-boilerplates
 aldryn-reversion
 aldryn_translation_tools
 coverage==3.7.1
