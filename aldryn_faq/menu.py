@@ -20,30 +20,37 @@ class FaqCategoryMenu(CMSAttachMenu):
 
     def get_nodes(self, request):
         nodes = []
-        lang = get_language_from_request(request, check_path=True)
-        categories = Category.objects.translated(lang)
+        language = get_language_from_request(request, check_path=True)
+        categories = Category.objects.translated(language)
 
         if hasattr(self, 'instance') and self.instance:
             #
             # If self has a property `instance`, then we're using django CMS
-            # 3.1.0 or later, which supports using CMSAttachMenus on multiple,
+            # 3.0.12 or later, which supports using CMSAttachMenus on multiple,
             # apphook'ed pages, each with their own apphook configuration. So,
             # here we modify the queryset to reflect this.
             #
             app = apphook_pool.get_apphook(self.instance.application_urls)
             config = app.get_config(self.instance.application_namespace)
             if config:
-                categories = categories.filter(
-                    appconfig__namespace=config.namespace
-                )
+                categories = categories.filter(appconfig=config)
 
         for category in categories:
             node = NavigationNode(
-                category.safe_translation_getter('name', language_code=lang),
-                category.get_absolute_url(language=lang),
-                category.safe_translation_getter('slug', language_code=lang),
+                category.safe_translation_getter('name', language_code=language),
+                category.get_absolute_url(language=language),
+                category.pk,
             )
             nodes.append(node)
+            for question in category.questions.all():
+                node = NavigationNode(
+                    question.safe_translation_getter('title', language_code=language),
+                    question.get_absolute_url(language=language),
+                    category.pk * 1000000 + question.pk,
+                    category.pk,
+                )
+                nodes.append(node)
+
         return nodes
 
 menu_pool.register_menu(FaqCategoryMenu)
