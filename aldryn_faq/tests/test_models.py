@@ -103,13 +103,15 @@ class TestQuestion(AldrynFaqTest):
         )
 
     def test_get_absolue_url(self):
+        pk1 = self.question1.pk
+
         self.assertEqual(
             self.question1.get_absolute_url("en"),
-            "/en/faq/example/1/"
+            "/en/faq/example/{pk}/".format(pk=pk1)
         )
         self.assertEqual(
             self.question1.get_absolute_url("de"),
-            "/de/faq/beispiel/1/"
+            "/de/faq/beispiel/{pk}/".format(pk=pk1)
         )
 
     def test_manager_filter_by_language(self):
