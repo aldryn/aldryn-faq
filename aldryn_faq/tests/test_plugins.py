@@ -10,10 +10,10 @@ from django.utils.translation import override
 from cms.api import add_plugin
 
 from aldryn_faq.models import SelectedCategory
-from .test_base import AldrynFaqTest, CMSRequestBasedTest
+from .test_base import AldrynFaqTest
 
 
-class TestQuestionListPlugin(AldrynFaqTest, CMSRequestBasedTest):
+class TestQuestionListPlugin(AldrynFaqTest):
 
     def test_plugin(self):
         page1 = self.get_or_create_page("Page One")
@@ -48,7 +48,7 @@ class TestQuestionListPlugin(AldrynFaqTest, CMSRequestBasedTest):
         self.assertTrue(plugin.get_questions(), plugin2.get_questions())
 
 
-class TestLatestQuestionsPlugin(AldrynFaqTest, CMSRequestBasedTest):
+class TestLatestQuestionsPlugin(AldrynFaqTest):
 
     def test_plugin(self):
         with override('de'):
@@ -67,7 +67,7 @@ class TestLatestQuestionsPlugin(AldrynFaqTest, CMSRequestBasedTest):
         self.assertTrue(rendered.find(url2) < rendered.find(url1))
 
 
-class TestTopQuestionsPlugin(AldrynFaqTest, CMSRequestBasedTest):
+class TestTopQuestionsPlugin(AldrynFaqTest):
     def test_plugin(self):
         page1 = self.get_or_create_page("Page One")
         ph = page1.placeholders.get(slot='content')
@@ -91,7 +91,7 @@ class TestTopQuestionsPlugin(AldrynFaqTest, CMSRequestBasedTest):
         self.assertTrue(rendered.find(question1.title) > -1)
 
 
-class TestMostReadQuestionsPlugin(AldrynFaqTest, CMSRequestBasedTest):
+class TestMostReadQuestionsPlugin(AldrynFaqTest):
     def test_plugin(self):
         # Prepare the questions...
         self.question1.number_of_visits = 5
@@ -116,7 +116,7 @@ class TestMostReadQuestionsPlugin(AldrynFaqTest, CMSRequestBasedTest):
         self.assertTrue(rendered.find(url2) < rendered.find(url1))
 
 
-class TestCategoryListPlugin(AldrynFaqTest, CMSRequestBasedTest):
+class TestCategoryListPlugin(AldrynFaqTest):
     def test_plugin(self):
         page1 = self.get_or_create_page("Page One")
         ph = page1.placeholders.get(slot='content')
@@ -125,11 +125,15 @@ class TestCategoryListPlugin(AldrynFaqTest, CMSRequestBasedTest):
         request = self.get_page_request(
             page1, self.user, None, lang_code='de', edit=False)
         context = RequestContext(request, {})
-        url = self.reload(self.category1, "de").get_absolute_url()
+        category1 = self.category1
+        category1.appconfig = self.app_config
+        category1.save()
+        category2 = self.category2
+        category2.appconfig = self.app_config
+        category2.save()
+        url = category1.get_absolute_url(language="de")
         rendered = plugin.render_plugin(context, ph)
-        # Why does this work? Probably because if there were no selected
-        # categories, it returns all of them, and we only have 1 EN category?
-        self.assertTrue(rendered.find(url) > -1)
+        self.assertFalse(rendered.find(url) > -1)
 
         # Add some selected categories
         categories = [self.category1, self.category2]

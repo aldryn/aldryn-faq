@@ -38,6 +38,7 @@ HELPER_SETTINGS = {
         'aldryn_boilerplates',
         'aldryn_faq',
         'aldryn_reversion',
+        'aldryn_translation_tools',
         'djangocms_text_ckeditor',
         'parler',
         'reversion',

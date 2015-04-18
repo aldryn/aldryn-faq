@@ -12,11 +12,11 @@ from django.utils.translation import override, ugettext_lazy as _
 
 from aldryn_apphooks_config.models import AppHookConfig
 from aldryn_reversion.core import version_controlled_content
+from aldryn_translation_tools.models import TranslationHelperMixin
 
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from cms.utils.i18n import get_current_language
-
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 from sortedm2m.fields import SortedManyToManyField
@@ -51,7 +51,7 @@ class FaqConfig(TranslatableModel, AppHookConfig):
 
 @python_2_unicode_compatible
 @version_controlled_content
-class Category(TranslatableModel):
+class Category(TranslationHelperMixin, TranslatableModel):
     translations = TranslatedFields(
         name=models.CharField(max_length=255),
         slug=models.SlugField(verbose_name=_('Slug'), max_length=255),
@@ -75,12 +75,14 @@ class Category(TranslatableModel):
 
     def get_absolute_url(self, language=None):
         language = language or get_current_language()
-        slug = get_slug_in_language(self, language)
+        slug, language = self.known_translation_getter(
+            'slug', default=None, language_code=language)
+        kwargs = {'category_slug': slug}
         with override(language):
-            if not slug:  # category not translated in given language
-                return '/%s/' % language
-            kwargs = {'category_slug': slug}
-            return reverse('aldryn_faq:faq-category', kwargs=kwargs)
+            return reverse(
+                '{0}:faq-category'.format(self.appconfig.namespace),
+                kwargs=kwargs
+            )
 
 
 @python_2_unicode_compatible
