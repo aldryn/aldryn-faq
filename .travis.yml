@@ -18,17 +18,17 @@ env:
 
 matrix:
   allow_failures:
-    # Remove this once aldryn-boilerplates is compatible with Django 1.7
-    - python: 2.6
     - env: DJANGO=1.7 CMD=./test
     - env: DJANGO=1.7 CMD="flake8 aldryn_newsblog"
   exclude:
+    # Django 1.7 requires Python 2.7 or later
     - python: 2.6
       env: DJANGO=1.7 CMD=./test
   fast_finish: true
   include:
+    # Change this to Django 1.7 once it is working.
     - python: 2.7
-      env: DJANGO=1.7 CMD="flake8 aldryn_newsblog"
+      env: DJANGO=1.6 CMD="flake8 aldryn_newsblog"
 
 cache:
   directories:

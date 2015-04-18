@@ -26,7 +26,6 @@ HAYSTACK_CONNECTIONS = {
 }
 
 HELPER_SETTINGS = {
-    # 'ROOT_URLCONF': 'aldryn_faq.tests.urls',
     'TIME_ZONE': 'Europe/Zurich',
     'LANGUAGES': (
         ('en', 'English'),
@@ -70,6 +69,7 @@ HELPER_SETTINGS = {
         1: (
             {'code': 'de', },
             {'code': 'en', },
+            {'code': 'fr', },
         ),
         'default': {
             'hide_untranslated': False,
@@ -92,8 +92,11 @@ HELPER_SETTINGS = {
                 'code': 'fr',
                 'name': 'Français',
                 'fallbacks': ['en', ]
-            }
-        ]
+            },
+        ],
+        'default': {
+            'hide_untranslated': False,
+        }
     },
 }
 
