@@ -26,7 +26,7 @@ HAYSTACK_CONNECTIONS = {
 }
 
 HELPER_SETTINGS = {
-    'ROOT_URLCONF': 'aldryn_faq.tests.urls',
+    # 'ROOT_URLCONF': 'aldryn_faq.tests.urls',
     'TIME_ZONE': 'Europe/Zurich',
     'LANGUAGES': (
         ('en', 'English'),
@@ -48,6 +48,10 @@ HELPER_SETTINGS = {
         # required for testing the migrations.
         'adminsortable',
     ],
+    'MIGRATION_MODULES': {
+        'cms': 'cms.migrations_django',
+        'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
+    },
     'STATICFILES_FINDERS': [
         'django.contrib.staticfiles.finders.FileSystemFinder',
         # important! place right before django.contrib.staticfiles.finders.AppDirectoriesFinder
@@ -70,6 +74,26 @@ HELPER_SETTINGS = {
         'default': {
             'hide_untranslated': False,
         }
+    },
+    'SITE_ID': 1,
+    'CMS_LANGUAGES': {
+        1: [
+            {
+                'code': 'de',
+                'name': 'Deutsche',
+                'fallbacks': ['en', ]
+            },
+            {
+                'code': 'en',
+                'name': 'English',
+                'fallbacks': ['de', ]
+            },
+            {
+                'code': 'fr',
+                'name': 'Français',
+                'fallbacks': ['en', ]
+            }
+        ]
     },
 }
 
