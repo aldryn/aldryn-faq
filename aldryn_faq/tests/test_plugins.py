@@ -128,11 +128,12 @@ class TestCategoryListPlugin(AldrynFaqTest):
         category1 = self.category1
         category1.appconfig = self.app_config
         category1.save()
+        category2 = self.category2
+        category2.appconfig = self.app_config
+        category2.save()
         url = category1.get_absolute_url(language="de")
         rendered = plugin.render_plugin(context, ph)
-        # Why does this work? Probably because if there were no selected
-        # categories, it returns all of them, and we only have 1 EN category?
-        self.assertTrue(rendered.find(url) > -1)
+        self.assertFalse(rendered.find(url) > -1)
 
         # Add some selected categories
         categories = [self.category1, self.category2]
