@@ -83,6 +83,7 @@ class AldrynFaqTestMixin(TestUtilityMixin, object):
         super(AldrynFaqTestMixin, self).setUp()
         with override("en"):
             self.category1 = Category(**self.data["category1"]["en"])
+            self.category1.appconfig = self.app_config
             self.category1.save()
             self.question1 = Question(**self.data["question1"]["en"])
             self.question1.category = self.category1
@@ -99,6 +100,7 @@ class AldrynFaqTestMixin(TestUtilityMixin, object):
         with override("de"):
             # Make a DE-only Category
             self.category2 = Category(**self.data["category2"]["de"])
+            self.category2.appconfig = self.app_config
             self.category2.save()
 
             # Make a DE-only Question
