@@ -126,10 +126,8 @@ class TestCategoryListPlugin(AldrynFaqTest):
             page1, self.user, None, lang_code='de', edit=False)
         context = RequestContext(request, {})
         category1 = self.category1
-        category1.appconfig = self.app_config
         category1.save()
         category2 = self.category2
-        category2.appconfig = self.app_config
         category2.save()
         url = category1.get_absolute_url(language="de")
         rendered = plugin.render_plugin(context, ph)

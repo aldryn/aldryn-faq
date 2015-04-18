@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 import six
 
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -12,11 +13,12 @@ from django.utils.translation import override, ugettext_lazy as _
 
 from aldryn_apphooks_config.models import AppHookConfig
 from aldryn_reversion.core import version_controlled_content
-from aldryn_translation_tools import TranslationHelperMixin
+from aldryn_translation_tools.models import TranslationHelperMixin
 
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
-from cms.utils.i18n import get_current_language
+from cms.utils.i18n import get_current_language, get_fallback_languages
+
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 from sortedm2m.fields import SortedManyToManyField
@@ -81,8 +83,7 @@ class Category(TranslationHelperMixin, TranslatableModel):
         with override(language):
             return reverse(
                 '{0}:faq-category'.format(self.appconfig.namespace),
-                kwargs=kwargs
-            )
+                kwargs=kwargs)
 
 
 @python_2_unicode_compatible
@@ -115,19 +116,55 @@ class Question(TranslatableModel):
         return ContentType.objects.get_for_model(self.__class__).id
 
     def get_absolute_url(self, language=None):
-        language = language or get_current_language()
-        category = self.category
-        try:
-            translation = get_translation(self, language_code=language)
-        except models.ObjectDoesNotExist:
-            translation = None
-        cat_slug = get_slug_in_language(category, language)
-        if translation and cat_slug:
-            with override(language):
-                return reverse(
-                    'aldryn_faq:faq-answer', args=(cat_slug, self.pk))
-        else:
-            return category.get_absolute_url(language)
+        """
+        Returns the absolute_url of this question object, respecting the
+        configured fallback languages.
+        """        
+
+        # NOTE: We have a couple of languages to consider here:
+        #   1. The requested language (or current thread's langauge) and any
+        #      fallbacks defined in settings.CMS_LANGUAGES;
+        #   2. The available language of the category;
+        #   3. The available langauges of the question (this object).
+        #
+        # We need to find a consistent language to provide the correct url
+
+        # NOTE: We're not using sets here, as we'd lose ordering, and the size
+        # of these sets will be pretty small (~4 items), so it doesn't seem
+        # worth it to use any ordered-set implementation.
+
+        # Build a list of suitable languages, in preference order.
+        language or get_current_language()
+        site_id = getattr(settings, 'SITE_ID', None)
+        languages = [language] + get_fallback_languages(
+            language, site_id=site_id)
+
+        # Reduce this by the available languages for the category
+        category_languages = self.category.get_available_languages()
+        languages = (lang for lang in languages if lang in category_languages)
+
+        # Reduce further by the available languages for the question
+        question_languages = self.get_available_languages()
+        languages = (lang for lang in languages if lang in question_languages)
+
+        common_language = next(languages, None)
+        if common_language:
+            try:
+                namespace = self.category.appconfig.namespace
+            except:
+                namespace = False
+
+            category_slug = self.category.safe_translation_getter(
+                'slug', default=None, language_code=common_language)
+
+            if namespace and category_slug:
+                with override(common_language):
+                    return reverse(
+                        '{0}:faq-answer'.format(namespace),
+                        kwargs={'category_slug': category_slug, 'pk': self.pk})
+
+        # No suitable translations exist, return the category's url
+        return self.category.get_absolute_url(language)
 
 
 class QuestionsPlugin(models.Model):

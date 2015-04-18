@@ -15,8 +15,6 @@ class TestMenu(AldrynFaqTest):
         # Test that the EN version of the menu has only category1 and is shown
         # in English.
         category1 = self.reload(self.category1, 'en')
-        category1.appconfig = self.app_config
-        category1.save()
         request = self.get_page_request(None, self.user, '/en/')
         menu = FaqCategoryMenu()
         self.assertEqualItems(
@@ -29,11 +27,7 @@ class TestMenu(AldrynFaqTest):
         request = self.get_page_request(None, self.user, '/de/')
         menu = FaqCategoryMenu()
         category1 = self.reload(self.category1, 'de')
-        category1.appconfig = self.app_config
-        category1.save()
         category2 = self.reload(self.category2, 'de')
-        category2.appconfig = self.app_config
-        category2.save()
         nodes = menu.get_nodes(request)
         self.assertEqualItems(
             [menuitem.title for menuitem in nodes],

@@ -16,8 +16,6 @@ class TestFaqByCategoryView(AldrynFaqTest, CMSRequestBasedTest):
     def test_as_view(self):
         """Tests that the FaqByCategoryView produces the correct context."""
         category1 = self.reload(self.category1, "en")
-        category1.appconfig = self.app_config
-        category1.save()
         question1 = self.reload(self.question1, "en")
 
         kwargs = {"category_slug": category1.slug}
@@ -46,11 +44,7 @@ class TestFaqAnswerView(AldrynFaqTest, CMSRequestBasedTest):
     def test_as_view(self):
         """Tests that the FaqAnswerView produces the correct context."""
         category1 = self.reload(self.category1, "en")
-        category1.appconfig = self.app_config
-        category1.save()
         question1 = self.reload(self.question1, "en")
-        question1.category = category1
-        question1.save()
 
         kwargs = {"category_slug": category1.slug, "pk": question1.id}
         with override('en'):
