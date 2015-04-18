@@ -42,16 +42,14 @@ class TestCategory(AldrynFaqTest):
             ct.id
         )
 
-    def test_get_absolue_url(self):
+    def test_get_absolute_url(self):
         category1 = self.category1
-        category1.appconfig = self.app_config
-        category1.save()
         self.assertEqual(
-            self.category1.get_absolute_url("en"),
+            category1.get_absolute_url("en"),
             "/en/faq/example/"
         )
         self.assertEqual(
-            self.category1.get_absolute_url("de"),
+            category1.get_absolute_url("de"),
             "/de/faq/beispiel/"
         )
 
