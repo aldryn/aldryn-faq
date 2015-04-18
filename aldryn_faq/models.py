@@ -119,7 +119,7 @@ class Question(TranslatableModel):
         """
         Returns the absolute_url of this question object, respecting the
         configured fallback languages.
-        """        
+        """
 
         # NOTE: We have a couple of languages to consider here:
         #   1. The requested language (or current thread's langauge) and any
@@ -134,7 +134,7 @@ class Question(TranslatableModel):
         # worth it to use any ordered-set implementation.
 
         # Build a list of suitable languages, in preference order.
-        language or get_current_language()
+        language = language or get_current_language()
         site_id = getattr(settings, 'SITE_ID', None)
         languages = [language] + get_fallback_languages(
             language, site_id=site_id)
