@@ -123,7 +123,7 @@ class Question(TranslatableModel):
         """
         Returns the absolute_url of this question object
         """
-        category_slug, category_language = self.category.known_translation_getter(
+        category_slug, language = self.category.known_translation_getter(
             'slug', default=None, language_code=language)
         kwargs = {
             'category_slug': category_slug,

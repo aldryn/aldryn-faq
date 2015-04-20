@@ -68,6 +68,7 @@ class TestLatestQuestionsPlugin(AldrynFaqTest):
 
 
 class TestTopQuestionsPlugin(AldrynFaqTest):
+
     def test_plugin(self):
         page1 = self.get_or_create_page("Page One")
         ph = page1.placeholders.get(slot='content')

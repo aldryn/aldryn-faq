@@ -6,7 +6,8 @@ REQUIREMENTS = [
     'aldryn-apphooks-config',
     'aldryn-reversion',
     'aldryn-search',
-    'django-admin-sortable', # DO NOT REMOVE THIS
+    'aldryn-translation-tools',
+    'django-admin-sortable',  # DO NOT REMOVE THIS
     'django-admin-sortable2>=0.5.0',
     'django-parler',
     'django-sortedm2m',
