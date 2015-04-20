@@ -58,8 +58,9 @@ class Category(TranslationHelperMixin, TranslatableModel):
         name=models.CharField(max_length=255),
         slug=models.SlugField(verbose_name=_('Slug'), max_length=255),
     )
-    appconfig = models.ForeignKey(FaqConfig, verbose_name=_('appconfig'),
-        blank=True, null=True)
+    appconfig = models.ForeignKey(
+        FaqConfig, verbose_name=_('appconfig'), blank=True, null=True
+    )
     objects = CategoryManager()
 
     class Meta:
@@ -68,7 +69,9 @@ class Category(TranslationHelperMixin, TranslatableModel):
 
     def __str__(self):
         if six.PY2:
-            return self.safe_translation_getter('name', default=unicode(self.pk))
+            return self.safe_translation_getter(
+                'name', default=six.u(str(self.pk))
+            )
         else:
             return self.safe_translation_getter('name', default=str(self.pk))
 
@@ -76,14 +79,17 @@ class Category(TranslationHelperMixin, TranslatableModel):
         return ContentType.objects.get_for_model(self.__class__).id
 
     def get_absolute_url(self, language=None):
-        language = language or get_current_language()
         slug, language = self.known_translation_getter(
             'slug', default=None, language_code=language)
         kwargs = {'category_slug': slug}
+
+        if self.app_config_id and self.app_config.namespace:
+            namespace = '{0}:'.format(self.app_config.namespace)
+        else:
+            namespace = ''
+
         with override(language):
-            return reverse(
-                '{0}:faq-category'.format(self.appconfig.namespace),
-                kwargs=kwargs)
+            return reverse('{0}faq-category'.format(namespace), kwargs=kwargs)
 
 
 @python_2_unicode_compatible
