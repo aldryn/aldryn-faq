@@ -29,6 +29,18 @@ class FaqMixin(AppConfigMixin):
         context['current_app'] = self.namespace
         return context
 
+    def get_category_or_404(self, slug, language):
+        """
+        Looks for a category with the given slug IN THE GIVEN LANGUAGE. This
+        should not use fallbacks, otherwise it may be possible that we get the
+        wrong category.
+        """
+        categories = Category.objects.filter(
+            appconfig=self.config).translated(language, slug=slug)
+        if not categories:
+            raise Http404("Category not found")
+        return categories[0]
+
     def get_queryset(self):
         return self.model.objects.language(self.current_language)
 
@@ -47,18 +59,12 @@ class FaqByCategoryView(FaqMixin, ListView):
     template_name = 'aldryn_faq/questiontranslation_list.html'
 
     def get(self, *args, **kwargs):
-        self.category = self.get_category_or_404(self.config)
+        self.category = self.get_category_or_404(
+            kwargs['category_slug'], self.current_language)
         setattr(self.request, request_faq_category_identifier, self.category)
         response = super(FaqByCategoryView, self).get(*args, **kwargs)
         set_language_changer(self.request, self.category.get_absolute_url)
         return response
-
-    def get_category_or_404(self, config=None):
-        categories = Category.objects.filter(
-            appconfig=config).translated(slug=self.kwargs['category_slug'])
-        if not categories:
-            raise Http404("Category not found")
-        return categories[0]
 
     def get_queryset(self):
         if self.category:
@@ -73,7 +79,11 @@ class FaqAnswerView(FaqMixin, DetailView):
     template_name = 'aldryn_faq/question_detail.html'
 
     def get(self, *args, **kwargs):
+        category = self.get_category_or_404(
+            kwargs['category_slug'], self.current_language)
         question = self.get_object()
+        if not question or not category or question.category != category:
+            raise Http404
         if hasattr(self.request, 'toolbar'):
             self.request.toolbar.set_object(question)
         setattr(

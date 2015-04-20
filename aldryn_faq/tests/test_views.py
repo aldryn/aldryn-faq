@@ -63,3 +63,50 @@ class TestFaqAnswerView(AldrynFaqTest):
             response.context_data['object'],
             question1,
         )
+
+        # Now, check that manipulating the url to get an answer from the wrong
+        # category returns a 404. In this case, we have to do it in DE, since
+        # question2 is only available in that language.
+        category1 = self.reload(self.category1, "de")
+        question2 = self.reload(self.question2, "de")
+        kwargs = {"category_slug": category1.slug, "pk": question2.pk}
+        with override('de'):
+            url = reverse(
+                '{0}:faq-answer'.format(self.app_config.namespace),
+                kwargs=kwargs
+            )
+        request = factory.get(url)
+        request.user = self.user
+        request.current_page = self.page
+        with self.assertRaises(Http404):
+            response = FaqAnswerView.as_view()(request, **kwargs)
+
+        # Now, do that again, this time mixing the languages.
+        category1 = self.reload(self.category1, "en")  # NOTE THESE DO NOT MATCH
+        question2 = self.reload(self.question2, "de")
+        kwargs = {"category_slug": category1.slug, "pk": question2.pk}
+        with override('de'):  # NOTE THIS IS DE
+            url = reverse(
+                '{0}:faq-answer'.format(self.app_config.namespace),
+                kwargs=kwargs
+            )
+        request = factory.get(url)
+        request.user = self.user
+        request.current_page = self.page
+        with self.assertRaises(Http404):
+            response = FaqAnswerView.as_view()(request, **kwargs)
+
+        # Now, now the opposite way, for good measure.
+        category1 = self.reload(self.category1, "en")  # NOTE THESE DO NOT MATCH
+        question2 = self.reload(self.question2, "de")
+        kwargs = {"category_slug": category1.slug, "pk": question2.pk}
+        with override('en'):  # NOTE: THIS IS NOW EN
+            url = reverse(
+                '{0}:faq-answer'.format(self.app_config.namespace),
+                kwargs=kwargs
+            )
+        request = factory.get(url)
+        request.user = self.user
+        request.current_page = self.page
+        with self.assertRaises(Http404):
+            response = FaqAnswerView.as_view()(request, **kwargs)
