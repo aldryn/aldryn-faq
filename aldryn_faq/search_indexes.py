@@ -18,7 +18,7 @@ class QuestionIndex(get_index_base()):
     index_title = True
 
     def get_title(self, obj):
-        with switch_language(obj, self.get_current_language()):
+        with switch_language(obj):
             return obj.safe_translation_getter('title')
 
     def get_index_queryset(self, language):
@@ -53,7 +53,7 @@ class CategoryIndex(get_index_base()):
     index_title = True
 
     def get_title(self, obj):
-        with switch_language(obj, self.get_current_language()):
+        with switch_language(obj):
             return obj.safe_translation_getter('name')
 
     def get_index_queryset(self, language):
@@ -63,5 +63,5 @@ class CategoryIndex(get_index_base()):
         return Category
 
     def get_search_data(self, obj, language, request):
-        with switch_language(obj, self.get_current_language()):
+        with switch_language(obj):
             return strip_tags(obj.safe_translation_getter('name'))
