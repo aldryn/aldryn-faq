@@ -4,10 +4,14 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_faq.utils import rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_new_to_old(db)
+
         # Adding field 'CategoryTranslation.slug'
         db.add_column(u'aldryn_faq_category_translation', 'slug',
                       self.gf('django.db.models.fields.SlugField')(default='', max_length=255, blank=True),
@@ -15,6 +19,8 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
+
         # Deleting field 'CategoryTranslation.slug'
         db.delete_column(u'aldryn_faq_category_translation', 'slug')
 

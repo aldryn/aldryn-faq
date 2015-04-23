@@ -4,10 +4,15 @@ from south.db import db
 from south.v2 import DataMigration
 from django.db import models
 
+from aldryn_faq.utils import rename_tables_new_to_old
+
+
 class Migration(DataMigration):
     no_dry_run = True
 
     def forwards(self, orm):
+        rename_tables_new_to_old(db)
+
         for question in orm['aldryn_faq.Question'].objects.all():
             trans = orm['aldryn_faq.QuestionTranslation']()
             trans.language_code = question.language
@@ -17,7 +22,8 @@ class Migration(DataMigration):
             trans.save()
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        rename_tables_new_to_old(db, self.cms_plugin_table_mapping)
+
 
     models = {
         u'aldryn_faq.category': {

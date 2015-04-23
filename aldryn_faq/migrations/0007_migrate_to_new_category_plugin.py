@@ -4,6 +4,9 @@ from south.db import db
 from south.v2 import DataMigration
 from django.db import models
 
+from aldryn_faq.utils import rename_tables_new_to_old
+
+
 # Copy from CMSPlugin.set_base_attr
 def set_base_plugin_attr(source_plugin, target_plugin):
     for attr in ['parent_id', 'placeholder', 'language', 'plugin_type', 'creation_date', 'level', 'lft', 'rght',
@@ -14,14 +17,16 @@ def set_base_plugin_attr(source_plugin, target_plugin):
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        "Write your forwards methods here."
+        rename_tables_new_to_old(db)
+
         for cms_plugin in orm['cms.cmsplugin'].objects.filter(plugin_type='CategoryListPlugin'):
             new_plugin = orm[u'aldryn_faq.categorylistplugin'](cmsplugin_ptr=cms_plugin)
             set_base_plugin_attr(cms_plugin, new_plugin)
             new_plugin.save()
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        rename_tables_new_to_old(db)
+
 
     models = {
         u'aldryn_faq.category': {

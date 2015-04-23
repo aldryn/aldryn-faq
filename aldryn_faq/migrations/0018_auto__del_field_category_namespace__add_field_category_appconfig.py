@@ -4,10 +4,14 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_faq.utils import rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_new_to_old(db)
+
         # Deleting field 'Category.namespace'
         db.delete_column(u'aldryn_faq_category', 'namespace_id')
 
@@ -18,6 +22,8 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
+
         # Adding field 'Category.namespace'
         db.add_column(u'aldryn_faq_category', 'namespace',
                       self.gf('django.db.models.fields.related.ForeignKey')(default=None, null=True, to=orm['aldryn_faq.FaqConfig']),

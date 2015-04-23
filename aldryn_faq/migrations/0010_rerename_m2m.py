@@ -4,16 +4,20 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_faq.utils import rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        db.rename_table('cmsplugin_questionlistplugin_questions', 'aldryn_faq_questionlistplugin_questions')
-        db.rename_table('cmsplugin_questionlistplugin', 'aldryn_faq_questionlistplugin')
+        rename_tables_new_to_old(db)
+        # db.rename_table('cmsplugin_questionlistplugin_questions', 'aldryn_faq_questionlistplugin_questions')
+        # db.rename_table('cmsplugin_questionlistplugin', 'aldryn_faq_questionlistplugin')
 
     def backwards(self, orm):
-        db.rename_table('aldryn_faq_questionlistplugin_questions', 'cmsplugin_questionlistplugin_questions')
-        db.rename_table('aldryn_faq_questionlistplugin', 'cmsplugin_questionlistplugin')
+        rename_tables_new_to_old(db)
+        # db.rename_table('aldryn_faq_questionlistplugin_questions', 'cmsplugin_questionlistplugin_questions')
+        # db.rename_table('aldryn_faq_questionlistplugin', 'cmsplugin_questionlistplugin')
 
     models = {
         u'aldryn_faq.category': {

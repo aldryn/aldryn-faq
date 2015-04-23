@@ -4,15 +4,19 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_faq.utils import rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_new_to_old(db)
 
         # Changing field 'QuestionTranslation.answer_text'
         db.alter_column(u'aldryn_faq_question_translation', 'answer_text', self.gf('djangocms_text_ckeditor.fields.HTMLField')(default=''))
 
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
 
         # Changing field 'QuestionTranslation.answer_text'
         db.alter_column(u'aldryn_faq_question_translation', 'answer_text', self.gf('djangocms_text_ckeditor.fields.HTMLField')(null=True))

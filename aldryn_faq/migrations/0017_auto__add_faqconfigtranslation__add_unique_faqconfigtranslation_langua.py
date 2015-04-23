@@ -4,10 +4,14 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_faq.utils import rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_new_to_old(db)
+
         # Adding model 'FaqConfigTranslation'
         db.create_table(u'aldryn_faq_faqconfig_translation', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -36,6 +40,8 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
+
         # Removing unique constraint on 'FaqConfigTranslation', fields ['language_code', u'master']
         db.delete_unique(u'aldryn_faq_faqconfig_translation', ['language_code', u'master_id'])
 

@@ -4,10 +4,14 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_faq.utils import rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_new_to_old(db)
+
         # Adding field 'Question.number_of_visits'
         db.add_column(u'aldryn_faq_question', 'number_of_visits',
                       self.gf('django.db.models.fields.PositiveIntegerField')(default=0),
@@ -15,6 +19,8 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
+
         # Deleting field 'Question.number_of_visits'
         db.delete_column(u'aldryn_faq_question', 'number_of_visits')
 

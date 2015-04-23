@@ -4,10 +4,14 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_faq.utils import rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_new_to_old(db)
+
         # Deleting model 'LatestQuestionPlugin'
         db.delete_table(u'cmsplugin_latestquestionplugin')
 
@@ -32,6 +36,8 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
+
         # Adding model 'LatestQuestionPlugin'
         db.create_table(u'cmsplugin_latestquestionplugin', (
             (u'cmsplugin_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['cms.CMSPlugin'], unique=True, primary_key=True)),
