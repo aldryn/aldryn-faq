@@ -4,10 +4,14 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_faq.utils import rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_new_to_old(db)
+
         # Adding model 'SelectedCategory'
         db.create_table(u'aldryn_faq_selectedcategory', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -25,6 +29,8 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
+
         # Deleting model 'SelectedCategory'
         db.delete_table(u'aldryn_faq_selectedcategory')
 

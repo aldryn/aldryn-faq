@@ -4,10 +4,14 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_faq.utils import rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_new_to_old(db)
+
         # Deleting field 'Question.answer_text'
         db.delete_column(u'aldryn_faq_question', 'answer_text')
 
@@ -20,6 +24,9 @@ class Migration(SchemaMigration):
 
     def backwards(self, orm):
         raise RuntimeError("Cannot reverse this migration. 'Question.language' and its values cannot be restored.")
+
+        rename_tables_new_to_old(db)
+
         # Adding field 'Question.answer_text'
         db.add_column(u'aldryn_faq_question', 'answer_text',
                       self.gf('djangocms_text_ckeditor.fields.HTMLField')(null=True, blank=True),
