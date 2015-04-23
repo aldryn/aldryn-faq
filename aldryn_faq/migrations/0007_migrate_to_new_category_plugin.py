@@ -4,8 +4,6 @@ from south.db import db
 from south.v2 import DataMigration
 from django.db import models
 
-from aldryn_faq.utils import rename_tables_new_to_old
-
 
 # Copy from CMSPlugin.set_base_attr
 def set_base_plugin_attr(source_plugin, target_plugin):
@@ -17,15 +15,19 @@ def set_base_plugin_attr(source_plugin, target_plugin):
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        rename_tables_new_to_old(db)
-
-        for cms_plugin in orm['cms.cmsplugin'].objects.filter(plugin_type='CategoryListPlugin'):
-            new_plugin = orm[u'aldryn_faq.categorylistplugin'](cmsplugin_ptr=cms_plugin)
-            set_base_plugin_attr(cms_plugin, new_plugin)
-            new_plugin.save()
+        """
+        This migration didn't actually do anything. It's trying to recreate the plugins
+        and map it to the new database naming scheme, but that's not gonna work since
+        models['categorylistplugin']['Meta']['db_table'] still points to the old scheme
+        """
+        # for cms_plugin in orm['cms.cmsplugin'].objects.filter(plugin_type='CategoryListPlugin'):
+        #     new_plugin = orm[u'aldryn_faq.categorylistplugin'](cmsplugin_ptr=cms_plugin)
+        #     set_base_plugin_attr(cms_plugin, new_plugin)
+        #     new_plugin.save()
+        pass
 
     def backwards(self, orm):
-        rename_tables_new_to_old(db)
+        pass
 
 
     models = {
