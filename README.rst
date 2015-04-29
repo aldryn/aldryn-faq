@@ -4,6 +4,9 @@
     :target: https://travis-ci.org/aldryn/aldryn-faq
 .. image:: https://coveralls.io/repos/aldryn/aldryn-faq/badge.svg
     :target: https://coveralls.io/r/aldryn/aldryn-faq
+.. image:: https://codeclimate.com/github/aldryn/aldryn-faq/badges/gpa.svg
+   :target: https://codeclimate.com/github/aldryn/aldryn-faq
+   :alt: Code Climate
 
 ==========
 Aldryn FAQ
