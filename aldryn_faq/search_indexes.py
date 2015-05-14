@@ -30,8 +30,8 @@ class QuestionIndex(get_index_base()):
     def get_search_data(self, obj, language, request):
         with switch_language(obj, language):
             text_bits = [
-                strip_tags(obj.title),
-                strip_tags(obj.answer_text)
+                strip_tags(obj.safe_translation_getter('title') or ''),
+                strip_tags(obj.safe_translation_getter('answer_text') or '')
             ]
             plugins = obj.answer.cmsplugin_set.filter(language=language)
             for base_plugin in plugins:
