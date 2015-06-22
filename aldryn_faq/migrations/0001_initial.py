@@ -1,84 +1,200 @@
 # -*- coding: utf-8 -*-
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+import aldryn_translation_tools.models
+import app_data.fields
+import cms.models.fields
+import sortedm2m.fields
+import djangocms_text_ckeditor.fields
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'CategoryTranslation'
-        db.create_table(u'aldryn_faq_category_translation', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('language_code', self.gf('django.db.models.fields.CharField')(max_length=15, db_index=True)),
-            ('master', self.gf('django.db.models.fields.related.ForeignKey')(related_name='translations', null=True, to=orm['aldryn_faq.Category'])),
-        ))
-        db.send_create_signal(u'aldryn_faq', ['CategoryTranslation'])
+    dependencies = [
+        ('cms', '0012_auto_20150607_2207'),
+    ]
 
-        # Adding unique constraint on 'CategoryTranslation', fields ['language_code', 'master']
-        db.create_unique(u'aldryn_faq_category_translation', ['language_code', 'master_id'])
-
-        # Adding model 'Category'
-        db.create_table(u'aldryn_faq_category', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        ))
-        db.send_create_signal(u'aldryn_faq', ['Category'])
-
-        # Adding model 'Question'
-        db.create_table(u'aldryn_faq_question', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('order', self.gf('django.db.models.fields.PositiveIntegerField')(default=1, db_index=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('language', self.gf('django.db.models.fields.CharField')(max_length=5)),
-            ('category', self.gf('adminsortable.fields.SortableForeignKey')(to=orm['aldryn_faq.Category'])),
-            ('answer', self.gf('django.db.models.fields.related.ForeignKey')(related_name='faq_questions', null=True, to=orm['cms.Placeholder'])),
-        ))
-        db.send_create_signal(u'aldryn_faq', ['Question'])
-
-
-    def backwards(self, orm):
-        # Removing unique constraint on 'CategoryTranslation', fields ['language_code', 'master']
-        db.delete_unique(u'aldryn_faq_category_translation', ['language_code', 'master_id'])
-
-        # Deleting model 'CategoryTranslation'
-        db.delete_table(u'aldryn_faq_category_translation')
-
-        # Deleting model 'Category'
-        db.delete_table(u'aldryn_faq_category')
-
-        # Deleting model 'Question'
-        db.delete_table(u'aldryn_faq_question')
-
-
-    models = {
-        u'aldryn_faq.category': {
-            'Meta': {'object_name': 'Category'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-        },
-        u'aldryn_faq.categorytranslation': {
-            'Meta': {'unique_together': "[('language_code', 'master')]", 'object_name': 'CategoryTranslation', 'db_table': "u'aldryn_faq_category_translation'"},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'language_code': ('django.db.models.fields.CharField', [], {'max_length': '15', 'db_index': 'True'}),
-            'master': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'translations'", 'null': 'True', 'to': u"orm['aldryn_faq.Category']"}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
-        },
-        u'aldryn_faq.question': {
-            'Meta': {'ordering': "['order']", 'object_name': 'Question'},
-            'answer': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'faq_questions'", 'null': 'True', 'to': "orm['cms.Placeholder']"}),
-            'category': ('adminsortable.fields.SortableForeignKey', [], {'to': u"orm['aldryn_faq.Category']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'language': ('django.db.models.fields.CharField', [], {'max_length': '5'}),
-            'order': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1', 'db_index': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '255'})
-        },
-        'cms.placeholder': {
-            'Meta': {'object_name': 'Placeholder'},
-            'default_width': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'slot': ('django.db.models.fields.CharField', [], {'max_length': '50', 'db_index': 'True'})
-        }
-    }
-
-    complete_apps = ['aldryn_faq']
+    operations = [
+        migrations.CreateModel(
+            name='Category',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+            ],
+            options={
+                'verbose_name': 'category',
+                'verbose_name_plural': 'categories',
+            },
+            bases=(aldryn_translation_tools.models.TranslationHelperMixin, models.Model),
+        ),
+        migrations.CreateModel(
+            name='CategoryListPlugin',
+            fields=[
+                ('cmsplugin_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='cms.CMSPlugin')),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=('cms.cmsplugin',),
+        ),
+        migrations.CreateModel(
+            name='CategoryTranslation',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('language_code', models.CharField(max_length=15, verbose_name='Language', db_index=True)),
+                ('name', models.CharField(max_length=255)),
+                ('slug', models.SlugField(max_length=255, verbose_name='Slug')),
+                ('master', models.ForeignKey(related_name='translations', editable=False, to='aldryn_faq.Category', null=True)),
+            ],
+            options={
+                'managed': True,
+                'db_table': 'aldryn_faq_category_translation',
+                'db_tablespace': '',
+                'default_permissions': (),
+                'verbose_name': 'category Translation',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='FaqConfig',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('type', models.CharField(max_length=100, verbose_name='type')),
+                ('namespace', models.CharField(default=None, unique=True, max_length=100, verbose_name='instance namespace')),
+                ('app_data', app_data.fields.AppDataField(default=b'{}', editable=False)),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='FaqConfigTranslation',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('language_code', models.CharField(max_length=15, verbose_name='Language', db_index=True)),
+                ('app_title', models.CharField(max_length=234, verbose_name='application title')),
+                ('master', models.ForeignKey(related_name='translations', editable=False, to='aldryn_faq.FaqConfig', null=True)),
+            ],
+            options={
+                'managed': True,
+                'db_table': 'aldryn_faq_faqconfig_translation',
+                'db_tablespace': '',
+                'default_permissions': (),
+                'verbose_name': 'faq config Translation',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='LatestQuestionsPlugin',
+            fields=[
+                ('cmsplugin_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='cms.CMSPlugin')),
+                ('questions', models.IntegerField(default=5, help_text='The number of questions to be displayed.')),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=('cms.cmsplugin', models.Model),
+        ),
+        migrations.CreateModel(
+            name='MostReadQuestionsPlugin',
+            fields=[
+                ('cmsplugin_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='cms.CMSPlugin')),
+                ('questions', models.IntegerField(default=5, help_text='The number of questions to be displayed.')),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=('cms.cmsplugin', models.Model),
+        ),
+        migrations.CreateModel(
+            name='Question',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('is_top', models.BooleanField(default=False)),
+                ('number_of_visits', models.PositiveIntegerField(default=0, editable=False)),
+                ('order', models.PositiveIntegerField(default=1, db_index=True)),
+                ('answer', cms.models.fields.PlaceholderField(related_name='faq_questions', slotname='faq_question_answer', editable=False, to='cms.Placeholder', null=True)),
+                ('category', models.ForeignKey(related_name='questions', to='aldryn_faq.Category')),
+            ],
+            options={
+                'ordering': ('order',),
+                'verbose_name': 'question',
+                'verbose_name_plural': 'questions',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='QuestionListPlugin',
+            fields=[
+                ('cmsplugin_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='cms.CMSPlugin')),
+                ('questions', sortedm2m.fields.SortedManyToManyField(help_text=None, to='aldryn_faq.Question')),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=('cms.cmsplugin',),
+        ),
+        migrations.CreateModel(
+            name='QuestionTranslation',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('language_code', models.CharField(max_length=15, verbose_name='Language', db_index=True)),
+                ('title', models.CharField(max_length=255, verbose_name='Title')),
+                ('answer_text', djangocms_text_ckeditor.fields.HTMLField(verbose_name='answer')),
+                ('master', models.ForeignKey(related_name='translations', editable=False, to='aldryn_faq.Question', null=True)),
+            ],
+            options={
+                'managed': True,
+                'db_table': 'aldryn_faq_question_translation',
+                'db_tablespace': '',
+                'default_permissions': (),
+                'verbose_name': 'question Translation',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='SelectedCategory',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('position', models.PositiveIntegerField(null=True, verbose_name='position', blank=True)),
+                ('category', models.ForeignKey(verbose_name='category', to='aldryn_faq.Category')),
+                ('cms_plugin', models.ForeignKey(related_name='selected_categories', to='aldryn_faq.CategoryListPlugin')),
+            ],
+            options={
+                'ordering': ['position'],
+                'verbose_name': 'Category',
+                'verbose_name_plural': 'Categories',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='TopQuestionsPlugin',
+            fields=[
+                ('cmsplugin_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='cms.CMSPlugin')),
+                ('questions', models.IntegerField(default=5, help_text='The number of questions to be displayed.')),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=('cms.cmsplugin', models.Model),
+        ),
+        migrations.AlterUniqueTogether(
+            name='questiontranslation',
+            unique_together=set([('language_code', 'master')]),
+        ),
+        migrations.AlterUniqueTogether(
+            name='faqconfigtranslation',
+            unique_together=set([('language_code', 'master')]),
+        ),
+        migrations.AlterUniqueTogether(
+            name='categorytranslation',
+            unique_together=set([('language_code', 'master')]),
+        ),
+        migrations.AddField(
+            model_name='category',
+            name='appconfig',
+            field=models.ForeignKey(verbose_name='appconfig', blank=True, to='aldryn_faq.FaqConfig', null=True),
+            preserve_default=True,
+        ),
+    ]
