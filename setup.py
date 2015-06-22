@@ -11,7 +11,7 @@ REQUIREMENTS = [
     'django-admin-sortable2>=0.5.0',
     'django-parler',
     'django-sortedm2m',
-    'django-cms>=3.0.12,<3.1'
+    'django-cms>=3.0.12',
 ]
 
 CLASSIFIERS = [
