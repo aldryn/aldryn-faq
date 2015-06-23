@@ -56,7 +56,7 @@ class FaqByCategoryListView(FaqMixin, AppConfigMixin, ListView):
 
 class FaqByCategoryView(FaqMixin, ListView):
 
-    template_name = 'aldryn_faq/questiontranslation_list.html'
+    template_name = 'aldryn_faq/question_list.html'
 
     def get(self, *args, **kwargs):
         self.category = self.get_category_or_404(

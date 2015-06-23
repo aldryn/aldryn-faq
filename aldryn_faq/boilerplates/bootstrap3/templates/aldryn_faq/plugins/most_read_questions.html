@@ -1,3 +1,5 @@
-<div class="aldryn aldryn-faq aldryn-faq-list">
+{% load i18n %}
+
+<div class="aldryn aldryn-faq aldryn-faq-most-read">
     {% include "aldryn_faq/includes/ungrouped_question_list.html" with object_list=instance.get_questions %}
 </div>
