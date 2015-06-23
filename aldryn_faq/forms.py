@@ -15,6 +15,11 @@ class CategoryAdminForm(TranslatableModelForm):
 
     class Meta:
         model = Category
+        fields = [
+            'name',
+            'slug',
+            'appconfig',
+        ]
 
     # def clean_slug(self):
     #     slug = self.cleaned_data['slug']
@@ -38,6 +43,9 @@ class QuestionListPluginForm(forms.ModelForm):
 
     class Meta:
         model = QuestionListPlugin
+        fields = [
+            'questions',
+        ]
 
     def __init__(self, *args, **kwargs):
         super(QuestionListPluginForm, self).__init__(*args, **kwargs)
