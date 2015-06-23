@@ -1,7 +1,10 @@
 {% extends "aldryn_faq/fullwidth.html" %}
+{% load i18n cms_tags %}
 
 {% block faq_content %}
+    {% static_placeholder "faq_list_top" %}
     {% with list="true" %}
         {% include "aldryn_faq/includes/question_list.html" %}
     {% endwith %}
+    {% static_placeholder "faq_list_bottom" %}
 {% endblock %}
