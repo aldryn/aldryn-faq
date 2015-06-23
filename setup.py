@@ -3,15 +3,15 @@ from setuptools import setup, find_packages
 from aldryn_faq import __version__
 
 REQUIREMENTS = [
-    'aldryn-apphooks-config',
-    'aldryn-reversion',
+    'aldryn-apphooks-config>=0.2.4',
+    'django-reversion>=1.8.2,<1.9',
     'aldryn-search',
     'aldryn-translation-tools',
     'django-admin-sortable',  # DO NOT REMOVE THIS
     'django-admin-sortable2>=0.5.0',
-    'django-parler',
+    'django-parler>=1.4',
     'django-sortedm2m',
-    'django-cms>=3.0.12,<3.1'
+    'django-cms>=3.0.12',
 ]
 
 CLASSIFIERS = [
@@ -40,5 +40,5 @@ setup(
     install_requires=REQUIREMENTS,
     classifiers=CLASSIFIERS,
     include_package_data=True,
-    zip_safe=False
+    zip_safe=False,
 )
