@@ -6,5 +6,10 @@
     {% with list="true" %}
         {% include "aldryn_faq/includes/question_list.html" %}
     {% endwith %}
+{% endblock %}
+
+{% block faq_footer %}
+    {% url 'aldryn_faq:faq-category-list' as category_url %}
+    {% include "aldryn_faq/includes/pager.html" with title=_("Back to Overview") slug=category_url %}
     {% static_placeholder "faq_list_bottom" %}
 {% endblock %}
