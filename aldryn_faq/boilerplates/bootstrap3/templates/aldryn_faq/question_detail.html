@@ -1,24 +1,46 @@
-{% extends "aldryn_faq/base.html" %}
+{% extends "aldryn_faq/fullwidth.html" %}
 {% load i18n cms_tags %}
 {% load url from future %}
 
 {% block faq_content %}
-<div class="aldryn aldryn-faq aldryn-faq-detail">
-    <h2>
-        <a href="#" class="label label-primary pull-right">{% render_model object "category" "category" %}</a>
-        {% render_model object "title" %}
-    </h2>
+    <article class="aldryn aldryn-faq aldryn-faq-detail">
+        {% block faq_detail_categories %}
+            <a href="{% url 'aldryn_faq:faq-category' object.category.slug %}" class="label label-primary">
+                {% render_model object "category" "category" %}
+            </a>
+        {% endblock faq_detail_categories %}
 
-    {% if question.answer_text %}
-        <div class="lead">{% render_model object "answer_text" "answer_text" "" safe %}</div>
-    {% endif %}
+        {% block faq_detail_title %}
+            <h2>{% render_model object "title" %}</h2>
+        {% endblock faq_detail_title %}
 
-    <div class="aldryn-faq-content">
-        {% render_placeholder object.answer 800 %}
+        {% block faq_detail_lead %}
+            {% if question.answer_text %}
+                <div class="lead">
+                    {% render_model object "answer_text" "answer_text" "" safe %}
+                </div>
+            {% endif %}
+        {% endblock faq_detail_lead %}
+
+        {% block faq_detail_content %}
+            <div class="content">
+                {% render_placeholder object.answer 800 %}
+            </div>
+        {% endblock faq_detail_content %}
+    </article>
+{% endblock %}
+
+{% block faq_footer %}
+    <div class="aldryn-faq-pager">
+        <ul class="pager">
+            <li>
+                <span class="pager-back">
+                    – <a href="{% url 'aldryn_faq:faq-category' object.category.slug %}">
+                        {% trans "Back to Overview" %}
+                    </a> –
+                </span>
+            </li>
+        </ul>
     </div>
-
-    <ul class="pager">
-        <li class="previous"><a href="{% url 'aldryn_faq:faq-category' object.category.slug %}"><span aria-hidden="true">&larr;</span> {% trans "Back" %}</a></li>
-    </ul>
-</div>
+    {% static_placeholder "faq_detail_bottom" %}
 {% endblock %}
