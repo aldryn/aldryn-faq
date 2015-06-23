@@ -31,12 +31,6 @@
 </div>
 
 {% if list and title %}
-    <ul class="pager">
-        <li>
-            <a href="../">
-                <span aria-hidden="true">&larr;</span>
-                {% trans "Back" %}
-            </a>
-        </li>
-    </ul>
+    {% url 'aldryn_faq:faq-category' object.category.slug as category_url %}
+    {% include "aldryn_faq/includes/pager.html" with title=_("Back to Category") slug=category_url %}
 {% endif %}
