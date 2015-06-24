@@ -68,12 +68,10 @@ class Category(TranslationHelperMixin, TranslatableModel):
         verbose_name_plural = _('categories')
 
     def __str__(self):
+        pkstr = str(self.pk)
         if six.PY2:
-            return self.safe_translation_getter(
-                'name', default=six.u(str(self.pk))
-            )
-        else:
-            return self.safe_translation_getter('name', default=str(self.pk))
+            pkstr = six.u(pkstr)
+        return self.safe_translation_getter('name', default=pkstr)
 
     def model_type_id(self):
         return ContentType.objects.get_for_model(self.__class__).id
@@ -116,7 +114,10 @@ class Question(TranslatableModel):
         ordering = ('order', )
 
     def __str__(self):
-        return self.safe_translation_getter('title', default=str(self.pk))
+        pkstr = str(self.pk)
+        if six.PY2:
+            pkstr = six.u(pkstr)
+        return self.safe_translation_getter('title', default=pkstr)
 
     def model_type_id(self):
         return ContentType.objects.get_for_model(self.__class__).id
@@ -189,14 +190,18 @@ class QuestionsPlugin(models.Model):
 class QuestionListPlugin(CMSPlugin):
     questions = SortedManyToManyField(Question)
 
-    def __str__(self):
-        return str(self.questions.count())
-
     def copy_relations(self, oldinstance):
         self.questions = oldinstance.questions.all()
 
     def get_questions(self):
         return self.questions.all()
+
+    def __str__(self):
+        question_count = self.questions.count()
+        return '{0} {1} selected'.format(
+            question_count,
+            "question" if question_count == 1 else "questions"
+        )
 
 
 class CategoryListPlugin(CMSPlugin):
