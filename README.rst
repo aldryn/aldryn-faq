@@ -72,14 +72,13 @@ Manual Installation
 4) If you plan to use translations, configure ``django-parler`` (https://pypi.python.org/pypi/django-parler/)
 
   Be sure to add ``PARLER_LANGUAGES`` to your settings with the appropriate
-  configuration for your project. Example (from Django Parler's README): ::
+  configuration for your project. Example: ::
 
     PARLER_LANGUAGES = {
-        None: (
+        1: (
             {'code': 'en',},
-            {'code': 'en-us',},
-            {'code': 'it',},
-            {'code': 'nl',},
+            {'code': 'fr',},
+            {'code': 'de',},
         ),
         'default': {
             'fallback': 'en',             # defaults to PARLER_DEFAULT_LANGUAGE_CODE
