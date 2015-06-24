@@ -71,20 +71,20 @@ Manual Installation
 
 4) If you plan to use translations, configure ``django-parler`` (https://pypi.python.org/pypi/django-parler/)
 
-  Be sure to add ``PARLER_LANGUAGES`` to your settings with the appropriate
-  configuration for your project. Example: ::
+   Be sure to add ``PARLER_LANGUAGES`` to your settings with the appropriate
+   configuration for your project. Example: ::
 
-    PARLER_LANGUAGES = {
-        1: (
-            {'code': 'en',},
-            {'code': 'fr',},
-            {'code': 'de',},
-        ),
-        'default': {
-            'fallback': 'en',             # defaults to PARLER_DEFAULT_LANGUAGE_CODE
-            'hide_untranslated': False,   # the default; let .active_translations() return fallbacks too.
-        }
-    }
+       PARLER_LANGUAGES = {
+           1: (
+               {'code': 'en',},
+               {'code': 'fr',},
+               {'code': 'de',},
+           ),
+           'default': {
+               'fallback': 'en',             # defaults to PARLER_DEFAULT_LANGUAGE_CODE
+               'hide_untranslated': False,   # the default; let .active_translations() return fallbacks too.
+           }
+       }
 
 5) Run migrations: `python manage.py migrate aldryn_faq`.
 
