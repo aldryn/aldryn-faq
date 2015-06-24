@@ -21,7 +21,8 @@ class FaqCategoryMenu(CMSAttachMenu):
     def get_nodes(self, request):
         nodes = []
         language = get_language_from_request(request, check_path=True)
-        categories = Category.objects.translated(language)
+        categories = Category.objects.active_translations(
+            language_code=language).distinct()
 
         if hasattr(self, 'instance') and self.instance:
             #
@@ -46,6 +47,8 @@ class FaqCategoryMenu(CMSAttachMenu):
                 node = NavigationNode(
                     question.safe_translation_getter('title', language_code=language),
                     question.get_absolute_url(language=language),
+                    # NOTE: We're adding 1 million here to avoid clashing with
+                    # the category IDs.
                     category.pk * 1000000 + question.pk,
                     category.pk,
                 )
