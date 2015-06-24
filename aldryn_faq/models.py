@@ -134,25 +134,18 @@ class Question(TranslatableModel):
         #
         # We need to find a consistent language to provide the correct url
 
-        # NOTE: We're not using sets here, as we'd lose ordering, and the size
-        # of these sets will be pretty small (~4 items), so it doesn't seem
-        # worth it to use any ordered-set implementation.
-
         # Build a list of suitable languages, in preference order.
         language = language or get_current_language()
         site_id = getattr(settings, 'SITE_ID', None)
         languages = [language] + get_fallback_languages(
             language, site_id=site_id)
 
-        # Reduce this by the available languages for the category
         category_languages = self.category.get_available_languages()
-        languages = (lang for lang in languages if lang in category_languages)
-
-        # Reduce further by the available languages for the question
         question_languages = self.get_available_languages()
-        languages = (lang for lang in languages if lang in question_languages)
+        common_set = set(category_languages).intersection(question_languages)
+        common_language = next(
+            (lang for lang in languages if lang in common_set), None)
 
-        common_language = next(languages, None)
         if common_language:
             try:
                 namespace = self.category.appconfig.namespace
