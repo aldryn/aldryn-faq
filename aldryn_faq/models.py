@@ -140,12 +140,15 @@ class Question(TranslatableModel):
         languages = [language] + get_fallback_languages(
             language, site_id=site_id)
 
+        # Reduce this set to languages where we have translations for category
+        # and question while still maintaining language order.
         category_languages = self.category.get_available_languages()
         question_languages = self.get_available_languages()
         common_set = set(category_languages).intersection(question_languages)
         common_language = next(
             (lang for lang in languages if lang in common_set), None)
 
+        # If there is a candidate language, use it!
         if common_language:
             try:
                 namespace = self.category.appconfig.namespace
