@@ -9,7 +9,7 @@ from parler.managers import TranslatableManager
 class RelatedManager(TranslatableManager):
 
     def filter_by_language(self, language):
-        return self.active_translations(language)
+        return self.active_translations(language_code=language)
 
     def filter_by_current_language(self):
         return self.filter_by_language(get_current_language())
@@ -18,7 +18,8 @@ class RelatedManager(TranslatableManager):
 class CategoryManager(TranslatableManager):
 
     def get_categories(self, language=None):
-        categories = self.active_translations(language).prefetch_related('questions')
+        categories = self.active_translations(
+            language_code=language).prefetch_related('questions')
 
         for category in categories:
             category.count = (category.questions
