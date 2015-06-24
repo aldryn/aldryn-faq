@@ -16,8 +16,8 @@ Description
 ~~~~~~~~~~~
 
 Aldryn FAQ is a simple Frequently Asked Questions (FAQ) application. It allows
-you to present categorized lists of frequently asked questions questions and
-their answers.
+you to present categorized lists of frequently asked questions and their
+answers.
 
 It is written to support full internationalization; questions and their answers
 can be managed in multiple lanauges.
