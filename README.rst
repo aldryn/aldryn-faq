@@ -87,7 +87,7 @@ Manual Installation
         }
     }
 
-4) Run migrations: `python manage.py migrate aldryn_faq`.
+5) Run migrations: `python manage.py migrate aldryn_faq`.
 
    NOTE: aldryn_faq supports both South and Django 1.7 migrations. However, if
    your project uses a version of South older than 1.0.3, you may need to add
@@ -99,7 +99,7 @@ Manual Installation
           # ...
       },
 
-5) (Re-)Start your application server.
+6) (Re-)Start your application server.
 
 
 Listing
