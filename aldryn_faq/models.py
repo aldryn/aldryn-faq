@@ -199,8 +199,8 @@ class QuestionListPlugin(CMSPlugin):
     def __str__(self):
         question_count = self.questions.count()
         return ungettext(
-            "%(count) question selected",
-            "%(count) questions selected",
+            "%(count)d question selected",
+            "%(count)d questions selected",
             question_count
         ) % {"count": question_count, }
 
