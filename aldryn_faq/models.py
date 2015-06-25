@@ -9,7 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import override, ugettext_lazy as _
+from django.utils.translation import override, ugettext_lazy as _, ungettext
 
 from aldryn_apphooks_config.models import AppHookConfig
 from aldryn_reversion.core import version_controlled_content
@@ -68,12 +68,10 @@ class Category(TranslationHelperMixin, TranslatableModel):
         verbose_name_plural = _('categories')
 
     def __str__(self):
+        pkstr = str(self.pk)
         if six.PY2:
-            return self.safe_translation_getter(
-                'name', default=six.u(str(self.pk))
-            )
-        else:
-            return self.safe_translation_getter('name', default=str(self.pk))
+            pkstr = six.u(pkstr)
+        return self.safe_translation_getter('name', default=pkstr)
 
     def model_type_id(self):
         return ContentType.objects.get_for_model(self.__class__).id
@@ -116,7 +114,10 @@ class Question(TranslatableModel):
         ordering = ('order', )
 
     def __str__(self):
-        return self.safe_translation_getter('title', default=str(self.pk))
+        pkstr = str(self.pk)
+        if six.PY2:
+            pkstr = six.u(pkstr)
+        return self.safe_translation_getter('title', default=pkstr)
 
     def model_type_id(self):
         return ContentType.objects.get_for_model(self.__class__).id
@@ -189,14 +190,19 @@ class QuestionsPlugin(models.Model):
 class QuestionListPlugin(CMSPlugin):
     questions = SortedManyToManyField(Question)
 
-    def __str__(self):
-        return str(self.questions.count())
-
     def copy_relations(self, oldinstance):
         self.questions = oldinstance.questions.all()
 
     def get_questions(self):
         return self.questions.all()
+
+    def __str__(self):
+        question_count = self.questions.count()
+        return ungettext(
+            "%(count)d question selected",
+            "%(count)d questions selected",
+            question_count
+        ) % {"count": question_count, }
 
 
 class CategoryListPlugin(CMSPlugin):
