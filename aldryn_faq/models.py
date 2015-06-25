@@ -9,7 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import override, ugettext_lazy as _
+from django.utils.translation import override, ugettext_lazy as _, ungettext
 
 from aldryn_apphooks_config.models import AppHookConfig
 from aldryn_reversion.core import version_controlled_content
@@ -198,10 +198,11 @@ class QuestionListPlugin(CMSPlugin):
 
     def __str__(self):
         question_count = self.questions.count()
-        return '{0} {1} selected'.format(
-            question_count,
-            "question" if question_count == 1 else "questions"
-        )
+        return ungettext(
+            "%(count) question selected",
+            "%(count) questions selected",
+            question_count
+        ) % {"count": question_count, }
 
 
 class CategoryListPlugin(CMSPlugin):
