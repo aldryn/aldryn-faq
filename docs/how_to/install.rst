@@ -2,7 +2,7 @@
 Installation
 ############
 
-You can install Aldryn News & Blog either on `Aldryn <http://www.aldryn.com>`_
+You can install Aldryn FAQ either on `Aldryn <http://www.aldryn.com>`_
 or by hand into your own project.
 
 
@@ -11,14 +11,14 @@ Aldryn Platform Users
 *********************
 
 To install the addon on Aldryn, all you need to do is follow this
-`installation link <https://control.aldryn.com/control/?select_project_for_addon=aldryn-newsblog>`_
+`installation link <https://control.aldryn.com/control/?select_project_for_addon=aldryn-faq>`_
 on the Aldryn Marketplace and follow the instructions.
 
 Manually you can:
 
 #. Choose a site you want to install the add-on to from the dashboard.
 #. Go to Apps > Install App
-#. Click Install next to the News & Blog app.
+#. Click Install next to the FAQ app.
 #. Redeploy the site.
 
 
@@ -38,15 +38,15 @@ PIP dependency
 
 If you're installing into an existing django CMS project, you can run either::
 
-    pip install aldryn-newsblog
+    pip install aldryn-faq
 
 or::
 
-    pip install -e git+https://github.com/aldryn/aldryn-newsblog.git#egg=aldryn-newsblog
+    pip install -e git+https://github.com/aldryn/aldryn-faq.git#egg=aldryn-faq
 
 If you need to start a new project, we recommend that first you use the
 `django CMS Installer <http://djangocms-installer.readthedocs.org>`_ to create
-it, and then install Aldryn News & Blog on top of that.
+it, and then install Aldryn FAQ on top of that.
 
 
 settings.py
@@ -54,19 +54,12 @@ settings.py
 
 In your project's ``settings.py`` make sure you have all of::
 
-    'aldryn_apphooks_config',
-    'aldryn_boilerplates',
-    'aldryn_categories',
-    'aldryn_newsblog',
-    'aldryn_people',
+    'adminsortable2',
     'aldryn_reversion',
     'djangocms_text_ckeditor',
-    'easy_thumbnails',
-    'filer',
     'parler',
-    'reversion',
     'sortedm2m',
-    'taggit',
+    'aldryn_faq',
 
 listed in ``INSTALLED_APPS``, *after* ``'cms'``.
 
@@ -76,7 +69,7 @@ Additional Configuration
 
 .. important::
 
-    To get Aldryn News & Blog to work you need to add additional configurations:
+    To get Aldryn FAQ to work you need to add additional configurations:
 
 
 1. Aldryn-Boilerplates
@@ -90,52 +83,46 @@ To use https://github.com/aldryn/aldryn-boilerplate-bootstrap3 (recommended)
 ``set ALDRYN_BOILERPLATE_NAME='bootstrap3'``.
 
 
-2. Django-Filer
----------------
+2. Django-Parler
+----------------
 
-Aldryn News & Blog requires the use of the optional "subject location"
-processor from Django Filer for Easy Thumbnails. This requires setting the
-``THUMBNAIL_PROCESSORS`` tuple in your project's settings and explicitly
-omitting the default processor ``scale_and_crop`` and including the optional
-``scale_and_crop_with_subject_location`` processor. For example: ::
+If you plan to use translations, configure `django-parler
+<https://pypi.python.org/pypi/django-parler/>`_.
 
-    THUMBNAIL_PROCESSORS = (
-        'easy_thumbnails.processors.colorspace',
-        'easy_thumbnails.processors.autocrop',
-        # 'easy_thumbnails.processors.scale_and_crop',
-        'filer.thumbnail_processors.scale_and_crop_with_subject_location',
-        'easy_thumbnails.processors.filters',
-        'easy_thumbnails.processors.background',
-    )
+Be sure to add ``PARLER_LANGUAGES`` to your settings with the appropriate
+configuration for your project. Example: ::
 
-For more information on this optional processor, see the
-`documentation for Django Filer
-<http://django-filer.readthedocs.org/en/latest/installation.html#subject-location-aware-cropping>`_.
+    PARLER_LANGUAGES = {
+       1: (
+           {'code': 'en',},
+           {'code': 'fr',},
+           {'code': 'de',},
+       ),
+       'default': {
+           'fallback': 'en',             # defaults to PARLER_DEFAULT_LANGUAGE_CODE
+           'hide_untranslated': False,   # the default; let .active_translations() return fallbacks too.
+       }
+    }
 
 
 Migrations
 ==========
 
 Now run ``python manage.py migrate`` if you have not already done so,
-foloowed by ``python manage.py migrate`` to prepare the database for the new applications.
+followed by ``python manage.py migrate`` to prepare the database for the new
+applications.
 
-Now run ``python manage.py migrate aldryn_newsblog``.
+Now run ``python manage.py migrate aldryn_faq``.
 
 .. note::
 
-    Aldryn News & Blog supports both South and Django 1.7 migrations.
+    Aldryn FAQ supports both South and Django 1.7 migrations.
 
 If using Django 1.7, you may need to add the following to your settings: ::
 
     MIGRATION_MODULES = {
        ...
-       # The following are for some of the dependencies.
-
-       # Use this if you're using a version of djangocms_text_ckeditor < 2.5.1
-       # 'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
-
-       # Use this if you're using a version of Filer < 0.9.10
-       # 'filer': 'filer.migrations_django',
+       'aldryn_faq': 'aldryn_faq.migrations_django',
        ...
     }
 
@@ -144,7 +131,7 @@ Server
 ======
 
 To finish the setup, you need to create a page, change to the
-*Advanced Settings* and choose *NewsBlog* within the *Application* drop-down.
+*Advanced Settings* and choose *FAQ* within the *Application* drop-down.
 
 You also need to set the *Application configurations* and
 **publish the changes**.
