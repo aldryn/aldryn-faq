@@ -249,7 +249,7 @@ class SelectedCategory(models.Model):
         to=CategoryListPlugin, related_name='selected_categories')
 
     class Meta:
-        ordering = ['position']
+        ordering = ['position', ]
         verbose_name = _('Category')
         verbose_name_plural = _('Categories')
 
