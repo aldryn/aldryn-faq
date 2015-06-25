@@ -38,7 +38,7 @@ class TestQuestionListPlugin(AldrynFaqTest):
         self.assertTrue(rendered.find(question1.title) > -1)
 
         # Test its unicode method
-        self.assertEqual(str(plugin), str(1))
+        self.assertEqual(str(plugin), '1 question selected')
 
         # Test its copy_relations. To do this, we'll create another instance
         # that is empty, then copy_relations to it, and prove that it contains
