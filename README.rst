@@ -17,7 +17,7 @@ interface should refer to our `user manual`_ section.
 how to install, configure and customize it for their own projects should
 refer to the `documentation`_ sections.
 
-.. _user manual: http://aldryn-newsblog.readthedocs.org/en/latest/user/index.html
+.. _user manual: http://aldryn-faq.readthedocs.org/en/latest/user/index.html
 
 
 ======================
@@ -29,8 +29,8 @@ configure and use Aldryn FAQ.
 
 You can also find instructions on `how to upgrade`_ from earlier versions.
 
-.. _documentation: http://aldryn-newsblog.readthedocs.org/en/latest/how_to/index.html
-.. _how to upgrade: http://aldryn-newsblog.readthedocs.org/en/latest/how_to/upgrade.html
+.. _documentation: http://aldryn-faq.readthedocs.org/en/latest/how_to/index.html
+.. _how to upgrade: http://aldryn-faq.readthedocs.org/en/latest/how_to/upgrade.html
 
 
 ============
