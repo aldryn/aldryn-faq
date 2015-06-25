@@ -245,7 +245,7 @@ class LatestQuestionsPlugin(CMSPlugin, QuestionsPlugin):
 class SelectedCategory(models.Model):
     category = models.ForeignKey(to=Category, verbose_name=_('category'))
     position = models.PositiveIntegerField(
-        verbose_name=_('position'), blank=True, null=True)
+        verbose_name=_('position'), blank=True, default=0, null=True)
     cms_plugin = models.ForeignKey(
         to=CategoryListPlugin, related_name='selected_categories')
 
