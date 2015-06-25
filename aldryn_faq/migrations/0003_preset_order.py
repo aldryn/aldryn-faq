@@ -17,7 +17,7 @@ def preset_order(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aldryn_faq', '0001_initial'),
+        ('aldryn_faq', '0002_default_position'),
     ]
 
     operations = [
