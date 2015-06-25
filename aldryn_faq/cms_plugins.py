@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 from cms.utils import get_language_from_request
+from adminsortable2.admin import SortableInlineAdminMixin
 
 from . import models
 from .forms import QuestionListPluginForm
@@ -64,7 +65,7 @@ class MostReadQuestionsPlugin(FAQPlugin):
         return context
 
 
-class SelectedCategoryInline(TabularInline):
+class SelectedCategoryInline(SortableInlineAdminMixin, TabularInline):
     model = models.SelectedCategory
     extra = 0
 
