@@ -3,6 +3,20 @@
 
 * Use get_current_language from cms instead get_language from Django because Django bug #9340
 
+0.13.0 (2015-06-26)
+===================
+
+* README cleanups
+* Adds documentation
+* Categories in the CategoryList plugin are now re-arrangeable via drag-and-drop
+  as opposed to manually managing a sort metric.
+* The Category List view and the Question List pages in different apphooks can
+  now be presented differently if so required via new Placeholder Fields.
+* The older, Static Placeholders still remain for this release, but are marked
+  in the mark-up as "DEPRECATED". Please use this release to migrate any plugins
+  in these plugins to their respective PlaceholderField replacements. These will
+  be remove in the next release.
+
 0.12.0 (2015-03-25)
 ===================
 
