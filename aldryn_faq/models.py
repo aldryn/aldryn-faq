@@ -11,6 +11,7 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import override, ugettext_lazy as _, ungettext
 
+from aldryn_apphooks_config.models import AppHookConfig
 from aldryn_reversion.core import version_controlled_content
 from aldryn_translation_tools.models import TranslationHelperMixin
 
@@ -22,7 +23,6 @@ from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 from sortedm2m.fields import SortedManyToManyField
 
-from .cms_appconfig import FaqConfig
 from .managers import CategoryManager, RelatedManager
 
 
@@ -42,6 +42,13 @@ def get_slug_in_language(record, language):
         return None
     return record.safe_translation_getter(
         field="slug", language_code=language, default=None, )
+
+
+class FaqConfig(TranslatableModel, AppHookConfig):
+    """Adds some translatable, per-app-instance fields."""
+    translations = TranslatedFields(
+        app_title=models.CharField(_('application title'), max_length=234),
+    )
 
 
 @python_2_unicode_compatible
