@@ -2,7 +2,8 @@
 {% load i18n cms_tags %}
 
 {% block faq_content %}
-    {% static_placeholder "faq_list_top" %}
+    {% render_placeholder view.config.placeholder_faq_list_top %}
+    {% static_placeholder "faq_list_top" %}{# DEPRECATED #}
     {% with list="true" %}
         {% include "aldryn_faq/includes/question_list.html" %}
     {% endwith %}
@@ -11,5 +12,6 @@
 {% block faq_footer %}
     {% url 'aldryn_faq:faq-category-list' as category_url %}
     {% include "aldryn_faq/includes/pager.html" with title=_("Back to Overview") slug=category_url %}
-    {% static_placeholder "faq_list_bottom" %}
+    {% render_placeholder view.config.placeholder_faq_list_bottom %}
+    {% static_placeholder "faq_list_bottom" %}{# DEPRECATED #}
 {% endblock %}
