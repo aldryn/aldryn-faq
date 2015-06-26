@@ -3,11 +3,11 @@ aldryn-apphooks-config
 aldryn-reversion
 aldryn_translation_tools
 coverage==3.7.1
-python-coveralls==2.4.2
+python-coveralls>=2.4.2
 django-admin-sortable2>=0.5.0
 django-classy-tags
 django-cms>=3.0.12,<3.1
-django-mptt<0.7
+django-mptt<0.7 # rq.filter: <0.7.0
 django-parler
 django-sekizai
 django-sortedm2m
@@ -28,7 +28,7 @@ django-admin-sortable
 
 # The following are for aldryn-search
 lxml
-django-appconf==0.6
+django-appconf==0.6 # rq.filter: <0.6
 aldryn-common
 django-haystack>=2.0.0
 django-spurl
