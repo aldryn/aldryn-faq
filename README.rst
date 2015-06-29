@@ -5,7 +5,7 @@ Aldryn FAQ
 |PyPI Version| |Build Status| |Coverage Status| |codeclimate| |requires_io|
 
 Aldryn FAQ is an `Aldryn <http://aldryn.com>`_-compatible simple Frequently
-Asked Questions (FAQ) applicatio for `django CMS <http://django-cms.org>`_.
+Asked Questions (FAQ) application for `django CMS <http://django-cms.org>`_.
 
 It allows you to present categorized lists of frequently asked questions and
 their answers.
