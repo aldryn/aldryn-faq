@@ -3,6 +3,7 @@ from setuptools import setup, find_packages
 from aldryn_faq import __version__
 
 REQUIREMENTS = [
+    'Django>=1.6,<1.8',
     'aldryn-apphooks-config>=0.2.4',
     'django-reversion>=1.8.2,<1.9',
     'aldryn-search',
