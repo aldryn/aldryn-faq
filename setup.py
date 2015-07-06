@@ -12,6 +12,7 @@ REQUIREMENTS = [
     'django-parler>=1.4',
     'django-sortedm2m',
     'django-cms>=3.0.12',
+    'django>=1.6,<1.8',
 ]
 
 CLASSIFIERS = [
