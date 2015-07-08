@@ -6,6 +6,7 @@ REQUIREMENTS = [
     'Django>=1.6,<1.8',
     'aldryn-apphooks-config>=0.2.4',
     'django-reversion>=1.8.2,<1.9',
+    'aldryn-reversion',
     'aldryn-search',
     'aldryn-translation-tools',
     'django-admin-sortable',  # DO NOT REMOVE THIS
