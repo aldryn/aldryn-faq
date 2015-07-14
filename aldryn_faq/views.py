@@ -8,6 +8,9 @@ from django.views.generic import DetailView
 from django.views.generic.list import ListView
 
 from menus.utils import set_language_changer
+
+from parler.views import TranslatableSlugMixin
+
 from aldryn_apphooks_config.mixins import AppConfigMixin
 
 from .models import Category, Question
@@ -35,10 +38,15 @@ class FaqMixin(AppConfigMixin):
         wrong category.
         """
         categories = Category.objects.filter(
-            appconfig=self.config).translated(language, slug=slug)
+            appconfig=self.config
+        ).active_translations(language, slug=slug)
+
         if not categories:
             raise Http404("Category not found")
         return categories[0]
+
+    def get_category_queryset(self):
+        return Category.objects.filter(appconfig=self.config)
 
     def get_queryset(self):
         return self.model.objects.language(self.current_language)
@@ -53,17 +61,21 @@ class FaqByCategoryListView(FaqMixin, AppConfigMixin, ListView):
         return qs.filter(appconfig=self.config)
 
 
-class FaqByCategoryView(FaqMixin, ListView):
-
+class FaqByCategoryView(FaqMixin, TranslatableSlugMixin, ListView):
+    slug_field = 'slug'
+    slug_url_kwarg = 'category_slug'
     template_name = 'aldryn_faq/question_list.html'
 
     def get(self, *args, **kwargs):
-        self.category = self.get_category_or_404(
-            kwargs['category_slug'], self.current_language)
+        categories = self.get_category_queryset()
+        self.category = self.get_object(queryset=categories)
         setattr(self.request, request_faq_category_identifier, self.category)
         response = super(FaqByCategoryView, self).get(*args, **kwargs)
         set_language_changer(self.request, self.category.get_absolute_url)
         return response
+
+    def get_slug_field(self):
+        return self.slug_field
 
     def get_queryset(self):
         if self.category:
@@ -74,19 +86,27 @@ class FaqByCategoryView(FaqMixin, ListView):
 
 
 class FaqAnswerView(FaqMixin, DetailView):
-
     template_name = 'aldryn_faq/question_detail.html'
 
     def get(self, *args, **kwargs):
         category = self.get_category_or_404(
-            kwargs['category_slug'], self.current_language)
+            slug=kwargs['category_slug'],
+            language=self.current_language
+        )
+
         question = self.get_object()
-        if not question or not category or question.category != category:
+
+        if question.category_id != category.pk:
             raise Http404
+
+        set_language_changer(self.request, question.get_absolute_url)
+
         if hasattr(self.request, 'toolbar'):
             self.request.toolbar.set_object(question)
+
         setattr(
             self.request, request_faq_category_identifier, question.category)
+
         setattr(self.request, request_faq_question_identifier, question)
         response = super(FaqAnswerView, self).get(*args, **kwargs)
 
@@ -97,3 +117,8 @@ class FaqAnswerView(FaqMixin, DetailView):
             number_of_visits=models.F('number_of_visits') + 1)
 
         return response
+
+    def get_object(self, queryset=None):
+        if not hasattr(self, '_object'):
+            self._object = super(FaqAnswerView, self).get_object(queryset)
+        return self._object
