@@ -68,6 +68,11 @@ class FaqByCategoryView(FaqMixin, TranslatableSlugMixin, ListView):
 
     def get(self, *args, **kwargs):
         categories = self.get_category_queryset()
+        category_pk = kwargs.get('category_pk')
+
+        if category_pk:
+            categories = categories.filter(pk=category_pk)
+
         self.category = self.get_object(queryset=categories)
         setattr(self.request, request_faq_category_identifier, self.category)
         response = super(FaqByCategoryView, self).get(*args, **kwargs)

@@ -76,7 +76,7 @@ class Category(TranslationHelperMixin, TranslatableModel):
             language_code=language
         )
 
-        kwargs = {'category_slug': slug}
+        kwargs = {'category_pk': self.pk, 'category_slug': slug}
 
         if self.appconfig_id and self.appconfig.namespace:
             namespace = '{0}:'.format(self.appconfig.namespace)

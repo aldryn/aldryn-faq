@@ -15,6 +15,11 @@ urlpatterns = patterns('',
         name='faq-category'
     ),
     url(
+        r'^(?P<category_pk>[0-9]+)/(?P<category_slug>[-\w]+)/$',
+        FaqByCategoryView.as_view(),
+        name='faq-category'
+    ),
+    url(
         r'^(?P<category_slug>[-\w]+)/(?P<pk>[0-9]+)/$',
         FaqAnswerView.as_view(),
         name='faq-answer'
