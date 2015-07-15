@@ -17,45 +17,16 @@ from cms.utils.i18n import get_current_language
 from adminsortable2.admin import SortableAdminMixin
 from aldryn_apphooks_config.admin import BaseAppHookConfig
 from aldryn_reversion.admin import VersionedPlaceholderAdminMixin
+from aldryn_translation_tools.admin import AllTranslationsMixin
 from parler.admin import TranslatableAdmin
 
 from .models import Category, Question, FaqConfig
 from .forms import CategoryAdminForm
 
 
-class AllTranslationsAdminMixin(object):
-    """To use this, apply this mixin to your Admin class, then add
-    'all_translations' to your list_display list."""
+class CategoryAdmin(AllTranslationsMixin, TranslatableAdmin):
 
-    def all_translations(self, obj):
-        """This is an adapter for the functionality that was in HVAD."""
-        available = list(obj.get_available_languages())
-        langs = []
-        for lang, _language_name in settings.LANGUAGES:
-            if lang in available:
-                langs.append(lang)
-                available.remove(lang)
-        langs += available
-        for idx, lang in enumerate(langs):
-            change_form_url = reverse('admin:{app_label}_{model_name}_change'.format(
-                app_label=obj._meta.app_label.lower(),
-                model_name=obj.__class__.__name__.lower(),
-            ), args=(obj.id, ))
-            link = '<a href="{url}?language={lang}">{lang}</a>'.format(
-                url=change_form_url,
-                lang=lang,
-            )
-            if lang == get_current_language():
-                link = "<strong>{0}</strong>".format(link)
-            langs[idx] = link
-        return ', '.join(langs)
-    all_translations.short_description = 'available translations'
-    all_translations.allow_tags = True
-
-
-class CategoryAdmin(AllTranslationsAdminMixin, TranslatableAdmin):
-
-    list_display = ('__str__', 'all_translations', 'appconfig', )
+    list_display = ('__str__', 'appconfig', )
 
     form = CategoryAdminForm
 
@@ -69,9 +40,12 @@ class CategoryAdmin(AllTranslationsAdminMixin, TranslatableAdmin):
     ]
 
     class Media:
-        # Django BUG - Django only checks for self.prepopulated_fields to
-        # determine if it should include these files. But it never checks
-        # get_prepopulated_fields()
+        # Workaround for known Django bug: #24467
+        # https://code.djangoproject.com/ticket/24467
+        # Django checks for self.prepopulated_fields to determine if it should
+        # include populate.js. But it never checks get_prepopulated_fields().
+        # Fix is slated for Django 1.9 release, so this needs to remain until
+        # we no longer support Django 1.8 or lower.
         js = [static('admin/js/%s' % url) for url in (
             'urlify.js', 'prepopulate.min.js')]
 
@@ -84,7 +58,9 @@ class CategoryAdmin(AllTranslationsAdminMixin, TranslatableAdmin):
 
 class QuestionAdmin(VersionedPlaceholderAdminMixin,
                     FrontendEditableAdminMixin,
-                    SortableAdminMixin, TranslatableAdmin):
+                    SortableAdminMixin,
+                    AllTranslationsMixin,
+                    TranslatableAdmin):
 
     render_placeholder_language_tabs = False
     list_display = ['__str__', 'category', 'is_top', 'number_of_visits']
@@ -115,7 +91,9 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Question, QuestionAdmin)
 
 
-class FaqConfigAdmin(TranslatableAdmin, BaseAppHookConfig):
+class FaqConfigAdmin(AllTranslationsMixin,
+                     BaseAppHookConfig,
+                     TranslatableAdmin):
     def get_config_fields(self):
         return ('app_title', )
 
