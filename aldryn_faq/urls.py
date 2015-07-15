@@ -24,4 +24,9 @@ urlpatterns = patterns('',
         FaqAnswerView.as_view(),
         name='faq-answer'
     ),
+    url(
+        r'^(?P<category_pk>[0-9]+)/(?P<category_slug>[-\w]+)/(?P<pk>[0-9]+)/$',
+        FaqAnswerView.as_view(),
+        name='faq-answer'
+    ),
 )

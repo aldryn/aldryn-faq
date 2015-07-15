@@ -75,8 +75,8 @@ class FaqByCategoryView(FaqMixin, TranslatableSlugMixin, ListView):
 
         self.category = self.get_object(queryset=categories)
         setattr(self.request, request_faq_category_identifier, self.category)
-        response = super(FaqByCategoryView, self).get(*args, **kwargs)
         set_language_changer(self.request, self.category.get_absolute_url)
+        response = super(FaqByCategoryView, self).get(*args, **kwargs)
         return response
 
     def get_slug_field(self):

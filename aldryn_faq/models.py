@@ -70,11 +70,14 @@ class Category(TranslationHelperMixin, TranslatableModel):
         return ContentType.objects.get_for_model(self.__class__).id
 
     def get_absolute_url(self, language=None):
-        slug, language = self.known_translation_getter(
+        if language is None:
+            language = get_current_language()
+
+        slug = self.known_translation_getter(
             'slug',
             default=None,
             language_code=language
-        )
+        )[0] or ''
 
         kwargs = {'category_pk': self.pk, 'category_slug': slug}
 
@@ -124,6 +127,9 @@ class Question(TranslatableModel):
         Returns the absolute_url of this question object, respecting the
         configured fallback languages.
         """
+        if language is None:
+            language = get_current_language()
+
         category_slug = self.category.safe_translation_getter(
             'slug',
             default=None,
@@ -137,9 +143,13 @@ class Question(TranslatableModel):
 
         if namespace and category_slug:
             with override(language):
-                return reverse(
-                    '{0}:faq-answer'.format(namespace),
-                    kwargs={'category_slug': category_slug, 'pk': self.pk})
+                url_name = '{0}:faq-answer'.format(namespace)
+                url_kwargs = {
+                    'pk': self.pk,
+                    'category_pk': self.category.pk,
+                    'category_slug': category_slug,
+                }
+                return reverse(url_name, kwargs=url_kwargs)
 
         # No suitable translations exist, return the category's url
         return self.category.get_absolute_url(language)
