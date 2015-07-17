@@ -174,6 +174,8 @@ class FaqAnswerView(FaqCategoryMixin, DetailView):
 
     def get_object(self, queryset=None):
         if not hasattr(self, '_object'):
+            # this is done because this method gets called twice.
+            # so no need to query db twice.
             self._object = super(FaqAnswerView, self).get_object(queryset)
         return self._object
 
