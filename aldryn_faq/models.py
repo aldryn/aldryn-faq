@@ -69,15 +69,16 @@ class Category(TranslationHelperMixin, TranslatableModel):
     def model_type_id(self):
         return ContentType.objects.get_for_model(self.__class__).id
 
-    def get_absolute_url(self, language=None):
+    def get_absolute_url(self, language=None, slug=None):
         if language is None:
             language = get_current_language()
 
-        slug = self.known_translation_getter(
-            'slug',
-            default=None,
-            language_code=language
-        )[0] or ''
+        if slug is None:
+            slug = self.known_translation_getter(
+                'slug',
+                default=None,
+                language_code=language
+            )[0] or ''
 
         kwargs = {'category_pk': self.pk, 'category_slug': slug}
 
