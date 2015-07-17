@@ -83,11 +83,10 @@ class FaqByCategoryView(FaqMixin, TranslatableSlugMixin, ListView):
         return self.slug_field
 
     def get_queryset(self):
-        if self.category:
-            return super(FaqByCategoryView, self).get_queryset().filter(
-                category=self.category).order_by('order')
-        else:
-            return Question.objects.none()
+        queryset = super(FaqByCategoryView, self).get_queryset()
+        queryset = queryset.active_translations(self.current_language)
+        queryset = queryset.filter(category=self.category).order_by('order')
+        return queryset
 
 
 class FaqAnswerView(FaqMixin, DetailView):
@@ -120,8 +119,16 @@ class FaqAnswerView(FaqMixin, DetailView):
         question_only_queryset = self.get_queryset().filter(pk=question.pk)
         question_only_queryset.update(
             number_of_visits=models.F('number_of_visits') + 1)
-
         return response
+
+    def get_category_url(self):
+        category = self.object.category
+        return category.get_absolute_url(self.current_language)
+
+    def get_context_data(self, **kwargs):
+        context = super(FaqAnswerView, self).get_context_data(**kwargs)
+        context['category_url'] = self.get_category_url()
+        return context
 
     def get_object(self, queryset=None):
         if not hasattr(self, '_object'):
