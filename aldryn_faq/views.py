@@ -14,8 +14,6 @@ from django.views.generic.list import ListView
 
 from menus.utils import set_language_changer
 
-from parler.views import TranslatableSlugMixin
-
 from aldryn_apphooks_config.mixins import AppConfigMixin
 
 from .models import Category, Question
@@ -94,32 +92,28 @@ class FaqByCategoryListView(FaqMixin, ListView):
         return qs.filter(appconfig=self.config)
 
 
-class FaqByCategoryView(FaqCategoryMixin, TranslatableSlugMixin, ListView):
-    slug_field = 'slug'
-    slug_url_kwarg = 'category_slug'
+class FaqByCategoryView(FaqCategoryMixin, ListView):
     template_name = 'aldryn_faq/question_list.html'
 
-    def get(self, *args, **kwargs):
-        # this is called to resolve the given category slug
-        # to a category.
+    def get(self, request, *args, **kwargs):
         # triggers a redirect if the old category url format is used.
-        self.get_category_or_404()
+        category = self.get_category_or_404()
+        category_url = category.get_absolute_url(self.current_language)
 
-        # category queryset filtered by current app
-        categories = self.get_category_queryset()
+        if request.path != category_url:
+            # say we have one category with two translations:
+            # /en/faq/category-en/
+            # /de/faq/category-de/
+            # with this check we make sure that any request to
+            # /en/faq/category-de/ gets redirected to /en/faq/category-en/
+            return HttpResponsePermanentRedirect(category_url)
 
-        # we have to call self.get_object() here to take advantage
-        # of parler's fallback redirects.
-        self.category = self.get_object(queryset=categories)
+        self.category = category
 
         setattr(self.request, request_faq_category_identifier, self.category)
         set_language_changer(self.request, self.category.get_absolute_url)
-        response = super(FaqByCategoryView, self).get(*args, **kwargs)
+        response = super(FaqByCategoryView, self).get(request, *args, **kwargs)
         return response
-
-    def get_slug_field(self):
-        # used by parler's TranslatableSlugMixin
-        return self.slug_field
 
     def get_queryset(self):
         queryset = super(FaqByCategoryView, self).get_queryset()
