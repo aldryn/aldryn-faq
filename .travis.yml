@@ -26,7 +26,6 @@ matrix:
       env: DJANGO=1.7 CMD=./test
   fast_finish: true
   include:
-    # Change this to Django 1.7 once it is working
     - python: 2.7
       env: DJANGO=1.7 CMD="flake8 aldryn_newsblog"
 
@@ -39,9 +38,6 @@ before_install:
 
 install:
   - pip install coveralls
-  - pip install -r "test_requirements/django-$DJANGO.txt"
-
-install:
   - pip wheel --wheel-dir $HOME/.wheelhouse -r test_requirements/django-$DJANGO.txt
   - pip install --use-wheel --no-index --find-links=$HOME/.wheelhouse -r test_requirements/django-$DJANGO.txt
 
@@ -51,6 +47,7 @@ before_script:
   - npm install
 
 script:
+  - python --version
   - coverage erase
   - coverage run test_settings.py
   - coverage report
