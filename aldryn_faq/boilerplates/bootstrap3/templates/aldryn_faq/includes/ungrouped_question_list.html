@@ -5,6 +5,9 @@
     {% for question in object_list %}
         <a href="{{ question.get_absolute_url }}" class="list-group-item">
             {% render_model question "title" %}
+            {% for tag in question.tags.all %}
+                <span class="badge badge-default pull-right">{{ tag }}</span>
+            {% endfor %}
         </a>
     {% empty %}
         <p class="list-group-item">{% trans "No entry found." %}</p>
