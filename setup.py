@@ -13,7 +13,7 @@ REQUIREMENTS = [
     'django-parler>=1.4',
     'django-reversion>=1.8.2,<1.9',
     'django-sortedm2m',
-    'django-parler',
+    'django-taggit',
 
     # THIS IS HERE TO SUPPORT EXISTING MIGRATIONS AND CAN BE REMOVED ONLY ONCE
     # WE NO LONGER SUPPORT SOUTH MIGRATIONS.

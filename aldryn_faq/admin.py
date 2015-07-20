@@ -60,7 +60,7 @@ class QuestionAdmin(VersionedPlaceholderAdminMixin,
                     TranslatableAdmin):
 
     render_placeholder_language_tabs = False
-    list_display = ['__str__', 'category', 'is_top', 'number_of_visits']
+    list_display = ['__str__', 'category', 'tags', 'is_top', 'number_of_visits']
     list_filter = ['category', 'translations__language_code']
     frontend_editable_fields = ('title', 'category', 'answer_text')
     readonly_fields = ['number_of_visits']
@@ -69,7 +69,7 @@ class QuestionAdmin(VersionedPlaceholderAdminMixin,
         fieldsets = [
             (None, {
                 'fields': [
-                    'title', 'category', 'answer_text', 'is_top',
+                    'title', 'category', 'answer_text', 'tags', 'is_top',
                     'number_of_visits']
             })
         ]
