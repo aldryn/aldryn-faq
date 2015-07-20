@@ -4,6 +4,8 @@ django-classy-tags
 django-mptt<0.7
 git+https://github.com/edoburu/django-parler@9d25bc60b24a16bc4781d0305c41c5acff0b00a6#egg=django-parler
 django-sekizai
+django-sortedm2m
+django-taggit
 djangocms-admin-style
 djangocms-helper
 djangocms-text-ckeditor
@@ -28,4 +30,3 @@ django-haystack>=2.0.0
 django-spurl
 django-standard-form
 aldryn-search
-
