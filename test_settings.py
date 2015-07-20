@@ -63,9 +63,9 @@ HELPER_SETTINGS = {
     'HAYSTACK_CONNECTIONS': HAYSTACK_CONNECTIONS,
     'PARLER_LANGUAGES': {
         1: (
-            {'code': 'de', },
-            {'code': 'en', },
-            {'code': 'fr', },
+            {'code': 'de', 'fallbacks': ['en', ]},
+            {'code': 'en', 'fallbacks': ['de', ]},
+            {'code': 'fr', 'fallbacks': ['en', ]},
         ),
         'default': {
             'hide_untranslated': False,

@@ -39,28 +39,58 @@ class TestFaqByCategoryView(AldrynFaqTest):
             [question_1, ],
         )
 
+    def test_view_context_fallback(self):
+        """
+        Tests that the FaqByCategoryView produces the correct context
+        when requesting a category in an untranslated language.
+        """
+        category_2 = self.reload(self.category2, "en")
+        category_2_url = category_2.get_absolute_url()
+
+        question_2 = self.reload(self.question2, "en")
+
+        request = self.get_page_request(
+            page=self.page,
+            user=self.user,
+            path=category_2_url,
+        )
+
+        url_kwargs = resolve(category_2_url).kwargs
+
+        try:
+            response = FaqByCategoryView.as_view()(request, **url_kwargs)
+        except Http404:
+            self.fail('Could not find category')
+
+        self.assertEqualItems(
+            response.context_data['object_list'],
+            [question_2, ],
+        )
+
     def test_view_old_format_redirect(self):
         """
         Tests that the FaqByCategoryView redirects user
         when accessed with old category url format
         """
         category_1 = self.reload(self.category1, "en")
+        category_1_url_new = category_1.get_absolute_url()
 
         kwargs = {"category_slug": category_1.slug}
 
         with override('en'):
             category_1_url_name = '{0}:faq-category'.format(self.app_config.namespace)
-            category_1_url = reverse(category_1_url_name, kwargs=kwargs)
+            category_1_url_old = reverse(category_1_url_name, kwargs=kwargs)
 
         request = self.get_page_request(
             page=self.page,
             user=self.user,
-            path=category_1_url,
+            path=category_1_url_old,
         )
 
         response = FaqByCategoryView.as_view()(request, **kwargs)
 
         self.assertEquals(response.status_code, 301)
+        self.assertEquals(response.url, category_1_url_new)
 
 
 class TestFaqAnswerView(AldrynFaqTest):
@@ -85,6 +115,29 @@ class TestFaqAnswerView(AldrynFaqTest):
             question_1,
         )
 
+    def test_view_context_fallback(self):
+        """
+        Tests that the FaqByCategoryView produces the correct context
+        when requesting a category in an untranslated language.
+        """
+        question_2 = self.reload(self.question1, "en")
+        question_2_url = question_2.get_absolute_url("en")
+
+        url_kwargs = resolve(question_2_url).kwargs
+
+        request = self.get_page_request(
+            page=self.page,
+            user=self.user,
+            path=question_2_url,
+        )
+
+        response = FaqAnswerView.as_view()(request, **url_kwargs)
+
+        self.assertEqual(
+            response.context_data['object'],
+            question_2,
+        )
+
     def test_view_old_format_redirect(self):
         """
         Tests that the TestFaqAnswerView redirects user
@@ -92,6 +145,7 @@ class TestFaqAnswerView(AldrynFaqTest):
         """
         category_1 = self.reload(self.category1, "en")
         question_1 = self.reload(self.question1, "en")
+        question_1_url_new = question_1.get_absolute_url()
 
         kwargs = {
             "category_slug": category_1.slug,
@@ -100,17 +154,18 @@ class TestFaqAnswerView(AldrynFaqTest):
 
         with override('en'):
             url_name = '{0}:faq-answer'.format(self.app_config.namespace)
-            question_1_url = reverse(url_name, kwargs=kwargs)
+            question_1_url_old = reverse(url_name, kwargs=kwargs)
 
         request = self.get_page_request(
             page=self.page,
             user=self.user,
-            path=question_1_url,
+            path=question_1_url_old,
         )
 
         response = FaqAnswerView.as_view()(request, **kwargs)
 
         self.assertEquals(response.status_code, 301)
+        self.assertEquals(response.url, question_1_url_new)
 
     def test_answer_match_category(self):
         """
