@@ -91,7 +91,7 @@ class QuestionAdmin(VersionedPlaceholderAdminMixin,
 
         # show placeholder field if not CMS 3.0
         if LooseVersion(cms.__version__) < LooseVersion('3.0'):
-            fieldsets.append(('Answer', cms_compat_fieldset))
+            fieldsets.append(('Short description', cms_compat_fieldset))
         return fieldsets
 
 
