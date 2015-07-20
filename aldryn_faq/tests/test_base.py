@@ -59,6 +59,32 @@ class AldrynFaqTestMixin(TestUtilityMixin, object):
         },
     }
 
+    enabled_parler_fallback_settings = {
+        'PARLER_LANGUAGES': {
+            1: (
+                {'code': 'de', 'fallbacks': ['en', ]},
+                {'code': 'en', 'fallbacks': ['de', ]},
+                {'code': 'fr', 'fallbacks': ['en', ]},
+            ),
+            'default': {
+                'hide_untranslated': False,
+            }
+        }
+    }
+
+    disabled_parler_fallback_settings = {
+        'PARLER_LANGUAGES': {
+            1: (
+                {'code': 'de'},
+                {'code': 'en'},
+                {'code': 'fr'},
+            ),
+            'default': {
+                'hide_untranslated': False,
+            }
+        }
+    }
+
     @staticmethod
     def reload(obj, language=None):
         """Simple convenience method for re-fetching an object from the ORM,

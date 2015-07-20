@@ -4,8 +4,9 @@ from __future__ import unicode_literals
 
 from django.core.urlresolvers import resolve, reverse
 from django.http import Http404
-from django.test.client import RequestFactory
 from django.utils.translation import override
+
+import parler.appsettings
 
 from ..views import FaqByCategoryView, FaqAnswerView
 
@@ -57,15 +58,18 @@ class TestFaqByCategoryView(AldrynFaqTest):
 
         url_kwargs = resolve(category_2_url).kwargs
 
-        try:
-            response = FaqByCategoryView.as_view()(request, **url_kwargs)
-        except Http404:
-            self.fail('Could not find category')
+        with self.settings(**self.enabled_parler_fallback_settings):
+            reload(parler.appsettings)
 
-        self.assertEqualItems(
-            response.context_data['object_list'],
-            [question_2, ],
-        )
+            try:
+                response = FaqByCategoryView.as_view()(request, **url_kwargs)
+            except Http404:
+                self.fail('Could not find category')
+
+            self.assertEqualItems(
+                response.context_data['object_list'],
+                [question_2, ],
+            )
 
     def test_view_old_format_redirect(self):
         """
@@ -131,7 +135,9 @@ class TestFaqAnswerView(AldrynFaqTest):
             path=question_2_url,
         )
 
-        response = FaqAnswerView.as_view()(request, **url_kwargs)
+        with self.settings(**self.enabled_parler_fallback_settings):
+            reload(parler.appsettings)
+            response = FaqAnswerView.as_view()(request, **url_kwargs)
 
         self.assertEqual(
             response.context_data['object'],

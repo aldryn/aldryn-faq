@@ -71,20 +71,25 @@ class TestGetAbsoluteUrls(AldrynFaqTest):
             category_2.get_absolute_url("fr")
 
     def test_question_urls(self):
-
-        with override('en'):
-            question_1_url = self.question1.get_absolute_url()
-            question_2_url = self.question2.get_absolute_url()
-
         question_1_pk = self.question1.pk
         question_2_pk = self.question2.pk
+
+        with override('en'):
+            question_1 = self.reload(self.question1)
+            question_1_url = question_1.get_absolute_url()
+
+            question_2 = self.reload(self.question2)
+            question_2_url = question_2.get_absolute_url()
 
         self.assertEquals('/en/faq/1-example/{pk}/'.format(pk=question_1_pk), question_1_url)
         self.assertEquals('/en/faq/2-beispiel2/{pk}/'.format(pk=question_2_pk), question_2_url)
 
         with override('de'):
-            question_1_url = self.question1.get_absolute_url()
-            question_2_url = self.question2.get_absolute_url()
+            question_1 = self.reload(self.question1)
+            question_1_url = question_1.get_absolute_url()
+
+            question_2 = self.reload(self.question2)
+            question_2_url = question_2.get_absolute_url()
 
         self.assertEquals('/de/faq/1-beispiel/{pk}/'.format(pk=question_1_pk), question_1_url)
         self.assertEquals('/de/faq/2-beispiel2/{pk}/'.format(pk=question_2_pk), question_2_url)

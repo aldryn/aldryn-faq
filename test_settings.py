@@ -63,14 +63,15 @@ HELPER_SETTINGS = {
     'HAYSTACK_CONNECTIONS': HAYSTACK_CONNECTIONS,
     'PARLER_LANGUAGES': {
         1: (
-            {'code': 'de', 'fallbacks': ['en', ]},
-            {'code': 'en', 'fallbacks': ['de', ]},
-            {'code': 'fr', 'fallbacks': ['en', ]},
+            {'code': 'de', },
+            {'code': 'en', },
+            {'code': 'fr', },
         ),
         'default': {
             'hide_untranslated': False,
         }
     },
+    'PARLER_ENABLE_CACHING': False,
     'SITE_ID': 1,
     'CMS_LANGUAGES': {
         1: [
