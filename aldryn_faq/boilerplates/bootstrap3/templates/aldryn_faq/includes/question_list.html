@@ -7,7 +7,9 @@
     {% for qgroup in qgroups %}
         {% if list %}
             <div class="panel-heading">
-                <h3 class="panel-title">{{ qgroup.grouper }}</h3>
+                <h3 class="panel-title">
+                    {{ qgroup.grouper }}
+                </h3>
             </div>
         {% endif %}
         <div class="list-group">
@@ -15,6 +17,9 @@
                 <a href="{% url 'aldryn_faq:faq-answer' question.category.slug question.pk %}" class="list-group-item">
                     {% render_model question "title" %}
                     {% if not list %}<span class="badge">{{ qgroup.grouper }}</span>{% endif %}
+                    {% for tag in question.tags.all %}
+                        <span class="badge badge-default pull-right">{{ tag }}</span>
+                    {% endfor %}
                 </a>
             {% endfor %}
         </div>
