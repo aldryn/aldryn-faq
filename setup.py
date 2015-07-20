@@ -13,6 +13,7 @@ REQUIREMENTS = [
     'django-admin-sortable2>=0.5.0',
     'django-parler>=1.4',
     'django-sortedm2m',
+    'django-taggit',
     'django-cms>=3.0.12',
 ]
 
