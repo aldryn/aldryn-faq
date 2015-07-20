@@ -43,14 +43,15 @@ class TestCategory(AldrynFaqTest):
         )
 
     def test_get_absolute_url(self):
-        category1 = self.category1
+        category_1 = self.category1
+
         self.assertEqual(
-            category1.get_absolute_url("en"),
-            "/en/faq/example/"
+            category_1.get_absolute_url("en"),
+            "/en/faq/1-example/"
         )
         self.assertEqual(
-            category1.get_absolute_url("de"),
-            "/de/faq/beispiel/"
+            category_1.get_absolute_url("de"),
+            "/de/faq/1-beispiel/"
         )
 
     def test_manager_get_categories(self):

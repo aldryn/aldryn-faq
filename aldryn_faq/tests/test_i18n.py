@@ -12,50 +12,52 @@ class TestGetAbsoluteUrls(AldrynFaqTest):
     def test_category_urls(self):
 
         with override('en'):
-            url1 = self.category1.get_absolute_url()
-            url2 = self.category2.get_absolute_url()
-        self.assertEquals('/en/faq/example/', url1)
+            category_1_url = self.category1.get_absolute_url()
+            category_2_url = self.category2.get_absolute_url()
+
+        self.assertEquals('/en/faq/1-example/', category_1_url)
         # category2 doesn't exist EN, so this should fallback to DE
-        self.assertEquals('/de/faq/beispiel2/', url2)
+        self.assertEquals('/en/faq/2-beispiel2/', category_2_url)
 
         with override('de'):
-            url1 = self.category1.get_absolute_url()
-            url2 = self.category2.get_absolute_url()
-        self.assertEquals('/de/faq/beispiel/', url1)
-        self.assertEquals('/de/faq/beispiel2/', url2)
+            category_1_url = self.category1.get_absolute_url()
+            category_2_url = self.category2.get_absolute_url()
+
+        self.assertEquals('/de/faq/1-beispiel/', category_1_url)
+        self.assertEquals('/de/faq/2-beispiel2/', category_2_url)
 
         # Now, test that we can override the context with the language parameter
         with override('en'):
-            url1 = self.category1.get_absolute_url(language="de")
-            url2 = self.category2.get_absolute_url(language="de")
-        self.assertEquals('/de/faq/beispiel/', url1)
-        self.assertEquals('/de/faq/beispiel2/', url2)
+            category_1_url = self.category1.get_absolute_url(language="de")
+            category_2_url = self.category2.get_absolute_url(language="de")
+
+        self.assertEquals('/de/faq/1-beispiel/', category_1_url)
+        self.assertEquals('/de/faq/2-beispiel2/', category_2_url)
 
         # For completeness, do the other way too
         with override('de'):
-            url1 = self.category1.get_absolute_url(language="en")
-            url2 = self.category2.get_absolute_url(language="en")
-        self.assertEquals('/en/faq/example/', url1)
+            category_1_url = self.category1.get_absolute_url(language="en")
+            category_2_url = self.category2.get_absolute_url(language="en")
+
+        self.assertEquals('/en/faq/1-example/', category_1_url)
         # category2 doesn't exist EN, so this should fallback to DE
-        self.assertEquals('/de/faq/beispiel2/', url2)
+        self.assertEquals('/en/faq/2-beispiel2/', category_2_url)
 
     def test_question_urls(self):
 
         with override('en'):
-            url1 = self.question1.get_absolute_url()
-            url2 = self.question2.get_absolute_url()
+            question_1_url = self.question1.get_absolute_url()
+            question_2_url = self.question2.get_absolute_url()
 
-        pk1 = self.question1.pk
-        pk2 = self.question2.pk
+        question_1_pk = self.question1.pk
+        question_2_pk = self.question2.pk
 
-        self.assertEquals('/en/faq/example/{pk}/'.format(pk=pk1), url1)
-        # neigher category2 nor question2 exist in EN, so, this should return
-        # the DE fallback to the question.
-        self.assertEquals('/de/faq/beispiel2/{pk}/'.format(pk=pk2), url2)
+        self.assertEquals('/en/faq/1-example/{pk}/'.format(pk=question_1_pk), question_1_url)
+        self.assertEquals('/en/faq/2-beispiel2/{pk}/'.format(pk=question_2_pk), question_2_url)
 
         with override('de'):
-            url1 = self.question1.get_absolute_url()
-            url2 = self.question2.get_absolute_url()
+            question_1_url = self.question1.get_absolute_url()
+            question_2_url = self.question2.get_absolute_url()
 
-        self.assertEquals('/de/faq/beispiel/{pk}/'.format(pk=pk1), url1)
-        self.assertEquals('/de/faq/beispiel2/{pk}/'.format(pk=pk2), url2)
+        self.assertEquals('/de/faq/1-beispiel/{pk}/'.format(pk=question_1_pk), question_1_url)
+        self.assertEquals('/de/faq/2-beispiel2/{pk}/'.format(pk=question_2_pk), question_2_url)
