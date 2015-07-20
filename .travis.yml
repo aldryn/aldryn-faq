@@ -50,7 +50,15 @@ before_script:
   - npm install -g codeclimate-test-reporter
   - npm install
 
-script: coverage run test_settings.py
+script:
+  - coverage erase
+  - coverage run test_settings.py
+  - coverage report
+  - gulp tests:unit
+  - gulp tests:lint
+  - sh test_requirements/runserver.sh
+  - sleep 60
+  - gulp tests:integration
 
 after_success: coveralls
 
