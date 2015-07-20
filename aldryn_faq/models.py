@@ -95,7 +95,7 @@ class Category(TranslationHelperMixin, TranslatableModel):
 class Question(TranslatableModel):
     translations = TranslatedFields(
         title=models.CharField(_('Title'), max_length=255),
-        answer_text=HTMLField(_('answer'))
+        answer_text=HTMLField(_('Short description'))
     )
     category = models.ForeignKey(Category, related_name='questions')
 
