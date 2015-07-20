@@ -1,5 +1,3 @@
-# Config file for automatic testing at travis-ci.org
-
 language: python
 
 # Use container based infrastructure
@@ -13,8 +11,12 @@ python:
 
 env:
   matrix:
-  - DJANGO=1.6 CMD=./test
-  - DJANGO=1.7 CMD=./test
+    - DJANGO=1.6 CMD=./test
+    - DJANGO=1.7 CMD=./test
+  global:
+    - secure: lNbb7g6bjHssNvj02PMAhdRMLTje0+WsYRxy7hdoPGJd5uCm3rx5Ha7yYmpv+6hj8SIA6QuE0viKVnife2Eyets99mMuYtsxE+NfHr19HpPEQPUdph3C5q93tupv+vJ52NQnPkb92PNAxDcM4+F+NQrlUBzVhoPjD/8y3whjFmE=
+    - secure: PiQisj0TKzfcoSuJe8nCiE3oKz1OT8IW+9lLA73lrHutY/yJrDlGrLoFBp20iIquVOKpGPX1DH1GvHVZeoiiV3qpaF/lJXmmacJte/FrdiVtQ9ezQYtRkY0UGiF+WnqfBPyGBHma9LszGcKHUIg+sXyQ/tIFFhq7U1vMKSPTHJ4=
+    - secure: gCi1UP9rgOnfvLT+UNiQkysnXUKvMi5ichNwPNxiXkLYlc66bJLIc/h8YI3V9vV4ICzyMJqEDHXV7T8NP0tsdxdNdEQNvStoaleLz7xsbjW7MZ2XxF13xncG6fksYr/5cjhBbiwg06HTn/VH+TD1FT1u9WUe+0/BJSx1JMnJQgs=
 
 matrix:
   # allow_failures:
@@ -24,13 +26,16 @@ matrix:
       env: DJANGO=1.7 CMD=./test
   fast_finish: true
   include:
-    # Change this to Django 1.7 once it is working.
+    # Change this to Django 1.7 once it is working
     - python: 2.7
       env: DJANGO=1.7 CMD="flake8 aldryn_newsblog"
 
 cache:
   directories:
     - $HOME/.wheelhouse
+
+before_install:
+  - npm install -g npm
 
 install:
   - pip install coveralls
@@ -40,9 +45,26 @@ install:
   - pip wheel --wheel-dir $HOME/.wheelhouse -r test_requirements/django-$DJANGO.txt
   - pip install --use-wheel --no-index --find-links=$HOME/.wheelhouse -r test_requirements/django-$DJANGO.txt
 
-script: coverage run test_settings.py
+before_script:
+  - npm install -g gulp
+  - npm install -g codeclimate-test-reporter
+  - npm install
+
+script:
+  - {envpython} --version
+  - coverage erase
+  - coverage run test_settings.py
+  - coverage report
+  - gulp tests:unit
+  - gulp tests:lint
+  - sh test_requirements/runserver.sh
+  - sleep 60
+  - gulp tests:integration
 
 after_success: coveralls
+
+after_script:
+  - codeclimate < tests/coverage/**/lcov.info
 
 notifications:
   webhooks: http://addons.us-iad-rs.aldryn.io/en/travis-endpoint/
