@@ -13,7 +13,6 @@ env:
   - TOXENV=py33-django16
   - TOXENV=py27-django17
   - TOXENV=py27-django16
-  - TOXENV=py26-django17
   - TOXENV=py26-django16
 
 cache:
