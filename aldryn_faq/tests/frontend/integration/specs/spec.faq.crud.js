@@ -78,33 +78,31 @@ describe('Aldryn FAQ tests: ', function () {
                 faqPage.titleInput.sendKeys('Test').then(function () {
                     faqPage.saveButton.click();
 
-                    faqPage.slugErrorNotification.isPresent()
-                        .then(function (present) {
-                        if (present === false) {
-                            browser.wait(function () {
-                                return browser.isElementPresent(faqPage.editPageLink);
-                            }, faqPage.mainElementsWaitTime);
+                    return faqPage.slugErrorNotification.isPresent();
+                }).then(function (present) {
+                    if (present === false) {
+                        browser.wait(function () {
+                            return browser.isElementPresent(faqPage.editPageLink);
+                        }, faqPage.mainElementsWaitTime);
 
-                            // wait till the editPageLink will become clickable
-                            browser.sleep(500);
+                        // wait till the editPageLink will become clickable
+                        browser.sleep(500);
 
-                            // validate/click edit page link
-                            faqPage.editPageLink.click();
+                        // validate/click edit page link
+                        faqPage.editPageLink.click();
 
-                            // switch to default page content
-                            browser.switchTo().defaultContent();
+                        // switch to default page content
+                        browser.switchTo().defaultContent();
 
-                            browser.wait(function () {
-                                return browser.isElementPresent(faqPage.testLink);
-                            }, faqPage.mainElementsWaitTime);
+                        browser.wait(function () {
+                            return browser.isElementPresent(faqPage.testLink);
+                        }, faqPage.mainElementsWaitTime);
 
-                            // validate test link text
-                            faqPage.testLink.getText()
-                                .then(function (title) {
-                                expect(title).toEqual('Test');
-                            });
-                        }
-                    });
+                        // validate test link text
+                        faqPage.testLink.getText().then(function (title) {
+                            expect(title).toEqual('Test');
+                        });
+                    }
                 });
             }
         });
