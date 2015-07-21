@@ -8,7 +8,7 @@ REQUIREMENTS = [
     'django-reversion>=1.8.2,<1.9',
     'aldryn-reversion',
     'aldryn-search',
-    'aldryn-translation-tools',
+    'aldryn-translation-tools>=0.0.5,<0.0.7',
     'django-admin-sortable',  # DO NOT REMOVE THIS
     'django-admin-sortable2>=0.5.0',
     'django-parler>=1.4',
