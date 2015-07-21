@@ -4,7 +4,6 @@
  */
 
 'use strict';
-/* global by, element, browser, expect */
 
 // #############################################################################
 // INTEGRATION TEST PAGE OBJECT

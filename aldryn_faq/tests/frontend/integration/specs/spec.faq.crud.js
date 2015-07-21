@@ -4,7 +4,7 @@
  */
 
 'use strict';
-/* global describe, it, browser, By, expect */
+/* global describe, it, browser */
 
 // #############################################################################
 // INTEGRATION TEST
