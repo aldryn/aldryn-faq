@@ -14,6 +14,7 @@ default_cms_plugin_table_mapping = (
     ('cmsplugin_topquestionsplugin', 'aldryn_faq_topquestionsplugin'),
 )
 
+
 def rename_tables(db, table_mapping=None, reverse=False):
     """
     renames tables from source to destination name, if the source exists
