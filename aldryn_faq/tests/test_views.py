@@ -2,10 +2,11 @@
 
 from __future__ import unicode_literals
 
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import resolve, reverse
 from django.http import Http404
-from django.test.client import RequestFactory
 from django.utils.translation import override
+
+import parler.appsettings
 
 from ..views import FaqByCategoryView, FaqAnswerView
 
@@ -13,100 +14,188 @@ from .test_base import AldrynFaqTest
 
 
 class TestFaqByCategoryView(AldrynFaqTest):
-    def test_as_view(self):
-        """Tests that the FaqByCategoryView produces the correct context."""
-        category1 = self.reload(self.category1, "en")
-        question1 = self.reload(self.question1, "en")
 
-        kwargs = {"category_slug": category1.slug}
-        with override('en'):
-            category1_url = reverse(
-                '{0}:faq-category'.format(self.app_config.namespace),
-                kwargs=kwargs
-            )
-        factory = RequestFactory()
-        request = factory.get(category1_url)
-        request.user = self.user
-        # We're not going through the middleware, and apphooks_config needs
-        # 'current_page' to be set on the request objects, so...
-        request.current_page = self.page
+    def test_view_context(self):
+        """Tests that the FaqByCategoryView produces the correct context."""
+        category_1 = self.reload(self.category1, "en")
+        category_1_url = category_1.get_absolute_url()
+
+        question_1 = self.reload(self.question1, "en")
+
+        request = self.get_page_request(
+            page=self.page,
+            user=self.user,
+            path=category_1_url,
+        )
+
+        url_kwargs = resolve(category_1_url).kwargs
+
         try:
-            response = FaqByCategoryView.as_view()(request, **kwargs)
+            response = FaqByCategoryView.as_view()(request, **url_kwargs)
         except Http404:
             self.fail('Could not find category')
+
         self.assertEqualItems(
             response.context_data['object_list'],
-            [question1, ],
+            [question_1, ],
         )
+
+    def test_view_context_fallback(self):
+        """
+        Tests that the FaqByCategoryView produces the correct context
+        when requesting a category in an untranslated language.
+        """
+        category_2 = self.reload(self.category2, "en")
+        category_2_url = category_2.get_absolute_url()
+
+        question_2 = self.reload(self.question2, "en")
+
+        request = self.get_page_request(
+            page=self.page,
+            user=self.user,
+            path=category_2_url,
+        )
+
+        url_kwargs = resolve(category_2_url).kwargs
+
+        with self.settings(**self.enabled_parler_fallback_settings):
+            reload(parler.appsettings)
+
+            try:
+                response = FaqByCategoryView.as_view()(request, **url_kwargs)
+            except Http404:
+                self.fail('Could not find category')
+
+            self.assertEqualItems(
+                response.context_data['object_list'],
+                [question_2, ],
+            )
+
+    def test_view_old_format_redirect(self):
+        """
+        Tests that the FaqByCategoryView redirects user
+        when accessed with old category url format
+        """
+        category_1 = self.reload(self.category1, "en")
+        category_1_url_new = category_1.get_absolute_url()
+
+        kwargs = {"category_slug": category_1.slug}
+
+        with override('en'):
+            category_1_url_name = '{0}:faq-category'.format(self.app_config.namespace)
+            category_1_url_old = reverse(category_1_url_name, kwargs=kwargs)
+
+        request = self.get_page_request(
+            page=self.page,
+            user=self.user,
+            path=category_1_url_old,
+        )
+
+        response = FaqByCategoryView.as_view()(request, **kwargs)
+
+        self.assertEquals(response.status_code, 301)
+        self.assertEquals(response.url, category_1_url_new)
 
 
 class TestFaqAnswerView(AldrynFaqTest):
-    def test_as_view(self):
-        """Tests that the FaqAnswerView produces the correct context."""
-        category1 = self.reload(self.category1, "en")
-        question1 = self.reload(self.question1, "en")
 
-        kwargs = {"category_slug": category1.slug, "pk": question1.id}
-        with override('en'):
-            url = reverse(
-                '{0}:faq-answer'.format(self.app_config.namespace),
-                kwargs=kwargs
-            )
-        factory = RequestFactory()
-        request = factory.get(url)
-        request.user = self.user
-        # We're not going through the middleware, and apphooks_config needs
-        # 'current_page' to be set on the request objects, so...
-        request.current_page = self.page
-        response = FaqAnswerView.as_view()(request, **kwargs)
-        self.assertEqual(
-            response.context_data['object'],
-            question1,
+    def test_view_context(self):
+        """Tests that the FaqByCategoryView produces the correct context."""
+        question_1 = self.reload(self.question1, "en")
+        question_1_url = question_1.get_absolute_url("en")
+
+        url_kwargs = resolve(question_1_url).kwargs
+
+        request = self.get_page_request(
+            page=self.page,
+            user=self.user,
+            path=question_1_url,
         )
 
-        # Now, check that manipulating the url to get an answer from the wrong
-        # category returns a 404. In this case, we have to do it in DE, since
-        # question2 is only available in that language.
-        category1 = self.reload(self.category1, "de")
-        question2 = self.reload(self.question2, "de")
-        kwargs = {"category_slug": category1.slug, "pk": question2.pk}
+        response = FaqAnswerView.as_view()(request, **url_kwargs)
+
+        self.assertEqual(
+            response.context_data['object'],
+            question_1,
+        )
+
+    def test_view_context_fallback(self):
+        """
+        Tests that the FaqByCategoryView produces the correct context
+        when requesting a category in an untranslated language.
+        """
+        question_2 = self.reload(self.question1, "en")
+        question_2_url = question_2.get_absolute_url("en")
+
+        url_kwargs = resolve(question_2_url).kwargs
+
+        request = self.get_page_request(
+            page=self.page,
+            user=self.user,
+            path=question_2_url,
+        )
+
+        with self.settings(**self.enabled_parler_fallback_settings):
+            reload(parler.appsettings)
+            response = FaqAnswerView.as_view()(request, **url_kwargs)
+
+        self.assertEqual(
+            response.context_data['object'],
+            question_2,
+        )
+
+    def test_view_old_format_redirect(self):
+        """
+        Tests that the TestFaqAnswerView redirects user
+        when accessed with old category url format
+        """
+        category_1 = self.reload(self.category1, "en")
+        question_1 = self.reload(self.question1, "en")
+        question_1_url_new = question_1.get_absolute_url()
+
+        kwargs = {
+            "category_slug": category_1.slug,
+            "pk": question_1.pk
+        }
+
+        with override('en'):
+            url_name = '{0}:faq-answer'.format(self.app_config.namespace)
+            question_1_url_old = reverse(url_name, kwargs=kwargs)
+
+        request = self.get_page_request(
+            page=self.page,
+            user=self.user,
+            path=question_1_url_old,
+        )
+
+        response = FaqAnswerView.as_view()(request, **kwargs)
+
+        self.assertEquals(response.status_code, 301)
+        self.assertEquals(response.url, question_1_url_new)
+
+    def test_answer_match_category(self):
+        """
+        Tests that the question id given in url
+        belongs to the given category, if not then 404 is raised.
+        """
+        category_1 = self.reload(self.category1, "de")
+        question_2 = self.reload(self.question2, "de")
+
+        kwargs = {
+            "category_pk": category_1.pk,
+            "category_slug": category_1.slug,
+            "pk": question_2.pk
+        }
+
         with override('de'):
-            url = reverse(
-                '{0}:faq-answer'.format(self.app_config.namespace),
-                kwargs=kwargs
-            )
-        request = factory.get(url)
-        request.user = self.user
-        request.current_page = self.page
-        with self.assertRaises(Http404):
-            response = FaqAnswerView.as_view()(request, **kwargs)
+            url_name = '{0}:faq-answer'.format(self.app_config.namespace)
+            question_2_invalid_url = reverse(url_name, kwargs=kwargs)
 
-        # Now, do that again, this time mixing the languages.
-        category1 = self.reload(self.category1, "en")  # NOTE THESE DO NOT MATCH
-        question2 = self.reload(self.question2, "de")
-        kwargs = {"category_slug": category1.slug, "pk": question2.pk}
-        with override('de'):  # NOTE THIS IS DE
-            url = reverse(
-                '{0}:faq-answer'.format(self.app_config.namespace),
-                kwargs=kwargs
-            )
-        request = factory.get(url)
-        request.user = self.user
-        request.current_page = self.page
-        with self.assertRaises(Http404):
-            response = FaqAnswerView.as_view()(request, **kwargs)
+        request = self.get_page_request(
+            page=self.page,
+            user=self.user,
+            path=question_2_invalid_url,
+        )
 
-        # Now, now the opposite way, for good measure.
-        category1 = self.reload(self.category1, "en")  # NOTE THESE DO NOT MATCH
-        question2 = self.reload(self.question2, "de")
-        kwargs = {"category_slug": category1.slug, "pk": question2.pk}
-        with override('en'):  # NOTE: THIS IS NOW EN
-            url = reverse(
-                '{0}:faq-answer'.format(self.app_config.namespace),
-                kwargs=kwargs
-            )
-        request = factory.get(url)
-        request.user = self.user
-        request.current_page = self.page
         with self.assertRaises(Http404):
-            response = FaqAnswerView.as_view()(request, **kwargs)
+            FaqAnswerView.as_view()(request, **kwargs)

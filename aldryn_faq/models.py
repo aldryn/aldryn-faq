@@ -131,11 +131,11 @@ class Question(TranslatableModel):
         if language is None:
             language = get_current_language()
 
-        category_slug = self.category.safe_translation_getter(
+        category_slug = self.category.known_translation_getter(
             'slug',
             default=None,
             language_code=language
-        )
+        )[0] or ''
 
         try:
             namespace = self.category.appconfig.namespace

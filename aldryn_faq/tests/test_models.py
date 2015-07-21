@@ -18,6 +18,7 @@ class TestCategory(AldrynFaqTest):
             category1 = self.reload(self.category1)
             self.assertEqual(
                 force_text(category1), self.data["category1"]["en"]["name"])
+
         with override('de'):
             category1 = self.reload(self.category1)
             self.assertEqual(
@@ -43,14 +44,15 @@ class TestCategory(AldrynFaqTest):
         )
 
     def test_get_absolute_url(self):
-        category1 = self.category1
+        category_1 = self.category1
+
         self.assertEqual(
-            category1.get_absolute_url("en"),
-            "/en/faq/example/"
+            category_1.get_absolute_url("en"),
+            "/en/faq/1-example/"
         )
         self.assertEqual(
-            category1.get_absolute_url("de"),
-            "/de/faq/beispiel/"
+            category_1.get_absolute_url("de"),
+            "/de/faq/1-beispiel/"
         )
 
     def test_manager_get_categories(self):
@@ -103,15 +105,15 @@ class TestQuestion(AldrynFaqTest):
         )
 
     def test_get_absolue_url(self):
-        pk1 = self.question1.pk
+        question_1_pk = self.question1.pk
 
         self.assertEqual(
             self.question1.get_absolute_url("en"),
-            "/en/faq/example/{pk}/".format(pk=pk1)
+            "/en/faq/1-example/{pk}/".format(pk=question_1_pk)
         )
         self.assertEqual(
             self.question1.get_absolute_url("de"),
-            "/de/faq/beispiel/{pk}/".format(pk=pk1)
+            "/de/faq/1-beispiel/{pk}/".format(pk=question_1_pk)
         )
 
     def test_manager_filter_by_language(self):
@@ -188,4 +190,54 @@ class TestFAQTranslations(AldrynFaqTest):
             self.assertEqual(
                 category1.slug,
                 self.data["category1"]["de"]["slug"]
+            )
+
+    def test_fetch_faq_translations_fallbacks(self):
+        """Test we can fetch arbitrary translations of the question and
+        its category."""
+
+        # Question and Category 1 do not exist in french
+        # we expect to fallback to english
+        with override("fr"):
+            question_1_fr = self.reload(self.question1)
+            category_1_fr = self.reload(self.question1.category)
+
+            self.assertEqual(
+                question_1_fr.safe_translation_getter('title', any_language=True),
+                self.data["question1"]["en"]["title"]
+            )
+            self.assertEqual(
+                question_1_fr.safe_translation_getter('answer_text', any_language=True),
+                self.data["question1"]["en"]["answer_text"]
+            )
+            self.assertEqual(
+                category_1_fr.safe_translation_getter('name', any_language=True),
+                self.data["category1"]["en"]["name"]
+            )
+            self.assertEqual(
+                category_1_fr.safe_translation_getter('slug', any_language=True),
+                self.data["category1"]["en"]["slug"]
+            )
+
+        # Question and Category 2 do not exist in english
+        # we expect to fallback to german
+        with override("en"):
+            question_2_en = self.reload(self.question2)
+            category_2_en = self.reload(self.question2.category)
+
+            self.assertEqual(
+                question_2_en.safe_translation_getter('title', any_language=True),
+                self.data["question2"]["de"]["title"]
+            )
+            self.assertEqual(
+                question_2_en.safe_translation_getter('answer_text', any_language=True),
+                self.data["question2"]["de"]["answer_text"]
+            )
+            self.assertEqual(
+                category_2_en.safe_translation_getter('name', any_language=True),
+                self.data["category2"]["de"]["name"]
+            )
+            self.assertEqual(
+                category_2_en.safe_translation_getter('slug', any_language=True),
+                self.data["category2"]["de"]["slug"]
             )

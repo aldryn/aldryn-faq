@@ -71,6 +71,7 @@ HELPER_SETTINGS = {
             'hide_untranslated': False,
         }
     },
+    'PARLER_ENABLE_CACHING': False,
     'SITE_ID': 1,
     'CMS_LANGUAGES': {
         1: [
