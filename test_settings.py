@@ -58,7 +58,7 @@ HELPER_SETTINGS = {
         # important! place right before django.template.loaders.app_directories.Loader
         'aldryn_boilerplates.template_loaders.AppDirectoriesLoader',
         'django.template.loaders.app_directories.Loader',
-        'django.template.loaders.eggs.Loader'
+        'django.template.loaders.eggs.Loader',
     ],
     'ALDRYN_BOILERPLATE_NAME': 'bootstrap3',
     'HAYSTACK_CONNECTIONS': HAYSTACK_CONNECTIONS,
