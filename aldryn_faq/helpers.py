@@ -21,7 +21,7 @@ def get_category_from_slug(queryset, slug, pk=None, language=None):
         if category:
             return category
         else:
-            slug = '{}-{}'.format(pk, slug)
+            slug = '{0}-{1}'.format(pk, slug)
 
     category = get_or_none(queryset, translations__slug=slug)
 
