@@ -152,8 +152,65 @@ describe('Aldryn FAQ tests: ', function () {
 
                 faqPage.namespaceInput.sendKeys('aldryn_faq')
                     .then(function () {
-                    faqPage.applicationTitleInput.sendKeys('Test title');
+                    return faqPage.applicationTitleInput.sendKeys('Test title');
                 }).then(function () {
+                    faqPage.saveButton.click();
+
+                    browser.wait(function () {
+                        return browser.isElementPresent(faqPage.successNotification);
+                    }, faqPage.mainElementsWaitTime);
+                });
+            }
+        });
+    });
+
+    it('creates a new category', function () {
+        browser.wait(function () {
+            return browser.isElementPresent(faqPage.breadcrumbsLinks.first());
+        }, faqPage.mainElementsWaitTime);
+
+        // click the Home link in breadcrumbs
+        faqPage.breadcrumbsLinks.first().click();
+
+        browser.wait(function () {
+            return browser.isElementPresent(faqPage.categoriesLink);
+        }, faqPage.mainElementsWaitTime);
+
+        faqPage.categoriesLink.click();
+
+        // check if the category already exists and return the status
+        faqPage.editConfigsLink.isPresent().then(function (present) {
+            if (present === false) {
+                // category is absent - create new category
+                browser.wait(function () {
+                    return browser.isElementPresent(faqPage.addConfigsButton);
+                }, faqPage.mainElementsWaitTime);
+
+                faqPage.addConfigsButton.click();
+
+                browser.wait(function () {
+                    return browser.isElementPresent(faqPage.languageTabs.first());
+                }, faqPage.mainElementsWaitTime);
+
+                // switch to English language tab
+                faqPage.languageTabs.first().click().then(function () {
+                    browser.wait(function () {
+                        return browser.isElementPresent(faqPage.nameInput);
+                    }, faqPage.mainElementsWaitTime);
+
+                    return faqPage.nameInput.sendKeys('Test category');
+                }).then(function () {
+                    // wait for Appconfig select to appear
+                    browser.wait(function () {
+                        return browser.isElementPresent(faqPage.appconfigSelect);
+                    }, faqPage.mainElementsWaitTime);
+
+                    // set Appconfig
+                    faqPage.appconfigSelect.click();
+                    return faqPage.appconfigSelect.sendKeys('FAQ / aldryn_faq');
+                }).then(function () {
+                    faqPage.appconfigSelect.click();
+
                     faqPage.saveButton.click();
 
                     browser.wait(function () {
