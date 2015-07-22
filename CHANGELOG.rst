@@ -1,10 +1,13 @@
 CHANGELOG
 =========
 
-0.12.6 (2015-04-16)
--------------------
+1.0.2 (2015-07-22)
+------------------
 
-* Use get_current_language from cms instead get_language from Django because Django bug #9340
+* Much better handling of language fallbacks
+* Add automated frontend tests and configuration
+* Improved admin display of translations
+* Fix up some dependencies
 
 0.13.0 (2015-06-26)
 -------------------
@@ -19,6 +22,11 @@ CHANGELOG
   in the mark-up as "DEPRECATED". Please use this release to migrate any plugins
   in these plugins to their respective PlaceholderField replacements. These will
   be remove in the next release.
+
+0.12.6 (2015-04-16)
+-------------------
+
+* Use get_current_language from cms instead get_language from Django because Django bug #9340
 
 0.12.0 (2015-03-25)
 -------------------
