@@ -24,6 +24,9 @@ cache:
   directories:
     - $HOME/.wheelhouse
 
+before_install:
+  - npm install -g npm
+
 install:
   - pip install tox
   - pip install coveralls
