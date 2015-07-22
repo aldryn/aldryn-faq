@@ -1,22 +1,15 @@
-aldryn-apphooks-config
 aldryn-boilerplates
-aldryn-reversion>=0.0.2,<0.1.0
-aldryn_translation_tools>=0.0.5,<0.0.7
 coverage==3.7.1
-python-coveralls>=2.4.2
-django-admin-sortable2>=0.5.0
 django-classy-tags
-django-cms>=3.0.12,<3.2
-django-mptt<0.7 # rq.filter: <0.7.0
-https://github.com/edoburu/django-parler/archive/9d25bc60b24a16bc4781d0305c41c5acff0b00a6.zip
+django-mptt<0.7
 django-sekizai
-django-sortedm2m
 djangocms-admin-style
 djangocms-helper
 djangocms-text-ckeditor
 docopt
-html5lib
 flake8
+html5lib
+python-coveralls>=2.4.2
 selenium
 six
 

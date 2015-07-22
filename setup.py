@@ -3,17 +3,23 @@ from setuptools import setup, find_packages
 from aldryn_faq import __version__
 
 REQUIREMENTS = [
-    'Django>=1.6,<1.8',
     'aldryn-apphooks-config>=0.2.4',
-    'django-reversion>=1.8.2,<1.9',
     'aldryn-reversion>=0.0.2,<0.1.0',
     'aldryn-search',
     'aldryn-translation-tools>=0.0.5,<0.0.7',
-    'django-admin-sortable',  # DO NOT REMOVE THIS
-    'django-admin-sortable2>=0.5.0',
+    'django>=1.6,<1.8',
+    'django-admin-sortable2>=0.5.2',
+    'django-cms>=3.0.12,<3.2',
     'django-parler>=1.4',
+    'django-reversion>=1.8.2,<1.9',
     'django-sortedm2m',
-    'django-cms>=3.0.12',
+
+    # KEEP UNTIL THERE IS A RELEASE OF DJANGO-PARLER LATER THAN 1.4.0
+    'https://github.com/edoburu/django-parler/archive/9d25bc60b24a16bc4781d0305c41c5acff0b00a6.zip',
+
+    # THIS IS HERE TO SUPPORT EXISTING MIGRATIONS. WE CAN REMOVE IT ONLY ONCE
+    # WE DROP SUPPORT FOR SOUTH MIGRATIONS.
+    'django-admin-sortable',
 ]
 
 CLASSIFIERS = [
