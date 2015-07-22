@@ -22,13 +22,15 @@ class QuestionIndex(get_index_base()):
             return obj.safe_translation_getter('title')
 
     def get_index_queryset(self, language):
-        return self.get_model().objects.language(language).active_translations(language)
+        questions = self.get_model().objects.language(language)
+        return questions.active_translations(language)
 
     def get_model(self):
         return Question
 
     def get_search_data(self, obj, language, request):
         with switch_language(obj, language):
+            context = RequestContext(request)
             text_bits = [
                 strip_tags(obj.safe_translation_getter('title') or ''),
                 strip_tags(obj.safe_translation_getter('answer_text') or '')
@@ -38,7 +40,7 @@ class QuestionIndex(get_index_base()):
                 instance, plugin_type = base_plugin.get_plugin_instance()
                 if instance is not None:
                     plugin_content = strip_tags(
-                        instance.render_plugin(context=RequestContext(request))
+                        instance.render_plugin(context=context)
                     )
                     text_bits.append(plugin_content)
 
@@ -57,7 +59,8 @@ class CategoryIndex(get_index_base()):
             return obj.safe_translation_getter('name')
 
     def get_index_queryset(self, language):
-        return self.get_model().objects.language(language).active_translations(language)
+        categories = self.get_model().objects.language(language)
+        return categories.active_translations(language)
 
     def get_model(self):
         return Category

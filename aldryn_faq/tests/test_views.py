@@ -87,7 +87,9 @@ class TestFaqByCategoryView(AldrynFaqTest):
         kwargs = {"category_slug": category_1.slug}
 
         with override('en'):
-            category_1_url_name = '{0}:faq-category'.format(self.app_config.namespace)
+            category_1_url_name = '{ns}:faq-category'.format(
+                ns=self.app_config.namespace
+            )
             category_1_url_old = reverse(category_1_url_name, kwargs=kwargs)
 
         request = self.get_page_request(
@@ -164,7 +166,7 @@ class TestFaqAnswerView(AldrynFaqTest):
         }
 
         with override('en'):
-            url_name = '{0}:faq-answer'.format(self.app_config.namespace)
+            url_name = '{ns}:faq-answer'.format(ns=self.app_config.namespace)
             question_1_url_old = reverse(url_name, kwargs=kwargs)
 
         request = self.get_page_request(
@@ -193,7 +195,7 @@ class TestFaqAnswerView(AldrynFaqTest):
         }
 
         with override('de'):
-            url_name = '{0}:faq-answer'.format(self.app_config.namespace)
+            url_name = '{ns}:faq-answer'.format(ns=self.app_config.namespace)
             question_2_invalid_url = reverse(url_name, kwargs=kwargs)
 
         request = self.get_page_request(

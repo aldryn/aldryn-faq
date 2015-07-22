@@ -209,22 +209,25 @@ class TestFAQTranslations(AldrynFaqTest):
         # we expect to fallback to english
         with override("fr"):
             question_1_fr = self.reload(self.question1)
+            question_1_fr_translation = question_1_fr.safe_translation_getter
+
             category_1_fr = self.reload(self.question1.category)
+            category_1_fr_translation = category_1_fr.safe_translation_getter
 
             self.assertEqual(
-                question_1_fr.safe_translation_getter('title', any_language=True),
+                question_1_fr_translation('title', any_language=True),
                 self.data["question1"]["en"]["title"]
             )
             self.assertEqual(
-                question_1_fr.safe_translation_getter('answer_text', any_language=True),
+                question_1_fr_translation('answer_text', any_language=True),
                 self.data["question1"]["en"]["answer_text"]
             )
             self.assertEqual(
-                category_1_fr.safe_translation_getter('name', any_language=True),
+                category_1_fr_translation('name', any_language=True),
                 self.data["category1"]["en"]["name"]
             )
             self.assertEqual(
-                category_1_fr.safe_translation_getter('slug', any_language=True),
+                category_1_fr_translation('slug', any_language=True),
                 self.data["category1"]["en"]["slug"]
             )
 
@@ -232,21 +235,24 @@ class TestFAQTranslations(AldrynFaqTest):
         # we expect to fallback to german
         with override("en"):
             question_2_en = self.reload(self.question2)
+            question_2_en_translation = question_2_en.safe_translation_getter
+
             category_2_en = self.reload(self.question2.category)
+            category_2_en_translation = category_2_en.safe_translation_getter
 
             self.assertEqual(
-                question_2_en.safe_translation_getter('title', any_language=True),
+                question_2_en_translation('title', any_language=True),
                 self.data["question2"]["de"]["title"]
             )
             self.assertEqual(
-                question_2_en.safe_translation_getter('answer_text', any_language=True),
+                question_2_en_translation('answer_text', any_language=True),
                 self.data["question2"]["de"]["answer_text"]
             )
             self.assertEqual(
-                category_2_en.safe_translation_getter('name', any_language=True),
+                category_2_en_translation('name', any_language=True),
                 self.data["category2"]["de"]["name"]
             )
             self.assertEqual(
-                category_2_en.safe_translation_getter('slug', any_language=True),
+                category_2_en_translation('slug', any_language=True),
                 self.data["category2"]["de"]["slug"]
             )

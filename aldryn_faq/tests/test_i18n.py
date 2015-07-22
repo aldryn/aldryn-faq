@@ -27,7 +27,7 @@ class TestGetAbsoluteUrls(AldrynFaqTest):
         self.assertEquals('/de/faq/1-beispiel/', category_1_url)
         self.assertEquals('/de/faq/2-beispiel2/', category_2_url)
 
-        # Now, test that we can override the context with the language parameter
+        # test that we can override the context with the language parameter
         with override('en'):
             category_1_url = self.category1.get_absolute_url(language="de")
             category_2_url = self.category2.get_absolute_url(language="de")
