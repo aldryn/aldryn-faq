@@ -11,6 +11,9 @@
 var faqPage = require('../pages/page.faq.crud.js');
 
 describe('Aldryn FAQ tests: ', function () {
+    // create random question name
+    var questionName = 'Test question ' + (Math.floor(Math.random() * 10001));
+
     it('logs in to the site with valid username and password', function () {
         // go to the main page
         browser.get(faqPage.site);
@@ -218,6 +221,86 @@ describe('Aldryn FAQ tests: ', function () {
                     }, faqPage.mainElementsWaitTime);
                 });
             }
+        });
+    });
+
+    it('creates a new question', function () {
+        browser.wait(function () {
+            return browser.isElementPresent(faqPage.breadcrumbsLinks.first());
+        }, faqPage.mainElementsWaitTime);
+
+        // click the Home link in breadcrumbs
+        faqPage.breadcrumbsLinks.first().click();
+
+        browser.wait(function () {
+            return browser.isElementPresent(faqPage.addQuestionButton);
+        }, faqPage.mainElementsWaitTime);
+
+        faqPage.addQuestionButton.click();
+
+        browser.wait(function () {
+            return browser.isElementPresent(faqPage.languageTabs.first());
+        }, faqPage.mainElementsWaitTime);
+
+        // switch to English language tab
+        faqPage.languageTabs.first().click().then(function () {
+            browser.wait(function () {
+                return browser.isElementPresent(faqPage.titleInput);
+            }, faqPage.mainElementsWaitTime);
+
+            return faqPage.titleInput.sendKeys(questionName);
+        }).then(function () {
+            // set Category
+            faqPage.categorySelect.click();
+            return faqPage.categorySelect.sendKeys('Test category');
+        }).then(function () {
+            faqPage.categorySelect.click();
+
+            // wait for cke iframe to appear
+            browser.wait(function () {
+                return browser.isElementPresent(faqPage.ckeIframe);
+            }, faqPage.iframeWaitTime);
+
+            // switch to cke iframe
+            browser.switchTo().frame(browser.findElement(
+                By.css('#cke_1_contents iframe')));
+
+            browser.wait(function () {
+                return browser.isElementPresent(faqPage.ckeEditableBlock);
+            }, faqPage.mainElementsWaitTime);
+
+            return faqPage.ckeEditableBlock.sendKeys('Test question');
+        }).then(function () {
+            // switch to default page content
+            browser.switchTo().defaultContent();
+
+            // wait for modal iframe to appear
+            browser.wait(function () {
+                return browser.isElementPresent(faqPage.sideMenuIframe);
+            }, faqPage.iframeWaitTime);
+
+            // switch to sidebar menu iframe
+            browser.switchTo().frame(browser.findElement(By.css(
+                '.cms_sideframe-frame iframe')));
+
+            browser.wait(function () {
+                return browser.isElementPresent(faqPage.saveAndContinueButton);
+            }, faqPage.iframeWaitTime);
+
+            browser.actions().mouseMove(faqPage.saveAndContinueButton)
+                .perform();
+            faqPage.saveButton.click();
+
+            browser.wait(function () {
+                return browser.isElementPresent(faqPage.successNotification);
+            }, faqPage.mainElementsWaitTime);
+
+            // validate success notification
+            expect(faqPage.successNotification.isDisplayed())
+                .toBeTruthy();
+            // validate edit question link
+            expect(faqPage.editQuestionLinks.first().isDisplayed())
+                .toBeTruthy();
         });
     });
 
