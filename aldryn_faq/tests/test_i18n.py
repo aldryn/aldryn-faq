@@ -72,17 +72,24 @@ class TestGetAbsoluteUrls(AldrynFaqTest):
 
     def test_question_urls(self):
         question_1_pk = self.question1.pk
+        question_1_category_pk = self.question1.category_id
+
         question_2_pk = self.question2.pk
+        question_2_category_pk = self.question2.category_id
 
         with override('en'):
             question_1 = self.reload(self.question1)
             question_1_url = question_1.get_absolute_url()
 
             question_2 = self.reload(self.question2)
+
             question_2_url = question_2.get_absolute_url()
 
-        self.assertEquals('/en/faq/1-example/{pk}/'.format(pk=question_1_pk), question_1_url)
-        self.assertEquals('/en/faq/2-beispiel2/{pk}/'.format(pk=question_2_pk), question_2_url)
+        self.assertEquals('/en/faq/{cat_pk}-example/{pk}/'.format(
+            cat_pk=question_1_category_pk, pk=question_1_pk), question_1_url)
+
+        self.assertEquals('/en/faq/{cat_pk}-beispiel2/{pk}/'.format(
+            cat_pk=question_2_category_pk, pk=question_2_pk), question_2_url)
 
         with override('de'):
             question_1 = self.reload(self.question1)
@@ -91,8 +98,11 @@ class TestGetAbsoluteUrls(AldrynFaqTest):
             question_2 = self.reload(self.question2)
             question_2_url = question_2.get_absolute_url()
 
-        self.assertEquals('/de/faq/1-beispiel/{pk}/'.format(pk=question_1_pk), question_1_url)
-        self.assertEquals('/de/faq/2-beispiel2/{pk}/'.format(pk=question_2_pk), question_2_url)
+        self.assertEquals('/de/faq/{cat_pk}-beispiel/{pk}/'.format(
+            cat_pk=question_1_category_pk, pk=question_1_pk), question_1_url)
+
+        self.assertEquals('/de/faq/{cat_pk}-beispiel2/{pk}/'.format(
+            cat_pk=question_2_category_pk, pk=question_2_pk), question_2_url)
 
     def test_question_urls_fallbacks(self):
         question_1 = self.question1

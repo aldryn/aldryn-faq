@@ -2,6 +2,11 @@
 
 from __future__ import unicode_literals
 
+try:
+    from imp import reload
+except ImportError:
+    from importlib import reload
+
 from django.core.urlresolvers import resolve, reverse
 from django.http import Http404
 from django.utils.translation import override

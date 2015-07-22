@@ -48,11 +48,11 @@ class TestCategory(AldrynFaqTest):
 
         self.assertEqual(
             category_1.get_absolute_url("en"),
-            "/en/faq/1-example/"
+            "/en/faq/{pk}-example/".format(pk=category_1.pk)
         )
         self.assertEqual(
             category_1.get_absolute_url("de"),
-            "/de/faq/1-beispiel/"
+            "/de/faq/{pk}-beispiel/".format(pk=category_1.pk)
         )
 
     def test_manager_get_categories(self):
@@ -105,15 +105,24 @@ class TestQuestion(AldrynFaqTest):
         )
 
     def test_get_absolue_url(self):
+        category_pk = self.question1.category_id
         question_1_pk = self.question1.pk
+        question_1_url_en = "/en/faq/{cat_pk}-example/{pk}/".format(
+            cat_pk=category_pk,
+            pk=question_1_pk
+        )
+        question_1_url_de = "/de/faq/{cat_pk}-beispiel/{pk}/".format(
+            cat_pk=category_pk,
+            pk=question_1_pk
+        )
 
         self.assertEqual(
             self.question1.get_absolute_url("en"),
-            "/en/faq/1-example/{pk}/".format(pk=question_1_pk)
+            question_1_url_en
         )
         self.assertEqual(
             self.question1.get_absolute_url("de"),
-            "/de/faq/1-beispiel/{pk}/".format(pk=question_1_pk)
+            question_1_url_de
         )
 
     def test_manager_filter_by_language(self):
