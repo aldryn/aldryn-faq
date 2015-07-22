@@ -1,6 +1,6 @@
 aldryn-apphooks-config
 aldryn-boilerplates
-aldryn-reversion
+aldryn-reversion>=0.0.2,<0.1.0
 aldryn_translation_tools>=0.0.5,<0.0.7
 coverage==3.7.1
 python-coveralls>=2.4.2
