@@ -4,8 +4,6 @@ from __future__ import unicode_literals
 
 from distutils.version import LooseVersion
 
-from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.contrib import admin
 from django.templatetags.static import static
 from django.utils.translation import ugettext as _

@@ -3,9 +3,7 @@
 from __future__ import unicode_literals
 
 from aldryn_faq.menu import FaqCategoryMenu
-from django.utils.translation import (
-    get_language_from_request,
-)
+
 from .test_base import AldrynFaqTest
 
 

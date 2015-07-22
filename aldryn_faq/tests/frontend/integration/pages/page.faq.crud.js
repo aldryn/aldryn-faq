@@ -35,6 +35,21 @@ var faqPage = {
     saveButton: element(by.css('.submit-row [name="_save"]')),
     editPageLink: element(by.css('.col1 [href*="preview/"]')),
 
+    // adding new apphook config
+    breadcrumbsLinks: element.all(by.css('.breadcrumbs a')),
+    faqConfigsLink: element(by.css('.model-faqconfig > th > a')),
+    editConfigsLink: element(by.css('.row1 > th > a')),
+    addConfigsButton: element(by.css('.object-tools .addlink')),
+    namespaceInput: element(by.id('id_namespace')),
+    applicationTitleInput: element(by.id('id_app_title')),
+    successNotification: element(by.css('.messagelist .success')),
+
+    // adding new category
+    categoriesLink: element(by.css('.model-category > th > a')),
+    languageTabs: element.all(by.css('.parler-language-tabs > .empty > a')),
+    nameInput: element(by.id('id_name')),
+    appconfigSelect: element(by.id('id_appconfig')),
+
     cmsLogin: function (credentials) {
         // object can contain username and password, if not set it will
         // fallback to 'admin'

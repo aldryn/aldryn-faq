@@ -108,4 +108,117 @@ describe('Aldryn FAQ tests: ', function () {
         });
     });
 
+    it('creates a new apphook config', function () {
+        // check if the focus is on sidebar ifarme
+        faqPage.editPageLink.isPresent().then(function (present) {
+            if (present === false) {
+                // wait for modal iframe to appear
+                browser.wait(function () {
+                    return browser.isElementPresent(faqPage.sideMenuIframe);
+                }, faqPage.iframeWaitTime);
+
+                // switch to sidebar menu iframe
+                browser.switchTo().frame(browser.findElement(By.css(
+                    '.cms_sideframe-frame iframe')));
+            }
+        }).then(function () {
+            browser.wait(function () {
+                return browser.isElementPresent(faqPage.breadcrumbsLinks.first());
+            }, faqPage.mainElementsWaitTime);
+
+            // click the Home link in breadcrumbs
+            faqPage.breadcrumbsLinks.first().click();
+
+            browser.wait(function () {
+                return browser.isElementPresent(faqPage.faqConfigsLink);
+            }, faqPage.mainElementsWaitTime);
+
+            faqPage.faqConfigsLink.click();
+
+            // check if the apphook config already exists and return the status
+            return faqPage.editConfigsLink.isPresent();
+        }).then(function (present) {
+            if (present === false) {
+                // apphook config is absent - create new apphook config
+                browser.wait(function () {
+                    return browser.isElementPresent(faqPage.addConfigsButton);
+                }, faqPage.mainElementsWaitTime);
+
+                faqPage.addConfigsButton.click();
+
+                browser.wait(function () {
+                    return browser.isElementPresent(faqPage.namespaceInput);
+                }, faqPage.mainElementsWaitTime);
+
+                faqPage.namespaceInput.sendKeys('aldryn_faq')
+                    .then(function () {
+                    return faqPage.applicationTitleInput.sendKeys('Test title');
+                }).then(function () {
+                    faqPage.saveButton.click();
+
+                    browser.wait(function () {
+                        return browser.isElementPresent(faqPage.successNotification);
+                    }, faqPage.mainElementsWaitTime);
+                });
+            }
+        });
+    });
+
+    it('creates a new category', function () {
+        browser.wait(function () {
+            return browser.isElementPresent(faqPage.breadcrumbsLinks.first());
+        }, faqPage.mainElementsWaitTime);
+
+        // click the Home link in breadcrumbs
+        faqPage.breadcrumbsLinks.first().click();
+
+        browser.wait(function () {
+            return browser.isElementPresent(faqPage.categoriesLink);
+        }, faqPage.mainElementsWaitTime);
+
+        faqPage.categoriesLink.click();
+
+        // check if the category already exists and return the status
+        faqPage.editConfigsLink.isPresent().then(function (present) {
+            if (present === false) {
+                // category is absent - create new category
+                browser.wait(function () {
+                    return browser.isElementPresent(faqPage.addConfigsButton);
+                }, faqPage.mainElementsWaitTime);
+
+                faqPage.addConfigsButton.click();
+
+                browser.wait(function () {
+                    return browser.isElementPresent(faqPage.languageTabs.first());
+                }, faqPage.mainElementsWaitTime);
+
+                // switch to English language tab
+                faqPage.languageTabs.first().click().then(function () {
+                    browser.wait(function () {
+                        return browser.isElementPresent(faqPage.nameInput);
+                    }, faqPage.mainElementsWaitTime);
+
+                    return faqPage.nameInput.sendKeys('Test category');
+                }).then(function () {
+                    // wait for Appconfig select to appear
+                    browser.wait(function () {
+                        return browser.isElementPresent(faqPage.appconfigSelect);
+                    }, faqPage.mainElementsWaitTime);
+
+                    // set Appconfig
+                    faqPage.appconfigSelect.click();
+                    return faqPage.appconfigSelect.sendKeys('FAQ / aldryn_faq');
+                }).then(function () {
+                    faqPage.appconfigSelect.click();
+
+                    faqPage.saveButton.click();
+
+                    browser.wait(function () {
+                        return browser.isElementPresent(faqPage.successNotification);
+                    }, faqPage.mainElementsWaitTime);
+                });
+            }
+        });
+    });
+
 });
