@@ -141,7 +141,8 @@ class FaqAnswerView(FaqCategoryMixin, DetailView):
             # /en/faq/category-en/
             # /de/faq/category-de/
             # with this check we make sure that any request to
-            # /en/faq/category-de/10/ gets redirected to /en/faq/category-en/10/
+            # /en/faq/category-de/10/ gets redirected
+            # to /en/faq/category-en/10/
             # where 10 is the question id
             return HttpResponsePermanentRedirect(question_url)
 

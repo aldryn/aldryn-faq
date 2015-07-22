@@ -26,8 +26,9 @@ class FaqCategoryMenu(CMSAttachMenu):
 
         if hasattr(self, 'instance') and self.instance:
             #
-            # If self has a property `instance`, then we're using django CMS
-            # 3.0.12 or later, which supports using CMSAttachMenus on multiple,
+            # If self has a property `instance`
+            # then we're using django CMS 3.0.12 or later,
+            # which supports using CMSAttachMenus on multiple,
             # apphook'ed pages, each with their own apphook configuration. So,
             # here we modify the queryset to reflect this.
             #
@@ -37,15 +38,23 @@ class FaqCategoryMenu(CMSAttachMenu):
                 categories = categories.filter(appconfig=config)
 
         for category in categories:
+            category_name = category.safe_translation_getter(
+                'name',
+                language_code=language
+            )
             node = NavigationNode(
-                category.safe_translation_getter('name', language_code=language),
+                category_name,
                 category.get_absolute_url(language=language),
                 category.pk,
             )
             nodes.append(node)
             for question in category.questions.all():
+                question_title = question.safe_translation_getter(
+                    'title',
+                    language_code=language
+                )
                 node = NavigationNode(
-                    question.safe_translation_getter('title', language_code=language),
+                    question_title,
                     question.get_absolute_url(language=language),
                     # NOTE: We're adding 1 million here to avoid clashing with
                     # the category IDs.

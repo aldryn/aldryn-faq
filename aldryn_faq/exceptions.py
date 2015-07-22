@@ -3,8 +3,8 @@
 
 class OldCategoryFormatUsed(Exception):
     """
-    This exception is raised then we detect that the old url format for categories
-    is being used.
+    This exception is raised then we detect
+    that the old url format for categories is being used.
     Once raised, this exception is handled by the view to redirect to the new
     url format.
     """

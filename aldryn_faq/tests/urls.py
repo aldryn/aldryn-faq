@@ -12,7 +12,8 @@ from cms.utils.conf import get_cms_setting
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     url(
         r'^media/(?P<path>.*)$', 'django.views.static.serve', {
             'document_root': settings.MEDIA_ROOT, 'show_indexes': True

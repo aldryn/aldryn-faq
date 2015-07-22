@@ -11,38 +11,48 @@ from .test_base import AldrynFaqTest
 class TestGetAbsoluteUrls(AldrynFaqTest):
 
     def test_category_urls(self):
+        category_1_pk = self.category1.pk
+        category_2_pk = self.category2.pk
 
         with override('en'):
             category_1_url = self.category1.get_absolute_url()
             category_2_url = self.category2.get_absolute_url()
 
-        self.assertEquals('/en/faq/1-example/', category_1_url)
+        self.assertEquals('/en/faq/{cat}-example/'.format(
+            cat=category_1_pk), category_1_url)
         # category2 doesn't exist EN, so this should fallback to DE
-        self.assertEquals('/en/faq/2-beispiel2/', category_2_url)
+        self.assertEquals('/en/faq/{cat}-beispiel2/'.format(
+            cat=category_2_pk), category_2_url)
 
         with override('de'):
             category_1_url = self.category1.get_absolute_url()
             category_2_url = self.category2.get_absolute_url()
 
-        self.assertEquals('/de/faq/1-beispiel/', category_1_url)
-        self.assertEquals('/de/faq/2-beispiel2/', category_2_url)
+        self.assertEquals('/de/faq/{cat}-beispiel/'.format(
+            cat=category_1_pk), category_1_url)
+        self.assertEquals('/de/faq/{cat}-beispiel2/'.format(
+            cat=category_2_pk), category_2_url)
 
         # test that we can override the context with the language parameter
         with override('en'):
             category_1_url = self.category1.get_absolute_url(language="de")
             category_2_url = self.category2.get_absolute_url(language="de")
 
-        self.assertEquals('/de/faq/1-beispiel/', category_1_url)
-        self.assertEquals('/de/faq/2-beispiel2/', category_2_url)
+        self.assertEquals('/de/faq/{cat}-beispiel/'.format(
+            cat=category_1_pk), category_1_url)
+        self.assertEquals('/de/faq/{cat}-beispiel2/'.format(
+            cat=category_2_pk), category_2_url)
 
         # For completeness, do the other way too
         with override('de'):
             category_1_url = self.category1.get_absolute_url(language="en")
             category_2_url = self.category2.get_absolute_url(language="en")
 
-        self.assertEquals('/en/faq/1-example/', category_1_url)
+        self.assertEquals('/en/faq/{cat}-example/'.format(
+            cat=category_1_pk), category_1_url)
         # category2 doesn't exist EN, so this should fallback to DE
-        self.assertEquals('/en/faq/2-beispiel2/', category_2_url)
+        self.assertEquals('/en/faq/{cat}-beispiel2/'.format(
+            cat=category_2_pk), category_2_url)
 
     def test_category_urls_fallbacks(self):
         category_1 = self.category1
@@ -53,7 +63,7 @@ class TestGetAbsoluteUrls(AldrynFaqTest):
         # this should fallback to the german category
         self.assertEqual(
             category_2.get_absolute_url("en"),
-            "/en/faq/2-beispiel2/"
+            "/en/faq/{cat}-beispiel2/".format(cat=category_2.pk)
         )
 
         # category 1 is not translated in french
@@ -61,7 +71,7 @@ class TestGetAbsoluteUrls(AldrynFaqTest):
         # this should fallback to the english category
         self.assertEqual(
             category_1.get_absolute_url("fr"),
-            "/fr/faq/1-example/"
+            "/fr/faq/{cat}-example/".format(cat=category_1.pk)
         )
 
         with self.assertRaises(NoReverseMatch):
@@ -106,17 +116,20 @@ class TestGetAbsoluteUrls(AldrynFaqTest):
 
     def test_question_urls_fallbacks(self):
         question_1 = self.question1
-        question_1_pk = self.question1.pk
+        question_1_pk = question_1.pk
+        question_1_category_pk = question_1.category_id
 
         question_2 = self.question2
-        question_2_pk = self.question2.pk
+        question_2_pk = question_2.pk
+        question_2_category_pk = question_2.category_id
 
         # question 2 is not translated in english
         # so given our test fallback config
         # this should fallback to the german category
         self.assertEqual(
             question_2.get_absolute_url("en"),
-            "/en/faq/2-beispiel2/{pk}/".format(pk=question_2_pk)
+            "/en/faq/{cat_pk}-beispiel2/{pk}/".format(
+                cat_pk=question_2_category_pk, pk=question_2_pk)
         )
 
         # question 1 is not translated in french
@@ -124,7 +137,8 @@ class TestGetAbsoluteUrls(AldrynFaqTest):
         # this should fallback to the english category
         self.assertEqual(
             question_1.get_absolute_url("fr"),
-            "/fr/faq/1-example/{pk}/".format(pk=question_1_pk)
+            "/fr/faq/{cat_pk}-example/{pk}/".format(
+                cat_pk=question_1_category_pk, pk=question_1_pk)
         )
 
         with self.assertRaises(NoReverseMatch):
