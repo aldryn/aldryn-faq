@@ -12,7 +12,7 @@
         {% endif %}
         <div class="list-group">
             {% for question in qgroup.list %}
-                <a href="{% url 'aldryn_faq:faq-answer' question.category.slug question.pk %}" class="list-group-item">
+                <a href="{{ question.get_absolute_url }}" class="list-group-item">
                     {% render_model question "title" %}
                     {% if not list %}<span class="badge">{{ qgroup.grouper }}</span>{% endif %}
                 </a>
@@ -31,6 +31,5 @@
 </div>
 
 {% if list and title %}
-    {% url 'aldryn_faq:faq-category' object.category.slug as category_url %}
-    {% include "aldryn_faq/includes/pager.html" with title=_("Back to Category") slug=category_url %}
+    {% include "aldryn_faq/includes/pager.html" with title=_("Back to Category") slug=object.category.get_absolute_ur %}
 {% endif %}
