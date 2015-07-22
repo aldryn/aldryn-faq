@@ -50,6 +50,15 @@ var faqPage = {
     nameInput: element(by.id('id_name')),
     appconfigSelect: element(by.id('id_appconfig')),
 
+    // adding new question
+    addQuestionButton: element(by.css('.model-question .addlink')),
+    categorySelect: element(by.id('id_category')),
+    ckeIframe: element(by.css('#cke_1_contents iframe')),
+    ckeEditableBlock: element(by.css('.cke_editable')),
+    saveAndContinueButton: element(by.css('.submit-row [name="_continue"]')),
+    editQuestionLinks: element.all(by.css(
+        '.results [href*="/aldryn_faq/question/"]')),
+
     cmsLogin: function (credentials) {
         // object can contain username and password, if not set it will
         // fallback to 'admin'
