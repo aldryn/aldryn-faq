@@ -44,6 +44,12 @@ var faqPage = {
     applicationTitleInput: element(by.id('id_app_title')),
     successNotification: element(by.css('.messagelist .success')),
 
+    // adding new category
+    categoriesLink: element(by.css('.model-category > th > a')),
+    languageTabs: element.all(by.css('.parler-language-tabs > .empty > a')),
+    nameInput: element(by.id('id_name')),
+    appconfigSelect: element(by.id('id_appconfig')),
+
     cmsLogin: function (credentials) {
         // object can contain username and password, if not set it will
         // fallback to 'admin'
