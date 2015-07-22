@@ -1,7 +1,5 @@
 {
-    "name": "aldryn-faq",
     "package-name": "aldryn-faq",
-    "description": "Simple faq application.",
     "installed-apps": [
         "adminsortable2",
         "aldryn_faq",
@@ -9,13 +7,5 @@
         "djangocms_text_ckeditor",
         "parler",
         "sortedm2m"
-    ],
-    "author": {
-        "name": "Divio AG",
-        "url": "https://www.divio.ch"
-    },
-    "license": {
-        "name": "BSD",
-        "text": "!literal-include LICENSE.txt"
-    }
+    ]
 }
