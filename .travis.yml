@@ -28,11 +28,16 @@ install:
   - pip install tox
   - pip install coveralls
 
-before-script:
+before_script:
+  - npm install -g gulp
   - npm install -g codeclimate-test-reporter
+  - npm install
 
 script:
   - tox -e $TOXENV
+
+after_script:
+  - codeclimate < tests/coverage/**/lcov.info
 
 after_success: coveralls
 
