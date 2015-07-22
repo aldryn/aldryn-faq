@@ -13,13 +13,16 @@ REQUIREMENTS = [
     'django-parler>=1.4',
     'django-reversion>=1.8.2,<1.9',
     'django-sortedm2m',
+    'django-parler',
 
-    # KEEP UNTIL THERE IS A RELEASE OF DJANGO-PARLER LATER THAN 1.4.0
-    'https://github.com/edoburu/django-parler/archive/9d25bc60b24a16bc4781d0305c41c5acff0b00a6.zip',
-
-    # THIS IS HERE TO SUPPORT EXISTING MIGRATIONS. WE CAN REMOVE IT ONLY ONCE
-    # WE DROP SUPPORT FOR SOUTH MIGRATIONS.
+    # THIS IS HERE TO SUPPORT EXISTING MIGRATIONS AND CAN BE REMOVED ONLY ONCE
+    # WE NO LONGER SUPPORT SOUTH MIGRATIONS.
     'django-admin-sortable',
+]
+
+DEPENDENCY_LINKS = [
+    # THIS CAN BE REMOVED ONCE THERE IS A RELEASE > 1.4.0
+    'git+https://github.com/edoburu/django-parler@9d25bc60b24a16bc4781d0305c41c5acff0b00a6#egg=django-parler',
 ]
 
 CLASSIFIERS = [
@@ -52,6 +55,7 @@ setup(
     license='LICENSE.txt',
     platforms=['OS Independent'],
     install_requires=REQUIREMENTS,
+    dependency_links=DEPENDENCY_LINKS,
     classifiers=CLASSIFIERS,
     long_description=open('README.rst').read(),
     include_package_data=True,
