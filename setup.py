@@ -22,7 +22,7 @@ REQUIREMENTS = [
 
 DEPENDENCY_LINKS = [
     # THIS CAN BE REMOVED ONCE THERE IS A RELEASE > 1.4.0
-    'git+https://github.com/edoburu/django-parler@9d25bc60b24a16bc4781d0305c41c5acff0b00a6#egg=django-parler',
+    'git+https://github.com/edoburu/django-parler@9d25bc60b24a16bc4781d0305c41c5acff0b00a6#egg=django-parler',  # NOQA
 ]
 
 CLASSIFIERS = [
