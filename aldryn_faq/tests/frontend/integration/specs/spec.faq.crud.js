@@ -46,7 +46,7 @@ describe('Aldryn FAQ tests: ', function () {
                 return browser.isElementPresent(faqPage.userMenuDropdown);
             }, faqPage.mainElementsWaitTime);
 
-            faqPage.administrationOptions.first().click();
+            return faqPage.administrationOptions.first().click();
         }).then(function () {
             // wait for modal iframe to appear
             browser.wait(function () {
@@ -62,6 +62,11 @@ describe('Aldryn FAQ tests: ', function () {
             }, faqPage.mainElementsWaitTime);
 
             faqPage.pagesLink.click();
+
+            // wait for iframe side menu to reload
+            browser.wait(function () {
+                return browser.isElementPresent(faqPage.addConfigsButton);
+            }, faqPage.mainElementsWaitTime);
 
             // check if the page already exists and return the status
             return faqPage.addPageLink.isPresent();
@@ -181,6 +186,11 @@ describe('Aldryn FAQ tests: ', function () {
 
         faqPage.categoriesLink.click();
 
+        // wait for iframe side menu to reload
+        browser.wait(function () {
+            return browser.isElementPresent(faqPage.addConfigsButton);
+        }, faqPage.mainElementsWaitTime);
+
         // check if the category already exists and return the status
         faqPage.editConfigsLink.isPresent().then(function (present) {
             if (present === false) {
@@ -254,8 +264,8 @@ describe('Aldryn FAQ tests: ', function () {
             faqPage.categorySelect.click();
             return faqPage.categorySelect.sendKeys('Test category');
         }).then(function () {
-            faqPage.categorySelect.click();
-
+            return faqPage.categorySelect.click();
+        }).then(function () {
             // wait for cke iframe to appear
             browser.wait(function () {
                 return browser.isElementPresent(faqPage.ckeIframe);
@@ -296,11 +306,83 @@ describe('Aldryn FAQ tests: ', function () {
             }, faqPage.mainElementsWaitTime);
 
             // validate success notification
-            expect(faqPage.successNotification.isDisplayed())
-                .toBeTruthy();
+            expect(faqPage.successNotification.isDisplayed()).toBeTruthy();
             // validate edit question link
             expect(faqPage.editQuestionLinks.first().isDisplayed())
                 .toBeTruthy();
+        });
+    });
+
+    it('adds a new faq block on the page', function () {
+        // switch to default page content
+        browser.switchTo().defaultContent();
+
+        // add faq to the page only if it was not added before
+        faqPage.aldrynFAQBlock.isPresent().then(function (present) {
+            if (present === false) {
+                // click the Page link in the top menu
+                return faqPage.userMenus.get(1).click().then(function () {
+                    // wait for top menu dropdown options to appear
+                    browser.wait(function () {
+                        return browser.isElementPresent(faqPage.userMenuDropdown);
+                    }, faqPage.mainElementsWaitTime);
+
+                    faqPage.advancedSettingsOption.click();
+
+                    // wait for modal iframe to appear
+                    browser.wait(function () {
+                        return browser.isElementPresent(faqPage.modalIframe);
+                    }, faqPage.iframeWaitTime);
+
+                    // switch to modal iframe
+                    browser.switchTo().frame(browser.findElement(By.css(
+                        '.cms_modal-frame iframe')));
+
+                    // wait for Application select to appear
+                    browser.wait(function () {
+                        return browser.isElementPresent(faqPage.applicationSelect);
+                    }, faqPage.mainElementsWaitTime);
+
+                    // set Application
+                    faqPage.applicationSelect.click();
+                    faqPage.applicationSelect.sendKeys('FAQ')
+                        .then(function () {
+                        faqPage.applicationSelect.click();
+                    });
+
+                    // switch to default page content
+                    browser.switchTo().defaultContent();
+
+                    browser.wait(function () {
+                        return browser.isElementPresent(faqPage.saveModalButton);
+                    }, faqPage.mainElementsWaitTime);
+
+                    browser.actions().mouseMove(faqPage.saveModalButton)
+                        .perform();
+                    return faqPage.saveModalButton.click();
+                });
+            }
+        }).then(function () {
+            // wait for aldryn-faq block to appear
+            browser.wait(function () {
+                return browser.isElementPresent(faqPage.aldrynFAQBlock);
+            }, faqPage.mainElementsWaitTime);
+
+            faqPage.categoryLink.click();
+
+            // wait for question link to appear
+            browser.wait(function () {
+                return browser.isElementPresent(faqPage.questionLink);
+            }, faqPage.mainElementsWaitTime);
+
+            faqPage.questionLink.click();
+
+            browser.wait(function () {
+                return browser.isElementPresent(faqPage.questionTitle);
+            }, faqPage.mainElementsWaitTime);
+
+            // validate question title
+            expect(faqPage.questionTitle.isDisplayed()).toBeTruthy();
         });
     });
 

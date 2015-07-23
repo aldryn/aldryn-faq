@@ -38,7 +38,7 @@ var faqPage = {
     // adding new apphook config
     breadcrumbsLinks: element.all(by.css('.breadcrumbs a')),
     faqConfigsLink: element(by.css('.model-faqconfig > th > a')),
-    editConfigsLink: element(by.css('.row1 > th > a')),
+    editConfigsLink: element(by.css('.row1 th > a')),
     addConfigsButton: element(by.css('.object-tools .addlink')),
     namespaceInput: element(by.id('id_namespace')),
     applicationTitleInput: element(by.id('id_app_title')),
@@ -58,6 +58,17 @@ var faqPage = {
     saveAndContinueButton: element(by.css('.submit-row [name="_continue"]')),
     editQuestionLinks: element.all(by.css(
         '.results [href*="/aldryn_faq/question/"]')),
+
+    // adding faq block to the page
+    aldrynFAQBlock: element(by.css('.aldryn-faq-categories')),
+    advancedSettingsOption: element(by.css(
+        '.cms_toolbar-item-navigation [href*="advanced-settings"]')),
+    modalIframe: element(by.css('.cms_modal-frame iframe')),
+    applicationSelect: element(by.id('application_urls')),
+    saveModalButton: element(by.css('.cms_modal-buttons .cms_btn-action')),
+    categoryLink: element(by.css('.aldryn-faq-categories a')),
+    questionLink: element(by.css('.aldryn-faq .list-group a')),
+    questionTitle: element(by.css('.aldryn-faq-detail h2 > div')),
 
     cmsLogin: function (credentials) {
         // object can contain username and password, if not set it will
