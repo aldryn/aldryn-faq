@@ -57,7 +57,7 @@ var faqPage = {
     ckeEditableBlock: element(by.css('.cke_editable')),
     saveAndContinueButton: element(by.css('.submit-row [name="_continue"]')),
     editQuestionLinks: element.all(by.css(
-        '.results .field-__str__ > [href*="/aldryn_faq/question/"]')),
+        '.results th > [href*="/aldryn_faq/question/"]')),
 
     // adding faq block to the page
     aldrynFAQBlock: element(by.css('.aldryn-faq-categories')),
