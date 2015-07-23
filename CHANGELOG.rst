@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.0.3 (2015-07-22)
+------------------
+
+* Unrestrict Aldryn Translation Tools version.
+
 1.0.2 (2015-07-22)
 ------------------
 
