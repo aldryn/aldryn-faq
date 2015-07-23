@@ -386,4 +386,71 @@ describe('Aldryn FAQ tests: ', function () {
         });
     });
 
+    it('deletes question', function () {
+        // wait for modal iframe to appear
+        browser.wait(function () {
+            return browser.isElementPresent(faqPage.sideMenuIframe);
+        }, faqPage.iframeWaitTime);
+
+        // switch to sidebar menu iframe
+        browser.switchTo()
+            .frame(browser.findElement(By.css('.cms_sideframe-frame iframe')));
+
+        // wait for edit question link to appear
+        browser.wait(function () {
+            return browser.isElementPresent(faqPage.editQuestionLinks.first());
+        }, faqPage.mainElementsWaitTime);
+
+        // validate edit question links texts to delete proper question
+        faqPage.editQuestionLinks.first().getText().then(function (text) {
+            if (text === questionName) {
+                return faqPage.editQuestionLinks.first().click();
+            } else {
+                faqPage.editQuestionLinks.get(1).getText()
+                    .then(function (text) {
+                    if (text === questionName) {
+                        return faqPage.editQuestionLinks.get(1).click();
+                    } else {
+                        faqPage.editQuestionLinks.get(2).getText()
+                            .then(function (text) {
+                            if (text === questionName) {
+                                return faqPage.editQuestionLinks.get(2).click();
+                            }
+                        });
+                    }
+                });
+            }
+        }).then(function () {
+            // wait for delete button to appear
+            browser.wait(function () {
+                return browser.isElementPresent(faqPage.deleteButton);
+            }, faqPage.mainElementsWaitTime);
+
+            browser.actions().mouseMove(faqPage.saveAndContinueButton)
+                .perform();
+            return faqPage.deleteButton.click();
+        }).then(function () {
+            // wait for confirmation button to appear
+            browser.wait(function () {
+                return browser.isElementPresent(faqPage.sidebarConfirmationButton);
+            }, faqPage.mainElementsWaitTime);
+
+            faqPage.sidebarConfirmationButton.click();
+
+            browser.wait(function () {
+                return browser.isElementPresent(faqPage.successNotification);
+            }, faqPage.mainElementsWaitTime);
+
+            // validate success notification
+            expect(faqPage.successNotification.isDisplayed())
+                .toBeTruthy();
+
+            // switch to default page content
+            browser.switchTo().defaultContent();
+
+            // refresh the page to see changes
+            browser.refresh();
+        });
+    });
+
 });

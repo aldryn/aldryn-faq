@@ -57,7 +57,7 @@ var faqPage = {
     ckeEditableBlock: element(by.css('.cke_editable')),
     saveAndContinueButton: element(by.css('.submit-row [name="_continue"]')),
     editQuestionLinks: element.all(by.css(
-        '.results [href*="/aldryn_faq/question/"]')),
+        '.results .field-__str__ > [href*="/aldryn_faq/question/"]')),
 
     // adding faq block to the page
     aldrynFAQBlock: element(by.css('.aldryn-faq-categories')),
@@ -69,6 +69,10 @@ var faqPage = {
     categoryLink: element(by.css('.aldryn-faq-categories a')),
     questionLink: element(by.css('.aldryn-faq .list-group a')),
     questionTitle: element(by.css('.aldryn-faq-detail h2 > div')),
+
+    // deleting question
+    deleteButton: element(by.css('.deletelink-box a')),
+    sidebarConfirmationButton: element(by.css('#content [type="submit"]')),
 
     cmsLogin: function (credentials) {
         // object can contain username and password, if not set it will
