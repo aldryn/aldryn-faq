@@ -4,8 +4,6 @@ from __future__ import unicode_literals
 
 from distutils.version import LooseVersion
 
-from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.contrib import admin
 from django.templatetags.static import static
 from django.utils.translation import ugettext as _
@@ -47,15 +45,6 @@ class CategoryAdmin(AllTranslationsMixin, TranslatableAdmin):
         # we no longer support Django 1.8 or lower.
         js = [static('admin/js/%s' % url) for url in (
             'urlify.js', 'prepopulate.min.js')]
-
-        # Workaround for another and independent Django bug: #9357
-        # https://code.djangoproject.com/ticket/9357
-        # Because we're using the above workaround, we're essentially masking
-        # the AllTranslationsMixin.Media class' css setting. We explicitly
-        # declare it again here. There doesn't appear to be a fix for this
-        # merged in any version yet, but, this workaround won't be necessary
-        # once we remove the above workaround anyway.
-        css = AllTranslationsMixin.Media.css
 
     def get_prepopulated_fields(self, request, obj=None):
         return {'slug': ['name']}

@@ -59,6 +59,32 @@ class AldrynFaqTestMixin(TestUtilityMixin, object):
         },
     }
 
+    enabled_parler_fallback_settings = {
+        'PARLER_LANGUAGES': {
+            1: (
+                {'code': 'de', 'fallbacks': ['en', ]},
+                {'code': 'en', 'fallbacks': ['de', ]},
+                {'code': 'fr', 'fallbacks': ['en', ]},
+            ),
+            'default': {
+                'hide_untranslated': False,
+            }
+        }
+    }
+
+    disabled_parler_fallback_settings = {
+        'PARLER_LANGUAGES': {
+            1: (
+                {'code': 'de'},
+                {'code': 'en'},
+                {'code': 'fr'},
+            ),
+            'default': {
+                'hide_untranslated': False,
+            }
+        }
+    }
+
     @staticmethod
     def reload(obj, language=None):
         """Simple convenience method for re-fetching an object from the ORM,
@@ -90,12 +116,18 @@ class AldrynFaqTestMixin(TestUtilityMixin, object):
             self.question1.save()
 
         # Make a DE translation of the category
-        self.mktranslation(self.category1, "de",
-            **self.data["category1"]["de"])
+        self.mktranslation(
+            self.category1,
+            "de",
+            **self.data["category1"]["de"]
+        )
 
         # Make a DE translation of the question
-        self.mktranslation(self.question1, "de",
-            **self.data["question1"]["de"])
+        self.mktranslation(
+            self.question1,
+            "de",
+            **self.data["question1"]["de"]
+        )
 
         with override("de"):
             # Make a DE-only Category
@@ -129,13 +161,21 @@ class CMSRequestBasedTest(TestUtilityMixin, TransactionTestCase):
         self.template = get_cms_setting('TEMPLATES')[0][0]
         self.language = settings.LANGUAGES[0][0]
         self.root_page = api.create_page(
-            'root page', self.template, self.language, published=True)
+            'root page',
+            self.template,
+            self.language,
+            published=True
+        )
         self.app_config = FaqConfig.objects.create(namespace='aldryn_faq')
-        self.page = api.create_page('faq', self.template, self.language,
+        self.page = api.create_page(
+            'faq',
+            self.template,
+            self.language,
             published=True,
             parent=self.root_page,
             apphook='FaqApp',
-            apphook_namespace=self.app_config.namespace)
+            apphook_namespace=self.app_config.namespace
+        )
         self.placeholder = self.page.placeholders.all()[0]
         self.request = get_request('en')
 

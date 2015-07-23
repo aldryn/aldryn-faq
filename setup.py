@@ -3,18 +3,27 @@ from setuptools import setup, find_packages
 from aldryn_faq import __version__
 
 REQUIREMENTS = [
-    'Django>=1.6,<1.8',
     'aldryn-apphooks-config>=0.2.4',
-    'django-reversion>=1.8.2,<1.9',
-    'aldryn-reversion',
+    'aldryn-reversion>=0.0.2,<0.1.0',
     'aldryn-search',
-    'aldryn-translation-tools==0.0.6',
-    'django-admin-sortable',  # DO NOT REMOVE THIS
-    'django-admin-sortable2>=0.5.0',
+    'aldryn-translation-tools>=0.0.7',
+    'django>=1.6,<1.8',
+    'django-admin-sortable2>=0.5.2',
+    'django-cms>=3.0.12,<3.2',
     'django-parler>=1.4',
+    'django-reversion>=1.8.2,<1.9',
     'django-sortedm2m',
     'django-taggit',
-    'django-cms>=3.0.12',
+    'django-parler',
+
+    # THIS IS HERE TO SUPPORT EXISTING MIGRATIONS AND CAN BE REMOVED ONLY ONCE
+    # WE NO LONGER SUPPORT SOUTH MIGRATIONS.
+    'django-admin-sortable',
+]
+
+DEPENDENCY_LINKS = [
+    # THIS CAN BE REMOVED ONCE THERE IS A RELEASE > 1.4.0
+    'git+https://github.com/edoburu/django-parler@9d25bc60b24a16bc4781d0305c41c5acff0b00a6#egg=django-parler',  # NOQA
 ]
 
 CLASSIFIERS = [
@@ -47,6 +56,7 @@ setup(
     license='LICENSE.txt',
     platforms=['OS Independent'],
     install_requires=REQUIREMENTS,
+    dependency_links=DEPENDENCY_LINKS,
     classifiers=CLASSIFIERS,
     long_description=open('README.rst').read(),
     include_package_data=True,

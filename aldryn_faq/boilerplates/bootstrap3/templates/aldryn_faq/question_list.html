@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block faq_footer %}
-    {% url 'aldryn_faq:faq-category-list' as category_url %}
-    {% include "aldryn_faq/includes/pager.html" with title=_("Back to Overview") slug=category_url %}
+    {% url 'aldryn_faq:faq-category-list' as category_list_url %}
+    {% include "aldryn_faq/includes/pager.html" with title=_("Back to Overview") slug=category_list_url %}
     {% render_placeholder view.config.placeholder_faq_list_bottom %}
 {% endblock %}

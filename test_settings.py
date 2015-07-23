@@ -50,15 +50,16 @@ HELPER_SETTINGS = {
     ],
     'STATICFILES_FINDERS': [
         'django.contrib.staticfiles.finders.FileSystemFinder',
-        # important! place right before django.contrib.staticfiles.finders.AppDirectoriesFinder
+        # important! place right before django.contrib.staticfiles.finders.AppDirectoriesFinder  # NOQA
         'aldryn_boilerplates.staticfile_finders.AppDirectoriesFinder',
         'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     ],
     'TEMPLATE_LOADERS': [
         'django.template.loaders.filesystem.Loader',
-        # important! place right before django.template.loaders.app_directories.Loader
+        # important! place right before django.template.loaders.app_directories.Loader  # NOQA
         'aldryn_boilerplates.template_loaders.AppDirectoriesLoader',
         'django.template.loaders.app_directories.Loader',
+        'django.template.loaders.eggs.Loader',
     ],
     'ALDRYN_BOILERPLATE_NAME': 'bootstrap3',
     'HAYSTACK_CONNECTIONS': HAYSTACK_CONNECTIONS,
@@ -72,6 +73,7 @@ HELPER_SETTINGS = {
             'hide_untranslated': False,
         }
     },
+    'PARLER_ENABLE_CACHING': False,
     'SITE_ID': 1,
     'CMS_LANGUAGES': {
         1: [
@@ -87,7 +89,7 @@ HELPER_SETTINGS = {
             },
             {
                 'code': 'fr',
-                'name': 'Français',
+                'name': u'Française',
                 'fallbacks': ['en', ]
             },
         ],

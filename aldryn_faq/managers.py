@@ -22,6 +22,6 @@ class CategoryManager(TranslatableManager):
             language_code=language).prefetch_related('questions')
 
         for category in categories:
-            category.count = (category.questions
-            .filter_by_language(language).count())
+            questions_by_language = category.questions.filter_by_language
+            category.count = questions_by_language(language).count()
         return sorted(categories, key=lambda x: -x.count)

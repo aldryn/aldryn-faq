@@ -4,7 +4,7 @@
 {% block faq_content %}
     <article class="aldryn aldryn-faq aldryn-faq-detail">
         {% block faq_detail_categories %}
-            <a href="{% url 'aldryn_faq:faq-category' object.category.slug %}" class="label label-primary">
+            <a href="{{ category_url }}" class="label label-primary">
                 {% render_model object "category" "category" %}
             </a>
         {% endblock faq_detail_categories %}
@@ -38,7 +38,6 @@
 {% endblock %}
 
 {% block faq_footer %}
-    {% url 'aldryn_faq:faq-category' object.category.slug as category_url %}
     {% include "aldryn_faq/includes/pager.html" with title=_("Back to Category") slug=category_url %}
     {% static_placeholder "faq_detail_bottom" %}
 {% endblock %}
