@@ -126,7 +126,7 @@ describe('Aldryn FAQ tests: ', function () {
                 }, faqPage.iframeWaitTime);
 
                 // switch to sidebar menu iframe
-                browser.switchTo().frame(browser.findElement(By.css(
+                return browser.switchTo().frame(browser.findElement(By.css(
                     '.cms_sideframe-frame iframe')));
             }
         }).then(function () {

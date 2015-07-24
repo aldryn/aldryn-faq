@@ -4,6 +4,8 @@ Aldryn FAQ
 
 |PyPI Version| |Build Status| |Coverage Status| |codeclimate| |requires_io|
 
+|Browser Matrix|
+
 Aldryn FAQ is an `Aldryn <http://aldryn.com>`_-compatible simple Frequently
 Asked Questions (FAQ) application for `django CMS <http://django-cms.org>`_.
 
@@ -58,3 +60,5 @@ review our guidelines for `Aldryn addons`_.
 .. |requires_io| image:: https://requires.io/github/aldryn/aldryn-faq/requirements.svg?branch=master
    :target: https://requires.io/github/aldryn/aldryn-faq/requirements/?branch=master
    :alt: Requirements Status
+.. |Browser Matrix| image:: https://saucelabs.com/browser-matrix/aldryn-faq.svg
+   :target: https://saucelabs.com/u/aldryn-faq
