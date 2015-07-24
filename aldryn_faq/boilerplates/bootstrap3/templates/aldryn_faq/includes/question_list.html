@@ -7,20 +7,28 @@
     {% for qgroup in qgroups %}
         {% if list %}
             <div class="panel-heading">
-                <h3 class="panel-title">
-                    {{ qgroup.grouper }}
-                </h3>
+                <h3 class="panel-title">{{ qgroup.grouper }}</h3>
             </div>
         {% endif %}
         <div class="list-group">
             {% for question in qgroup.list %}
-                <a href="{{ question.get_absolute_url }}" class="list-group-item">
-                    {% render_model question "title" %}
-                    {% if not list %}<span class="badge">{{ qgroup.grouper }}</span>{% endif %}
-                    {% for tag in question.tags.all %}
-                        <span class="badge badge-default pull-right">{{ tag }}</span>
-                    {% endfor %}
-                </a>
+                {% if view.config.app_data.config.show_description %}
+                    <div class="list-group-item">
+                        <a href="{{ question.get_absolute_url }}">
+                            {% render_model question "title" %}
+                            {% if not list %}<span class="badge">{{ qgroup.grouper }}</span>{% endif %}
+                        </a>
+                        {% render_model question "answer_text" %}
+                    </div>
+                {% else %}
+                    <a href="{{ question.get_absolute_url }}" class="list-group-item">
+                        {% render_model question "title" %}
+                        {% if not list %}<span class="badge">{{ qgroup.grouper }}</span>{% endif %}
+                        {% for tag in question.tags.all %}
+                            <span class="badge badge-default pull-right">{{ tag }}</span>
+                        {% endfor %}
+                    </a>
+                {% endif %}
             {% endfor %}
         </div>
     {% empty %}
