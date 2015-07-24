@@ -92,6 +92,9 @@ class FaqConfigAdmin(AllTranslationsMixin,
                      BaseAppHookConfig,
                      TranslatableAdmin):
     def get_config_fields(self):
-        return ('app_title', )
+        return (
+            'app_title',
+            'config.show_description',
+        )
 
 admin.site.register(FaqConfig, FaqConfigAdmin)

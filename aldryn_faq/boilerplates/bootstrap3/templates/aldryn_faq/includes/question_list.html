@@ -12,10 +12,20 @@
         {% endif %}
         <div class="list-group">
             {% for question in qgroup.list %}
-                <a href="{{ question.get_absolute_url }}" class="list-group-item">
-                    {% render_model question "title" %}
-                    {% if not list %}<span class="badge">{{ qgroup.grouper }}</span>{% endif %}
-                </a>
+                {% if view.config.app_data.config.show_description %}
+                    <div class="list-group-item">
+                        <a href="{{ question.get_absolute_url }}">
+                            {% render_model question "title" %}
+                            {% if not list %}<span class="badge">{{ qgroup.grouper }}</span>{% endif %}
+                        </a>
+                        {% render_model question "answer_text" %}
+                    </div>
+                {% else %}
+                    <a href="{{ question.get_absolute_url }}" class="list-group-item">
+                        {% render_model question "title" %}
+                        {% if not list %}<span class="badge">{{ qgroup.grouper }}</span>{% endif %}
+                    </a>
+                {% endif %}
             {% endfor %}
         </div>
     {% empty %}

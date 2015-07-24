@@ -3,9 +3,16 @@
 
 <div class="list-group">
     {% for question in object_list %}
-        <a href="{{ question.get_absolute_url }}" class="list-group-item">
-            {% render_model question "title" %}
-        </a>
+        {% if view.config.app_data.config.show_description %}
+            <div class="list-group-item">
+                <a href="{{ question.get_absolute_url }}">{% render_model question "title" %}</a>
+                {% render_model question "answer_text" %}
+            </div>
+        {% else %}
+            <a href="{{ question.get_absolute_url }}" class="list-group-item">
+                {% render_model question "title" %}
+            </a>
+        {% endif %}
     {% empty %}
         <p class="list-group-item">{% trans "No entry found." %}</p>
     {% endfor %}
