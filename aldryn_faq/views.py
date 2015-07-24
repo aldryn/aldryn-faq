@@ -84,7 +84,7 @@ class FaqCategoryMixin(FaqMixin):
 
 
 class FaqByCategoryListView(FaqMixin, ListView):
-    template_name = 'aldryn_faq/category_list.html'
+    template_name = 'aldryn_faq/landing.html'
     model = Category
 
     def get_queryset(self):
@@ -114,6 +114,11 @@ class FaqByCategoryView(FaqCategoryMixin, ListView):
         set_language_changer(self.request, self.category.get_absolute_url)
         response = super(FaqByCategoryView, self).get(request, *args, **kwargs)
         return response
+
+    def get_context_data(self, **kwargs):
+        kwargs['category_list'] = self.get_category_queryset()
+        kwargs['active_category'] = self.get_category_or_404()
+        return super(FaqByCategoryView, self).get_context_data(**kwargs)
 
     def get_queryset(self):
         queryset = super(FaqByCategoryView, self).get_queryset()

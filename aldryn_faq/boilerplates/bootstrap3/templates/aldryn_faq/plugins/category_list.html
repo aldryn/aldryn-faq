@@ -3,7 +3,8 @@
 <div class="aldryn aldryn-faq aldryn-faq-categories">
     <div class="list-group">
         {% for category in categories %}
-            <a href="{{ category.get_absolute_url }}" class="list-group-item">
+            <a href="{{ category.get_absolute_url }}" class="list-group-item
+                {% if category.pk == active_category.pk %} active{% endif %}">
                 {{ category }}
                 <span class="badge">{{ category.count }}</span>
             </a>
