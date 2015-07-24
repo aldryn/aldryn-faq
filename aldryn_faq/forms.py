@@ -11,6 +11,7 @@ from sortedm2m.forms import SortedMultipleChoiceField
 
 from .models import Category, QuestionListPlugin, Question, FaqConfig
 
+
 class CategoryAdminForm(TranslatableModelForm):
 
     class Meta:
