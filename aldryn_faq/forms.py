@@ -4,11 +4,12 @@ from __future__ import unicode_literals
 
 from django import forms
 
+from aldryn_apphooks_config.utils import setup_config
+from app_data import AppDataForm
 from parler.forms import TranslatableModelForm
-
 from sortedm2m.forms import SortedMultipleChoiceField
 
-from .models import Category, QuestionListPlugin, Question
+from .models import Category, QuestionListPlugin, Question, FaqConfig
 
 
 class CategoryAdminForm(TranslatableModelForm):
@@ -51,3 +52,15 @@ class QuestionListPluginForm(forms.ModelForm):
         super(QuestionListPluginForm, self).__init__(*args, **kwargs)
         questions_field = self.fields['questions']
         questions_field.queryset = Question.objects.language()
+
+
+class FaqOptionForm(AppDataForm):
+    show_description = forms.BooleanField(
+        required=False,
+        help_text=(
+            "This option enables the short descirption to be available "
+            "within the list view rendering for all plugins."
+        )
+    )
+
+setup_config(FaqOptionForm, FaqConfig)
