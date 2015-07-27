@@ -9,7 +9,7 @@
             </a>
         {% endblock faq_detail_categories %}
 
-        {% if  object.tags.all %}
+        {% if object.tags.all %}
             <div class="tags pull-right">
                 {% for tag in object.tags.all %}
                     <span class="badge">{{ tag }}</span>
