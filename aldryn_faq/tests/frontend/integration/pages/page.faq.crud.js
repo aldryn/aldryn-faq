@@ -88,7 +88,7 @@ var faqPage = {
             faqPage.passwordInput.clear();
 
             // fill in password field
-            faqPage.passwordInput.sendKeys(
+            return faqPage.passwordInput.sendKeys(
                 credentials.password);
         }).then(function () {
             faqPage.loginButton.click();
