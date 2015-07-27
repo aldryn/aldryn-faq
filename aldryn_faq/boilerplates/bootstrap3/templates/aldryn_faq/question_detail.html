@@ -12,7 +12,7 @@
         {% if  object.tags.all %}
             <div class="tags pull-right">
                 {% for tag in object.tags.all %}
-                    <span class="badge badge-default">{{ tag }}</span>
+                    <span class="badge">{{ tag }}</span>
                 {% endfor %}
             </div>
         {% endif %}
