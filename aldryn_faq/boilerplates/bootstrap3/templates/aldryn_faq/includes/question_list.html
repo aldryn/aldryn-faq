@@ -17,6 +17,9 @@
                         <h3 class="list-group-item-heading">
                             {% render_model question "title" %}
                             {% if not list %}<span class="badge">{{ qgroup.grouper }}</span>{% endif %}
+                            {% for tag in question.tags.all %}
+                                <span class="badge">{{ tag }}</span>
+                            {% endfor %}
                         </h3>
                         <div class="list-group-item-text">
                             {% render_model question "answer_text" %}
