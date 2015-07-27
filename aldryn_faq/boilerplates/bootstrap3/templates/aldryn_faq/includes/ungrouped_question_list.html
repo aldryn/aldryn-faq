@@ -16,7 +16,7 @@
         <a href="{{ question.get_absolute_url }}" class="list-group-item">
             {% render_model question "title" %}
             {% for tag in question.tags.all %}
-                <span class="badge badge-default pull-right">{{ tag }}</span>
+                <span class="badge">{{ tag }}</span>
             {% endfor %}
         </a>
         {% endif %}
