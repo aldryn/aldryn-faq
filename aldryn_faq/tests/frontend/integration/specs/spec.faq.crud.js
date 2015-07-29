@@ -409,12 +409,12 @@ describe('Aldryn FAQ tests: ', function () {
                 return faqPage.editQuestionLinks.get(1).getText()
                     .then(function (text) {
                     if (text === questionName) {
-                        faqPage.editQuestionLinks.get(1).click();
+                        return faqPage.editQuestionLinks.get(1).click();
                     } else {
                         return faqPage.editQuestionLinks.get(2).getText()
                             .then(function (text) {
                             if (text === questionName) {
-                                faqPage.editQuestionLinks.get(2).click();
+                                return faqPage.editQuestionLinks.get(2).click();
                             }
                         });
                     }
