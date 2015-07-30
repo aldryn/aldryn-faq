@@ -406,12 +406,12 @@ describe('Aldryn FAQ tests: ', function () {
             if (text === questionName) {
                 return faqPage.editQuestionLinks.first().click();
             } else {
-                faqPage.editQuestionLinks.get(1).getText()
+                return faqPage.editQuestionLinks.get(1).getText()
                     .then(function (text) {
                     if (text === questionName) {
                         return faqPage.editQuestionLinks.get(1).click();
                     } else {
-                        faqPage.editQuestionLinks.get(2).getText()
+                        return faqPage.editQuestionLinks.get(2).getText()
                             .then(function (text) {
                             if (text === questionName) {
                                 return faqPage.editQuestionLinks.get(2).click();
