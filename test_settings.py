@@ -34,6 +34,7 @@ HELPER_SETTINGS = {
     ),
     'INSTALLED_APPS': [
         'adminsortable2',
+        'aldryn_apphook_reload',
         'aldryn_boilerplates',
         'aldryn_faq',
         'aldryn_reversion',
@@ -47,6 +48,21 @@ HELPER_SETTINGS = {
         # NOTE: The following is NOT required for new installs, it is, however,
         # required for testing the migrations.
         'adminsortable',
+    ],
+    # This set of MW classes should work for Django 1.6 and 1.7.
+    'MIDDLEWARE_CLASSES': [
+        'aldryn_apphook_reload.middleware.ApphookReloadMiddleware',
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'django.middleware.locale.LocaleMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'cms.middleware.user.CurrentUserMiddleware',
+        'cms.middleware.page.CurrentPageMiddleware',
+        'cms.middleware.toolbar.ToolbarMiddleware',
+        'cms.middleware.language.LanguageCookieMiddleware'
     ],
     'STATICFILES_FINDERS': [
         'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -98,6 +114,7 @@ HELPER_SETTINGS = {
         }
     },
 }
+
 
 
 def run():
