@@ -115,7 +115,6 @@ HELPER_SETTINGS = {
 }
 
 
-
 def run():
     from djangocms_helper import runner
     runner.cms('aldryn_faq')
