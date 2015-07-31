@@ -1,6 +1,7 @@
 aldryn-boilerplates
 aldryn-reversion
 aldryn_translation_tools==0.0.6
+aldryn-apphook-reload
 coverage==3.7.1
 django-classy-tags
 django-mptt<0.7
