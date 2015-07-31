@@ -9,6 +9,14 @@
             </a>
         {% endblock faq_detail_categories %}
 
+        {% if object.tags.all %}
+            <div class="tags pull-right">
+                {% for tag in object.tags.all %}
+                    <span class="badge">{{ tag }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         {% block faq_detail_title %}
             <h2>{% render_model object "title" %}</h2>
         {% endblock faq_detail_title %}

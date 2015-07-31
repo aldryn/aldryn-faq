@@ -43,6 +43,7 @@ HELPER_SETTINGS = {
         'parler',
         'reversion',
         'sortedm2m',
+        'taggit',
 
         # NOTE: The following is NOT required for new installs, it is, however,
         # required for testing the migrations.

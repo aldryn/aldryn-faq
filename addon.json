@@ -6,6 +6,7 @@
         "aldryn_reversion",
         "djangocms_text_ckeditor",
         "parler",
-        "sortedm2m"
+        "sortedm2m",
+        "taggit"
     ]
 }

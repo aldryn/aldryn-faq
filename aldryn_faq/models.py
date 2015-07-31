@@ -20,6 +20,7 @@ from cms.utils.i18n import get_current_language
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 from sortedm2m.fields import SortedManyToManyField
+from taggit.managers import TaggableManager
 
 from .cms_appconfig import FaqConfig
 from .managers import CategoryManager, RelatedManager
@@ -95,7 +96,7 @@ class Category(TranslationHelperMixin, TranslatableModel):
 class Question(TranslatableModel):
     translations = TranslatedFields(
         title=models.CharField(_('Title'), max_length=255),
-        answer_text=HTMLField(_('answer'))
+        answer_text=HTMLField(_('Short description'))
     )
     category = models.ForeignKey(Category, related_name='questions')
 
@@ -103,6 +104,8 @@ class Question(TranslatableModel):
         'faq_question_answer', related_name='faq_questions')
     is_top = models.BooleanField(default=False)
     number_of_visits = models.PositiveIntegerField(default=0, editable=False)
+
+    tags = TaggableManager(blank=True)
 
     objects = RelatedManager()
 

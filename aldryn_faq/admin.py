@@ -60,7 +60,7 @@ class QuestionAdmin(VersionedPlaceholderAdminMixin,
                     TranslatableAdmin):
 
     render_placeholder_language_tabs = False
-    list_display = ['__str__', 'category', 'is_top', 'number_of_visits']
+    list_display = ['__str__', 'category', 'tags', 'is_top', 'number_of_visits']
     list_filter = ['category', 'translations__language_code']
     frontend_editable_fields = ('title', 'category', 'answer_text')
     readonly_fields = ['number_of_visits']
@@ -69,7 +69,7 @@ class QuestionAdmin(VersionedPlaceholderAdminMixin,
         fieldsets = [
             (None, {
                 'fields': [
-                    'title', 'category', 'answer_text', 'is_top',
+                    'title', 'category', 'answer_text', 'tags', 'is_top',
                     'number_of_visits']
             })
         ]
@@ -80,7 +80,7 @@ class QuestionAdmin(VersionedPlaceholderAdminMixin,
 
         # show placeholder field if not CMS 3.0
         if LooseVersion(cms.__version__) < LooseVersion('3.0'):
-            fieldsets.append(('Answer', cms_compat_fieldset))
+            fieldsets.append(('Short description', cms_compat_fieldset))
         return fieldsets
 
 
