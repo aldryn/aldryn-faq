@@ -21,13 +21,9 @@ REQUIREMENTS = [
     'django-admin-sortable',
 ]
 
-DEPENDENCY_LINKS = [
-    # THIS CAN BE REMOVED ONCE THERE IS A RELEASE > 1.4.0
-    'git+https://github.com/edoburu/django-parler@9d25bc60b24a16bc4781d0305c41c5acff0b00a6#egg=django-parler',  # NOQA
-]
-
+# https://pypi.python.org/pypi?%3Aaction=list_classifiers
 CLASSIFIERS = [
-    'Development Status :: 4 - Beta',
+    'Development Status :: 5 - Production/Stable',
     'Environment :: Web Environment',
     'Framework :: Django',
     'Framework :: Django :: 1.6',
@@ -56,7 +52,6 @@ setup(
     license='LICENSE.txt',
     platforms=['OS Independent'],
     install_requires=REQUIREMENTS,
-    dependency_links=DEPENDENCY_LINKS,
     classifiers=CLASSIFIERS,
     long_description=open('README.rst').read(),
     include_package_data=True,
