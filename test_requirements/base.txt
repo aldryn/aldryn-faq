@@ -1,11 +1,11 @@
-aldryn-boilerplates
-aldryn-reversion
-aldryn_translation_tools==0.0.6
+aldryn-boilerplates>=0.6.0
+aldryn-reversion>=0.1.0
+aldryn-translation-tools>=0.1.0
 aldryn-apphook-reload
 coverage==3.7.1
 django-classy-tags
 django-mptt<0.7
-git+https://github.com/edoburu/django-parler@9d25bc60b24a16bc4781d0305c41c5acff0b00a6#egg=django-parler
+django-parler>=1.4
 django-sekizai
 django-sortedm2m
 django-taggit
