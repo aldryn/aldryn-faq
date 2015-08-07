@@ -4,9 +4,10 @@ from aldryn_faq import __version__
 
 REQUIREMENTS = [
     'aldryn-apphooks-config>=0.2.4',
-    'aldryn-reversion>=0.0.2,<0.1.0',
+    'aldryn-boilerplates>=0.6.0',
+    'aldryn-reversion>=0.1.0',
     'aldryn-search',
-    'aldryn-translation-tools>=0.0.7',
+    'aldryn-translation-tools>=0.1.0',
     'django>=1.6,<1.8',
     'django-admin-sortable2>=0.5.2',
     'django-cms>=3.0.12,<3.2',
