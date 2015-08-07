@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-1.0.3 (2015-08-06)
+1.0.4 (2015-08-06)
 ------------------
 
 * Documentation improvements
