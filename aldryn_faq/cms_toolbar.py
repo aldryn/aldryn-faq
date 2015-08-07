@@ -111,16 +111,14 @@ class FaqToolbar(CMSToolbar):
         return url
 
     def populate(self):
-
-        config = self.__get_newsblog_config()
-        if not config:
-            return
-        self.config = config
-
-        view_name = getattr(self.request.resolver_match, 'view_name', None)
+        self.config = self.__get_newsblog_config()
         user = getattr(self.request, 'user', None)
+        try:
+            view_name = self.request.resolver_match.view_name
+        except AttributeError:
+            view_name = None
 
-        if user and view_name:
+        if user and view_name and self.config:
             language = get_language_from_request(self.request, check_path=True)
 
             category = get_obj_from_request(Category, self.request,
@@ -130,7 +128,7 @@ class FaqToolbar(CMSToolbar):
             question = get_obj_from_request(Question, self.request)
 
             menu = self.toolbar.get_or_create_menu('faq-app',
-                                                   config.get_app_title())
+                                                   self.config.get_app_title())
 
             change_config_perm = user.has_perm('aldryn_faq.change_faqconfig')
             config_perms = [change_config_perm, ]
@@ -154,7 +152,7 @@ class FaqToolbar(CMSToolbar):
                 if language:
                     url_args = {'language': language, }
                 url = get_admin_url('aldryn_faq_faqconfig_change',
-                                    [config.pk, ], **url_args)
+                                    [self.config.pk, ], **url_args)
                 menu.add_modal_item(_('Configure addon'), url=url)
 
             if any(config_perms) and any(category_perms + question_perms):
@@ -163,15 +161,13 @@ class FaqToolbar(CMSToolbar):
             # ------ Category items -------------------------------------------
 
             if change_category_perm:
-                url_args = {}
-                if config:
-                    url_args = {'appconfig__id__exact': config.pk}
+                url_args = {'appconfig__id__exact': self.config.pk}
                 url = get_admin_url('aldryn_faq_category_changelist',
                                     **url_args)
                 menu.add_sideframe_item(_('Category list'), url=url)
 
             if add_category_perm:
-                url_args = {'appconfig': config.pk, }
+                url_args = {'appconfig': self.config.pk, }
                 if language:
                     url_args.update({'language': language, })
                 url = get_admin_url('aldryn_faq_category_add', **url_args)
@@ -199,7 +195,7 @@ class FaqToolbar(CMSToolbar):
             # ------ Question items -------------------------------------------
 
             if add_question_perm:
-                url_args = {'appconfig': config.pk, }
+                url_args = {'appconfig': self.config.pk, }
                 if language:
                     url_args.update({'language': language, })
                 if category:
