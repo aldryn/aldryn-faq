@@ -2,26 +2,77 @@
 
 from __future__ import unicode_literals
 
+import urllib
+
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _, get_language_from_request
 
 from cms.toolbar_pool import toolbar_pool
 from cms.toolbar_base import CMSToolbar
-
-from aldryn_apphooks_config.utils import get_app_instance
 from cms.utils.urlutils import admin_reverse
 
-from aldryn_faq import (
-    request_faq_category_identifier,
-    request_faq_question_identifier,
-)
-from .models import Category, FaqConfig
+from aldryn_apphooks_config.utils import get_app_instance
+from parler.models import TranslatableModel
+
+from .models import Category, FaqConfig, Question
+
+
+def get_obj_from_request(model, request,
+                         pk_url_kwarg='pk',
+                         slug_url_kwarg='slug',
+                         slug_field='slug'):
+    """
+    Given a model and the request, try to extract and return an object
+    from an available 'pk' or 'slug', or return None.
+
+    Note that no checking is done that the view's kwargs really are for objects
+    matching the provided model (how would it?) so use only where appropriate.
+    """
+    language = get_language_from_request(request, check_path=True)
+    kwargs = request.resolver_match.kwargs
+    mgr = model.objects
+    if pk_url_kwarg in kwargs:
+        return mgr.filter(pk=kwargs[pk_url_kwarg]).first()
+    elif slug_url_kwarg in kwargs:
+        # If the model is translatable, and the given slug is a translated
+        # field, then find it the Parler way.
+        filter_kwargs = {slug_field: kwargs[slug_url_kwarg]}
+        translated_fields = model._parler_meta.get_translated_fields()
+        if (issubclass(model, TranslatableModel) and
+                slug_url_kwarg in translated_fields):
+            return mgr.active_translations(language, **filter_kwargs).first()
+        else:
+            # OK, do it the normal way.
+            return mgr.filter(**filter_kwargs).first()
+    else:
+        return None
+
+
+def get_admin_url(action, action_args=[], **url_args):
+    """
+    Convenience method for constructing admin-urls with GET parameters.
+
+    :param action:      The admin url key for use in reverse. E.g.,
+                        'aldryn_newsblog_edit_article'
+    :param action_args: The url args for the reverse. E.g., [article.pk, ]
+    :param url_args:    A dict of key/value pairs for GET parameters. E.g.,
+                        {'language': 'en', }.
+    :return: The complete admin url
+    """
+    base_url = admin_reverse(action, args=action_args)
+    # Converts [{key: value}, …] => ["key=value", …]
+    params = urllib.urlencode(url_args)
+    if params:
+        return "?".join([base_url, params])
+    else:
+        return base_url
 
 
 @toolbar_pool.register
 class FaqToolbar(CMSToolbar):
     watch_models = (Category, )
+    config = None
 
     def __get_newsblog_config(self):
         try:
@@ -35,54 +86,136 @@ class FaqToolbar(CMSToolbar):
 
         return config
 
+    def get_on_delete_redirect_url(self, obj):
+        if not self.config:
+            self.config = self.__get_newsblog_config()
+
+        if isinstance(obj, Category):
+            url = reverse(
+                '{0}:faq-category-list'.format(self.config.namespace)
+            )
+        elif isinstance(obj, Question):
+            category = obj.category
+            if category:
+                url = reverse(
+                    '{0}:faq-category'.format(self.config.namespace),
+                    kwargs={'category_slug': category.slug, }
+                )
+            else:
+                url = reverse(
+                    '{0}:faq-category-list'.format(self.config.namespace)
+                )
+        return url
+
     def populate(self):
-        def can(action, model):
-            perm = 'aldryn_faq.%(action)s_%(model)s' % {
-                'action': action, 'model': model}
-            return self.request.user.has_perm(perm)
 
         config = self.__get_newsblog_config()
         if not config:
             return
+        self.config = config
 
-        menu = self.toolbar.get_or_create_menu('faq-app', _('FAQ'))
+        view_name = getattr(self.request.resolver_match, 'view_name', None)
+        user = getattr(self.request, 'user', None)
 
-        if can('change', 'faqconfig'):
-            menu.add_modal_item(
-                _('Configure application'),
-                url=admin_reverse(
-                    'aldryn_faq_faqconfig_change',
-                    args=(config.pk, )
-                ),
-            )
+        if user and view_name:
+            language = get_language_from_request(self.request, check_path=True)
 
-        if can('add', 'category') or can('change', 'category'):
-            if can('add', 'category'):
-                menu.add_modal_item(
-                    _('Add category'),
-                    url=admin_reverse('aldryn_faq_category_add')
-                )
+            category = get_obj_from_request(Category, self.request,
+                                            pk_url_kwarg='category_pk',
+                                            slug_url_kwarg='category_slug')
 
-        category = getattr(self.request, request_faq_category_identifier, None)
+            question = get_obj_from_request(Question, self.request)
 
-        if category and can('change', 'category'):
-            url = reverse(
-                'admin:aldryn_faq_category_change',
-                args=(category.pk,),
-            )
-            menu.add_modal_item(_('Edit category'), url, active=True)
+            menu = self.toolbar.get_or_create_menu('faq-app',
+                                                   config.get_app_title())
 
-        if category and can('add', 'question'):
-            params = ('?category=%s&language=%s' %
-                      (category.pk, self.request.LANGUAGE_CODE))
-            menu.add_modal_item(
-                _('Add question'),
-                admin_reverse('aldryn_faq_question_add') + params
-            )
+            change_config_perm = user.has_perm('aldryn_faq.change_faqconfig')
+            config_perms = [change_config_perm, ]
 
-        question = getattr(self.request, request_faq_question_identifier, None)
+            add_category_perm = user.has_perm('aldryn_faq.add_category')
+            change_category_perm = user.has_perm('aldryn_faq.change_category')
+            delete_category_perm = user.has_perm('aldryn_faq.delete_category')
+            category_perms = [add_category_perm, change_category_perm,
+                              delete_category_perm]
 
-        if question and can('change', 'question'):
-            url = reverse(
-                'admin:aldryn_faq_question_change', args=(question.pk,))
-            menu.add_modal_item(_('Edit question'), url, active=True)
+            add_question_perm = user.has_perm('aldryn_faq.add_question')
+            change_question_perm = user.has_perm('aldryn_faq.change_question')
+            delete_question_perm = user.has_perm('aldryn_faq.delete_question')
+            question_perms = [add_question_perm, change_question_perm,
+                              delete_question_perm]
+
+            # ------ App Config items -----------------------------------------
+
+            if change_config_perm:
+                url_args = {}
+                if language:
+                    url_args = {'language': language, }
+                url = get_admin_url('aldryn_faq_faqconfig_change',
+                                    [config.pk, ], **url_args)
+                menu.add_modal_item(_('Configure addon'), url=url)
+
+            if any(config_perms) and any(category_perms + question_perms):
+                menu.add_break()
+
+            # ------ Category items -------------------------------------------
+
+            if change_category_perm:
+                url_args = {}
+                if config:
+                    url_args = {'appconfig__id__exact': config.pk}
+                url = get_admin_url('aldryn_faq_category_changelist',
+                                    **url_args)
+                menu.add_sideframe_item(_('Category list'), url=url)
+
+            if add_category_perm:
+                url_args = {'appconfig': config.pk, }
+                if language:
+                    url_args.update({'language': language, })
+                url = get_admin_url('aldryn_faq_category_add', **url_args)
+                menu.add_modal_item(_('Add new category'), url=url)
+
+            if change_category_perm and category:
+                url_args = {}
+                if language:
+                    url_args = {'language': language, }
+                url = get_admin_url('aldryn_faq_category_change',
+                                    [category.pk, ], **url_args)
+                menu.add_modal_item(_('Edit this category'), url=url,
+                                    active=True)
+
+            if delete_category_perm and category:
+                redirect_url = self.get_on_delete_redirect_url(category)
+                url = get_admin_url('aldryn_faq_category_delete',
+                                    [category.pk, ])
+                menu.add_modal_item(_('Delete this category'), url=url,
+                                    on_close=redirect_url)
+
+            if any(config_perms + category_perms) and any(question_perms):
+                menu.add_break()
+
+            # ------ Question items -------------------------------------------
+
+            if add_question_perm:
+                url_args = {'appconfig': config.pk, }
+                if language:
+                    url_args.update({'language': language, })
+                if category:
+                    url_args.update({'category': category.pk, })
+                url = get_admin_url('aldryn_faq_question_add', **url_args)
+                menu.add_modal_item(_('Add new question'), url=url)
+
+            if change_question_perm and question:
+                url_args = {}
+                if language:
+                    url_args = {'language': language, }
+                url = get_admin_url('aldryn_faq_question_change',
+                                    [question.pk, ], **url_args)
+                menu.add_modal_item(_('Edit this question'), url=url,
+                                    active=True)
+
+            if delete_question_perm and question:
+                redirect_url = self.get_on_delete_redirect_url(question)
+                url = get_admin_url('aldryn_faq_question_delete',
+                                    [question.pk, ])
+                menu.add_modal_item(_('Delete this question'), url=url,
+                                    on_close=redirect_url)
