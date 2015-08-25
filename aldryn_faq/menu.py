@@ -62,8 +62,8 @@ class FaqCategoryMenu(CMSAttachMenu):
                             question.safe_translation_getter(
                                 'title', language_code=language),
                             q_url,
-                            # NOTE: We're adding 1 million here to avoid clashing with
-                            # the category IDs.
+                            # NOTE: We're adding 1 million here to avoid
+                            # clashing with the category IDs.
                             category.pk * 1000000 + question.pk,
                             category.pk,
                         )
