@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+from django.core.urlresolvers import NoReverseMatch
 from django.utils.translation import (
     get_language_from_request,
     ugettext_lazy as _,
@@ -40,7 +41,7 @@ class FaqCategoryMenu(CMSAttachMenu):
         for category in categories:
             try:
                 url = category.get_absolute_url(language=language)
-            except:
+            except NoReverseMatch:
                 url = None
 
             if url:
@@ -54,7 +55,7 @@ class FaqCategoryMenu(CMSAttachMenu):
                 for question in category.questions.all():
                     try:
                         q_url = question.get_absolute_url(language=language)
-                    except:
+                    except NoReverseMatch:
                         q_url = None
 
                     if q_url:
