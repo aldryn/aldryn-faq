@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+from django.core.urlresolvers import NoReverseMatch
 from django.utils.translation import (
     get_language_from_request,
     ugettext_lazy as _,
@@ -38,24 +39,36 @@ class FaqCategoryMenu(CMSAttachMenu):
                 categories = categories.filter(appconfig=config)
 
         for category in categories:
-            node = NavigationNode(
-                category.safe_translation_getter(
-                    'name', language_code=language),
-                category.get_absolute_url(language=language),
-                category.pk,
-            )
-            nodes.append(node)
-            for question in category.questions.all():
+            try:
+                url = category.get_absolute_url(language=language)
+            except NoReverseMatch:
+                url = None
+
+            if url:
                 node = NavigationNode(
-                    question.safe_translation_getter(
-                        'title', language_code=language),
-                    question.get_absolute_url(language=language),
-                    # NOTE: We're adding 1 million here to avoid clashing with
-                    # the category IDs.
-                    category.pk * 1000000 + question.pk,
+                    category.safe_translation_getter(
+                        'name', language_code=language),
+                    url,
                     category.pk,
                 )
                 nodes.append(node)
+                for question in category.questions.all():
+                    try:
+                        q_url = question.get_absolute_url(language=language)
+                    except NoReverseMatch:
+                        q_url = None
+
+                    if q_url:
+                        node = NavigationNode(
+                            question.safe_translation_getter(
+                                'title', language_code=language),
+                            q_url,
+                            # NOTE: We're adding 1 million here to avoid
+                            # clashing with the category IDs.
+                            category.pk * 1000000 + question.pk,
+                            category.pk,
+                        )
+                        nodes.append(node)
 
         return nodes
 
