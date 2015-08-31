@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.0.6 (UPDATE  ME)
+------------------
+
+* Support for Django 1.8
+* Updated requirements
+
+
 1.0.5 (2015-08-07)
 ------------------
 
