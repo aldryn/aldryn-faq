@@ -12,6 +12,22 @@ from cms.api import add_plugin
 from aldryn_faq.models import SelectedCategory
 from .test_base import AldrynFaqTest
 
+# NOTICE:
+#
+# For unknown reasons, in Django 1.8, this statement:
+#
+#     context = RequestContext(request, {})
+#
+# Seems to create a context that does not contain a request object, but only
+# sometimes. This issue does not seem to exist in earlier versions of Django.
+# Investigating further.
+#
+# The fix for now is to explicitly add another context item for the request
+# object like so:
+#
+#     context = RequestContext(request, {"request": request})
+#
+# As required.
 
 class TestQuestionListPlugin(AldrynFaqTest):
 
@@ -33,7 +49,7 @@ class TestQuestionListPlugin(AldrynFaqTest):
         plugin.save()
         request = self.get_page_request(
             page1, self.user, None, lang_code='en', edit=False)
-        context = RequestContext(request, {})
+        context = RequestContext(request, {"request": request})
         rendered = plugin.render_plugin(context, ph)
         self.assertTrue(rendered.find(question1.title) > -1)
 
@@ -57,7 +73,7 @@ class TestLatestQuestionsPlugin(AldrynFaqTest):
             plugin = add_plugin(ph, "LatestQuestionsPlugin", language="de")
             request = self.get_page_request(
                 page1, self.user, None, lang_code="de", edit=False)
-            context = RequestContext(request, {})
+            context = RequestContext(request, {"request": request})
             url1 = self.reload(self.question1, "de").get_absolute_url()
             url2 = self.reload(self.question2, "de").get_absolute_url()
             rendered = plugin.render_plugin(context, ph)
@@ -86,7 +102,7 @@ class TestTopQuestionsPlugin(AldrynFaqTest):
         self.question1.save()
         request = self.get_page_request(
             page1, self.user, None, lang_code='en', edit=False)
-        context = RequestContext(request, {})
+        context = RequestContext(request, {'request': request})
         question1 = self.reload(self.question1, "en")
         rendered = plugin.render_plugin(context, ph)
         self.assertTrue(rendered.find(question1.title) > -1)
@@ -106,7 +122,7 @@ class TestMostReadQuestionsPlugin(AldrynFaqTest):
             plugin = add_plugin(ph, "MostReadQuestionsPlugin", language="de")
             request = self.get_page_request(
                 page1, self.user, None, lang_code="de", edit=False)
-            context = RequestContext(request, {})
+            context = RequestContext(request, {"request": request})
             url1 = self.reload(self.question1, "de").get_absolute_url()
             url2 = self.reload(self.question2, "de").get_absolute_url()
             rendered = plugin.render_plugin(context, ph)
