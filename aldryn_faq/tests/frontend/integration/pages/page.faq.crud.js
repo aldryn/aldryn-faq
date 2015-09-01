@@ -49,6 +49,7 @@ var faqPage = {
     languageTabs: element.all(by.css('.parler-language-tabs > .empty > a')),
     nameInput: element(by.id('id_name')),
     appconfigSelect: element(by.id('id_appconfig')),
+    appconfigOption: element(by.css('#id_appconfig > option[1]')),
 
     // adding new question
     addQuestionButton: element(by.css('.model-question .addlink')),

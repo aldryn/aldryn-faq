@@ -220,7 +220,8 @@ describe('Aldryn FAQ tests: ', function () {
 
                     // set Appconfig
                     faqPage.appconfigSelect.click();
-                    return faqPage.appconfigSelect.sendKeys('FAQ / aldryn_faq');
+                    faqPage.appconfigSelect.sendKeys('FAQ / aldryn_faq');
+                    return faqPage.appconfigOption.click();
                 }).then(function () {
                     faqPage.appconfigSelect.click();
 
