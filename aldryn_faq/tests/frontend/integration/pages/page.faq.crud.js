@@ -54,6 +54,8 @@ var faqPage = {
     // adding new question
     addQuestionButton: element(by.css('.model-question .addlink')),
     categorySelect: element(by.id('id_category')),
+    categoryOption: element(by.css('#id_category > option:nth-child(2)')),
+
     ckeIframe: element(by.css('#cke_1_contents iframe')),
     ckeEditableBlock: element(by.css('.cke_editable')),
     saveAndContinueButton: element(by.css('.submit-row [name="_continue"]')),

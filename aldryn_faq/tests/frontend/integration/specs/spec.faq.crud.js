@@ -263,9 +263,8 @@ describe('Aldryn FAQ tests: ', function () {
         }).then(function () {
             // set Category
             faqPage.categorySelect.click();
-            return faqPage.categorySelect.sendKeys('Test category');
-        }).then(function () {
-            return faqPage.categorySelect.click();
+            faqPage.categorySelect.sendKeys('Test category');
+            return faqPage.categoryOption.click();
         }).then(function () {
             // wait for cke iframe to appear
             browser.wait(function () {
