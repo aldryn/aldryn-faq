@@ -29,6 +29,7 @@ from .test_base import AldrynFaqTest
 #
 # As required.
 
+
 class TestQuestionListPlugin(AldrynFaqTest):
 
     def test_plugin(self):
