@@ -55,7 +55,6 @@ var faqPage = {
     addQuestionButton: element(by.css('.model-question .addlink')),
     categorySelect: element(by.id('id_category')),
     categoryOption: element(by.css('#id_category > option:nth-child(2)')),
-
     ckeIframe: element(by.css('#cke_1_contents iframe')),
     ckeEditableBlock: element(by.css('.cke_editable')),
     saveAndContinueButton: element(by.css('.submit-row [name="_continue"]')),
@@ -68,6 +67,7 @@ var faqPage = {
         '.cms_toolbar-item-navigation [href*="advanced-settings"]')),
     modalIframe: element(by.css('.cms_modal-frame iframe')),
     applicationSelect: element(by.id('application_urls')),
+    faqOption: element(by.css('option[value="FaqApp"]')),
     saveModalButton: element(by.css('.cms_modal-buttons .cms_btn-action')),
     categoryLink: element(by.css('.aldryn-faq-categories a')),
     questionLink: element(by.css('.aldryn-faq .list-group a')),
