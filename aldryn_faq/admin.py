@@ -88,7 +88,8 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Question, QuestionAdmin)
 
 
-class FaqConfigAdmin(AllTranslationsMixin,
+class FaqConfigAdmin(VersionedPlaceholderAdminMixin,
+                     AllTranslationsMixin,
                      BaseAppHookConfig,
                      TranslatableAdmin):
     def get_config_fields(self):
