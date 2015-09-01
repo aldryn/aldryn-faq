@@ -35,5 +35,9 @@ class FaqConfig(TranslatableModel, AppHookConfig):
     placeholder_faq_list_bottom = PlaceholderField(
         'faq_list_bottom', related_name='aldryn_faq_list_bottom')
 
+    class Meta:
+        verbose_name = 'config'
+        verbose_name_plural = 'configs'
+
     def get_app_title(self):
         return getattr(self, 'app_title', _('untitled'))
