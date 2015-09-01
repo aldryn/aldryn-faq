@@ -18,10 +18,12 @@ html5lib
 python-coveralls>=2.4.2
 selenium
 six
+tox
 
 #
 # NOTE: The following is NOT required for new installs, this is only here for
-# testing migrations.
+# testing migrations. This line should remain here until we no longer support
+# South migrations.
 #
 django-admin-sortable
 
