@@ -60,10 +60,18 @@ class QuestionAdmin(VersionedPlaceholderAdminMixin,
                     TranslatableAdmin):
 
     render_placeholder_language_tabs = False
-    list_display = ['__str__', 'category', 'tags', 'is_top', 'number_of_visits']
+    list_display = ['__str__', 'category', 'tag_list', 'is_top', 'number_of_visits']
     list_filter = ['category', 'translations__language_code']
     frontend_editable_fields = ('title', 'category', 'answer_text')
     readonly_fields = ['number_of_visits']
+
+    def tag_list(self, obj):
+        """
+        Displays Taggit tags to a comma-separated list of the tags’ names.
+        """
+        return ", ".join([str(tag) for tag in obj.tags.get_query_set()])
+    tag_list.short_description = 'Tags'
+    tag_list.allow_tags = True
 
     def get_fieldsets(self, request, obj=None):
         fieldsets = [
