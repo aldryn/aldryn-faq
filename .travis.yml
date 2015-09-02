@@ -16,7 +16,6 @@ env:
   matrix:
     - TOXENV=flake8
     - TOXENV=py34-dj18-cms31
-    - TOXENV=py34-dj18-cms30
     - TOXENV=py34-dj17-cms31
     - TOXENV=py34-dj17-cms30
     - TOXENV=py34-dj16-cms31
@@ -26,7 +25,6 @@ env:
     - TOXENV=py33-dj16-cms31
     - TOXENV=py33-dj16-cms30
     - TOXENV=py27-dj18-cms31
-    - TOXENV=py27-dj18-cms30
     - TOXENV=py27-dj17-cms31
     - TOXENV=py27-dj17-cms30
     - TOXENV=py27-dj16-cms31
