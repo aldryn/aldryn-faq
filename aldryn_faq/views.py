@@ -88,8 +88,9 @@ class FaqByCategoryListView(FaqMixin, ListView):
     model = Category
 
     def get_queryset(self):
-        qs = super(FaqByCategoryListView, self).get_queryset()
-        return qs.filter(appconfig=self.config)
+        return self.model.objects.language(
+            language_code=self.current_language).filter(
+                appconfig=self.config)
 
 
 class FaqByCategoryView(FaqCategoryMixin, ListView):

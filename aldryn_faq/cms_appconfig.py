@@ -6,10 +6,12 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from aldryn_apphooks_config.models import AppHookConfig
+from aldryn_reversion.core import version_controlled_content
 from cms.models.fields import PlaceholderField
 from parler.models import TranslatableModel, TranslatedFields
 
 
+@version_controlled_content()
 class FaqConfig(TranslatableModel, AppHookConfig):
     """Adds some translatable, per-app-instance fields."""
     translations = TranslatedFields(
@@ -32,6 +34,10 @@ class FaqConfig(TranslatableModel, AppHookConfig):
 
     placeholder_faq_list_bottom = PlaceholderField(
         'faq_list_bottom', related_name='aldryn_faq_list_bottom')
+
+    class Meta:
+        verbose_name = 'config'
+        verbose_name_plural = 'configs'
 
     def get_app_title(self):
         return getattr(self, 'app_title', _('untitled'))

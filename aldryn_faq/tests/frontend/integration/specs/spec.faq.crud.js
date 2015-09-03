@@ -219,8 +219,10 @@ describe('Aldryn FAQ tests: ', function () {
                     }, faqPage.mainElementsWaitTime);
 
                     // set Appconfig
-                    faqPage.appconfigSelect.click();
-                    return faqPage.appconfigSelect.sendKeys('FAQ / aldryn_faq');
+                    return faqPage.appconfigSelect.click();
+                }).then(function () {
+                    faqPage.appconfigSelect.sendKeys('FAQ / aldryn_faq');
+                    return faqPage.appconfigOption.click();
                 }).then(function () {
                     faqPage.appconfigSelect.click();
 
@@ -261,8 +263,10 @@ describe('Aldryn FAQ tests: ', function () {
             return faqPage.titleInput.sendKeys(questionName);
         }).then(function () {
             // set Category
-            faqPage.categorySelect.click();
-            return faqPage.categorySelect.sendKeys('Test category');
+            return faqPage.categorySelect.click();
+        }).then(function () {
+            faqPage.categorySelect.sendKeys('Test category');
+            return faqPage.categoryOption.click();
         }).then(function () {
             return faqPage.categorySelect.click();
         }).then(function () {
@@ -344,10 +348,11 @@ describe('Aldryn FAQ tests: ', function () {
                     }, faqPage.mainElementsWaitTime);
 
                     // set Application
-                    faqPage.applicationSelect.click();
-                    faqPage.applicationSelect.sendKeys('FAQ')
-                        .then(function () {
-                        faqPage.applicationSelect.click();
+                    faqPage.applicationSelect.click().then(function () {
+                        faqPage.applicationSelect.sendKeys('FAQ');
+                        return faqPage.faqOption.click();
+                    }).then(function () {
+                        return faqPage.applicationSelect.click();
                     });
 
                     // switch to default page content

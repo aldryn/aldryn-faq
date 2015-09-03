@@ -12,17 +12,34 @@ from cms.api import add_plugin
 from aldryn_faq.models import SelectedCategory
 from .test_base import AldrynFaqTest
 
+# NOTICE:
+#
+# For unknown reasons, in Django 1.8, this statement:
+#
+#     context = RequestContext(request, {})
+#
+# Seems to create a context that does not contain a request object, but only
+# sometimes. This issue does not seem to exist in earlier versions of Django.
+# Investigating further.
+#
+# The fix for now is to explicitly add another context item for the request
+# object like so:
+#
+#     context = RequestContext(request, {"request": request})
+#
+# As required.
+
 
 class TestQuestionListPlugin(AldrynFaqTest):
 
     def test_plugin(self):
         page1 = self.get_or_create_page("Page One")
-        ph = page1.placeholders.get(slot='content')
-        plugin = add_plugin(ph, 'QuestionListPlugin', language='en')
+        ph = page1.placeholders.get(slot="content")
+        plugin = add_plugin(ph, "QuestionListPlugin", language="en")
 
         # First test that it is initially empty
         request = self.get_page_request(
-            page1, self.user, None, lang_code='en', edit=False)
+            page1, self.user, None, lang_code="en", edit=False)
         context = RequestContext(request, {})
         rendered = plugin.render_plugin(context, ph)
         self.assertTrue(rendered.find(">No entry found.</p>") > -1)
@@ -32,18 +49,18 @@ class TestQuestionListPlugin(AldrynFaqTest):
         plugin.questions.add(question1)
         plugin.save()
         request = self.get_page_request(
-            page1, self.user, None, lang_code='en', edit=False)
-        context = RequestContext(request, {})
+            page1, self.user, None, lang_code="en", edit=False)
+        context = RequestContext(request, {"request": request})
         rendered = plugin.render_plugin(context, ph)
         self.assertTrue(rendered.find(question1.title) > -1)
 
         # Test its unicode method
-        self.assertEqual(str(plugin), '1 question selected')
+        self.assertEqual(str(plugin), "1 question selected")
 
         # Test its copy_relations. To do this, we'll create another instance
         # that is empty, then copy_relations to it, and prove that it contains
         # questions.
-        plugin2 = add_plugin(ph, 'QuestionListPlugin', language='en')
+        plugin2 = add_plugin(ph, "QuestionListPlugin", language="en")
         plugin2.copy_relations(plugin)
         self.assertTrue(plugin.get_questions(), plugin2.get_questions())
 
@@ -51,13 +68,13 @@ class TestQuestionListPlugin(AldrynFaqTest):
 class TestLatestQuestionsPlugin(AldrynFaqTest):
 
     def test_plugin(self):
-        with override('de'):
+        with override("de"):
             page1 = self.get_or_create_page("Page One")
             ph = page1.placeholders.get(slot="content")
             plugin = add_plugin(ph, "LatestQuestionsPlugin", language="de")
             request = self.get_page_request(
                 page1, self.user, None, lang_code="de", edit=False)
-            context = RequestContext(request, {})
+            context = RequestContext(request, {"request": request})
             url1 = self.reload(self.question1, "de").get_absolute_url()
             url2 = self.reload(self.question2, "de").get_absolute_url()
             rendered = plugin.render_plugin(context, ph)
@@ -71,12 +88,12 @@ class TestTopQuestionsPlugin(AldrynFaqTest):
 
     def test_plugin(self):
         page1 = self.get_or_create_page("Page One")
-        ph = page1.placeholders.get(slot='content')
-        plugin = add_plugin(ph, 'TopQuestionsPlugin', language='en')
+        ph = page1.placeholders.get(slot="content")
+        plugin = add_plugin(ph, "TopQuestionsPlugin", language="en")
 
         # First test that no plugins are found initially
         request = self.get_page_request(
-            page1, self.user, None, lang_code='en', edit=False)
+            page1, self.user, None, lang_code="en", edit=False)
         context = RequestContext(request, {})
         rendered = plugin.render_plugin(context, ph)
         self.assertTrue(rendered.find("No entry found") > -1)
@@ -85,8 +102,8 @@ class TestTopQuestionsPlugin(AldrynFaqTest):
         self.question1.is_top = True
         self.question1.save()
         request = self.get_page_request(
-            page1, self.user, None, lang_code='en', edit=False)
-        context = RequestContext(request, {})
+            page1, self.user, None, lang_code="en", edit=False)
+        context = RequestContext(request, {"request": request})
         question1 = self.reload(self.question1, "en")
         rendered = plugin.render_plugin(context, ph)
         self.assertTrue(rendered.find(question1.title) > -1)
@@ -100,13 +117,13 @@ class TestMostReadQuestionsPlugin(AldrynFaqTest):
         self.question2.number_of_visits = 10
         self.question2.save()
 
-        with override('de'):
+        with override("de"):
             page1 = self.get_or_create_page("Page One")
             ph = page1.placeholders.get(slot="content")
             plugin = add_plugin(ph, "MostReadQuestionsPlugin", language="de")
             request = self.get_page_request(
                 page1, self.user, None, lang_code="de", edit=False)
-            context = RequestContext(request, {})
+            context = RequestContext(request, {"request": request})
             url1 = self.reload(self.question1, "de").get_absolute_url()
             url2 = self.reload(self.question2, "de").get_absolute_url()
             rendered = plugin.render_plugin(context, ph)
@@ -121,10 +138,10 @@ class TestCategoryListPlugin(AldrynFaqTest):
     def test_plugin(self):
         page1 = self.get_or_create_page("Page One")
         ph = page1.placeholders.get(slot='content')
-        plugin = add_plugin(ph, 'CategoryListPlugin', language='de')
+        plugin = add_plugin(ph, 'CategoryListPlugin', language="de")
 
         request = self.get_page_request(
-            page1, self.user, None, lang_code='de', edit=False)
+            page1, self.user, None, lang_code="de", edit=False)
         context = RequestContext(request, {})
         category1 = self.category1
         category1.save()

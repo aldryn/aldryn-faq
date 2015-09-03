@@ -45,7 +45,7 @@ def get_slug_in_language(record, language):
 
 
 @python_2_unicode_compatible
-@version_controlled_content
+@version_controlled_content(follow=['appconfig'])
 class Category(TranslationHelperMixin, TranslatableModel):
     translations = TranslatedFields(
         name=models.CharField(max_length=255),
@@ -92,7 +92,7 @@ class Category(TranslationHelperMixin, TranslatableModel):
 
 
 @python_2_unicode_compatible
-@version_controlled_content
+@version_controlled_content(follow=['category'])
 class Question(TranslatableModel):
     translations = TranslatedFields(
         title=models.CharField(_('Title'), max_length=255),

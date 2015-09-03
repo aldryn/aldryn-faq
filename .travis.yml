@@ -15,20 +15,22 @@ env:
     - secure: gCi1UP9rgOnfvLT+UNiQkysnXUKvMi5ichNwPNxiXkLYlc66bJLIc/h8YI3V9vV4ICzyMJqEDHXV7T8NP0tsdxdNdEQNvStoaleLz7xsbjW7MZ2XxF13xncG6fksYr/5cjhBbiwg06HTn/VH+TD1FT1u9WUe+0/BJSx1JMnJQgs=
   matrix:
     - TOXENV=flake8
-    - TOXENV=py34-django17-cms31
-    - TOXENV=py34-django17-cms30
-    - TOXENV=py34-django16-cms31
-    - TOXENV=py34-django16-cms30
-    - TOXENV=py33-django17-cms31
-    - TOXENV=py33-django17-cms30
-    - TOXENV=py33-django16-cms31
-    - TOXENV=py33-django16-cms30
-    - TOXENV=py27-django17-cms31
-    - TOXENV=py27-django17-cms30
-    - TOXENV=py27-django16-cms31
-    - TOXENV=py27-django16-cms30
-    - TOXENV=py26-django16-cms31
-    - TOXENV=py26-django16-cms30
+    - TOXENV=py34-dj18-cms31
+    - TOXENV=py34-dj17-cms31
+    - TOXENV=py34-dj17-cms30
+    - TOXENV=py34-dj16-cms31
+    - TOXENV=py34-dj16-cms30
+    - TOXENV=py33-dj17-cms31
+    - TOXENV=py33-dj17-cms30
+    - TOXENV=py33-dj16-cms31
+    - TOXENV=py33-dj16-cms30
+    - TOXENV=py27-dj18-cms31
+    - TOXENV=py27-dj17-cms31
+    - TOXENV=py27-dj17-cms30
+    - TOXENV=py27-dj16-cms31
+    - TOXENV=py27-dj16-cms30
+    - TOXENV=py26-dj16-cms31
+    - TOXENV=py26-dj16-cms30
 
 cache:
   directories:
