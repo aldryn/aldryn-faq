@@ -192,7 +192,11 @@ class FaqAnswerView(CanonicalUrlMixin, FaqCategoryMixin, AllowPKsTooMixin,
                 FaqAnswerView, self).get_non_canonical_url_response_type()
 
     def get(self, request, *args, **kwargs):
-        category = self.get_category()
+        try:
+            category = self.get_category()
+        except FallbackLanguageResolved as flr:
+            # We have the category, but it is in a fallback language.
+            category = flr.object
 
         # only look at questions within this category
         queryset = self.get_queryset().filter(category=category.pk)
