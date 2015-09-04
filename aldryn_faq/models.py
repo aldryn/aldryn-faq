@@ -97,6 +97,11 @@ class Question(TranslatableModel):
     translations = TranslatedFields(
         title=models.CharField(_('Title'), max_length=255),
         answer_text=HTMLField(_('Short description'))
+        answer_text=HTMLField(_('Short description')),
+        slug=models.SlugField(
+            verbose_name=_('Slug'), max_length=255, blank=True,
+            help_text=_('Provide a "slug" for this category or leave blank for '
+                        'an auto-generated one.')),
     )
     category = models.ForeignKey(Category, related_name='questions')
 
