@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 
-from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import resolve, reverse
 from django.db import models
 from django.http import (
@@ -17,19 +17,37 @@ from django.utils.translation import (
     ugettext,
 )
 from django.views.generic import DetailView
-from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.list import ListView
 
 from aldryn_apphooks_config.mixins import AppConfigMixin
-from parler.views import FallbackLanguageResolved
+from parler.views import FallbackLanguageResolved, TranslatableSlugMixin
 from parler.utils import get_active_language_choices
 from menus.utils import set_language_changer
 
 from .models import Category, Question
 
 from . import request_faq_category_identifier, request_faq_question_identifier
-from .exceptions import OldCategoryFormatUsed
-from .helpers import get_category_from_slug
+
+
+# TODO: Move this to Aldryn Translation Tools
+class AllowPKsTooMixin(object):
+    def get_object(self, queryset=None):
+        """
+        Bypass TranslatableSlugMixin if we are using PKs. You would only use
+        this if you have a obj that supports accessing the object by pk or
+        by its translatable slug.
+
+        NOTE: This should only be used on DetailViews and this mixin MUST be
+        placed to the left of TranslatableSlugMixin. In fact, for best results,
+        declare your obj like this:
+
+            MyView(…, AllowPKsTooMixin, TranslatableSlugMixin, DetailView):
+        """
+        if self.pk_url_kwarg in self.kwargs:
+            return super(DetailView, self).get_object(queryset)
+
+        # OK, just let Parler have its way with it.
+        return super(AllowPKsTooMixin, self).get_object(queryset)
 
 
 # TODO: Move this to Aldryn Translation Tools
@@ -110,40 +128,51 @@ class FaqCategoryMixin(AppConfigMixin):
         if queryset is None:
             queryset = self.get_category_queryset()
 
-        slug = self.kwargs[self.category_slug_url_kwarg]
+        slug = self.kwargs.get(self.category_slug_url_kwarg, None)
+        pk = self.kwargs.get(self.category_pk_url_kwarg, None)
         choices = self.get_language_choices()
 
-        obj = None
-        using_fallback = False
-        prev_choices = []
-        for lang_choice in choices:
+        error_message = ugettext(
+            "No %(verbose_name)s found matching the query") % {
+                'verbose_name': queryset.model._meta.verbose_name}
+
+        if pk:
             try:
-                # Get the single item from the filtered queryset
-                # NOTE. Explicitly set language to the state the object was
-                # fetched in.
-                filters = {'slug': slug}
-                obj = queryset.translated(
-                    lang_choice, **filters).language(lang_choice).get()
+                obj = Category.objects.get(pk=pk)
             except ObjectDoesNotExist:
-                # Translated object not found, next object is marked as
-                # fallback.
-                using_fallback = True
-                prev_choices.append(lang_choice)
-            else:
-                break
+                raise Http404(error_message)
+        elif slug:
+            obj = None
+            using_fallback = False
+            prev_choices = []
+            for lang_choice in choices:
+                try:
+                    # Get the single item from the filtered queryset
+                    # NOTE. Explicitly set language to the state the object was
+                    # fetched in.
+                    filters = {'slug': slug}
+                    obj = queryset.translated(
+                        lang_choice, **filters).language(lang_choice).get()
+                except ObjectDoesNotExist:
+                    # Translated object not found, next object is marked as
+                    # fallback.
+                    using_fallback = True
+                    prev_choices.append(lang_choice)
+                else:
+                    break
 
-        if obj is None:
-            tried_msg = ", tried languages: {0}".format(", ".join(choices))
-            error_message = ugettext(
-                "No %(verbose_name)s found matching the query") % {
-                    'verbose_name': queryset.model._meta.verbose_name}
-            raise Http404(error_message + tried_msg)
+            if obj is None:
+                tried_msg = ", tried languages: {0}".format(", ".join(choices))
+                raise Http404(error_message + tried_msg)
 
-        # Object found!
-        if using_fallback:
-            for prev_choice in prev_choices:
-                if obj.has_translation(prev_choice):
-                    raise FallbackLanguageResolved(obj, prev_choice)
+            # Object found!
+            if using_fallback:
+                for prev_choice in prev_choices:
+                    if obj.has_translation(prev_choice):
+                        raise FallbackLanguageResolved(obj, prev_choice)
+
+        else:
+            raise Http404(error_message)
 
         return obj
 
@@ -154,7 +183,8 @@ class FaqCategoryMixin(AppConfigMixin):
         return HttpResponsePermanentRedirect(error.new_url_format)
 
 
-class FaqAnswerView(CanonicalUrlMixin, FaqCategoryMixin, DetailView):
+class FaqAnswerView(CanonicalUrlMixin, FaqCategoryMixin, AllowPKsTooMixin,
+                    TranslatableSlugMixin, DetailView):
     template_name = 'aldryn_faq/question_detail.html'
     model = Question
 
@@ -202,11 +232,11 @@ class FaqAnswerView(CanonicalUrlMixin, FaqCategoryMixin, DetailView):
         return context
 
     def get_object(self, queryset=None):
-        if not hasattr(self, '_object'):
+        if not hasattr(self, 'object'):
             # this is done because this method gets called twice.
             # so no need to query db twice.
-            self._object = super(FaqAnswerView, self).get_object(queryset)
-        return self._object
+            self.object = super(FaqAnswerView, self).get_object(queryset)
+        return self.object
 
     def handle_old_url_exception(self, error):
         match = resolve(error.new_url_format)
@@ -281,8 +311,9 @@ class FaqQuestionMixin(AppConfigMixin):
         return queryset
 
 
-class FaqByCategoryListView(FaqQuestionMixin, ListView):
+class FaqByCategoryListView(FaqCategoryMixin, ListView):
     template_name = 'aldryn_faq/landing.html'
+    model = Category
 
     def get_queryset(self):
         return self.model.objects.language(
