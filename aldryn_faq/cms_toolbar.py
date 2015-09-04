@@ -43,7 +43,7 @@ def get_obj_from_request(model, request,
         filter_kwargs = {slug_field: kwargs[slug_url_kwarg]}
         translated_fields = model._parler_meta.get_translated_fields()
         if (issubclass(model, TranslatableModel) and
-                slug_url_kwarg in translated_fields):
+                slug_field in translated_fields):
             return mgr.active_translations(language, **filter_kwargs).first()
         else:
             # OK, do it the normal way.
@@ -99,11 +99,9 @@ class FaqToolbar(CMSToolbar):
             )
         elif isinstance(obj, Question):
             category = obj.category
+            lang = obj.get_current_language()
             if category:
-                url = reverse(
-                    '{0}:faq-category'.format(self.config.namespace),
-                    kwargs={'category_slug': category.slug, }
-                )
+                url = category.get_absolute_url(language=lang)
             else:
                 url = reverse(
                     '{0}:faq-category-list'.format(self.config.namespace)

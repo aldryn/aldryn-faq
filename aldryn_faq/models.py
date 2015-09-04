@@ -11,8 +11,8 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import override, ugettext_lazy as _, ungettext
 
 from aldryn_reversion.core import version_controlled_content
-from aldryn_translation_tools.models import TranslationHelperMixin
-
+from aldryn_translation_tools.models import (
+    TranslationHelperMixin, TranslatedAutoSlugifyMixin)
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from cms.utils.i18n import get_current_language
@@ -46,10 +46,16 @@ def get_slug_in_language(record, language):
 
 @python_2_unicode_compatible
 @version_controlled_content(follow=['appconfig'])
-class Category(TranslationHelperMixin, TranslatableModel):
+class Category(TranslatedAutoSlugifyMixin, TranslationHelperMixin,
+               TranslatableModel):
+    slug_source_field_name = 'name'
+
     translations = TranslatedFields(
         name=models.CharField(max_length=255),
-        slug=models.SlugField(verbose_name=_('Slug'), max_length=255),
+        slug=models.SlugField(
+            verbose_name=_('Slug'), max_length=255, blank=True,
+            help_text=_('Provide a "slug" for this category or leave blank for '
+                        'an auto-generated one.')),
     )
     appconfig = models.ForeignKey(
         FaqConfig, verbose_name=_('appconfig'), blank=True, null=True
@@ -70,17 +76,21 @@ class Category(TranslationHelperMixin, TranslatableModel):
         return ContentType.objects.get_for_model(self.__class__).id
 
     def get_absolute_url(self, language=None, slug=None):
-        if language is None:
-            language = get_current_language()
+        language = language or get_current_language()
 
-        if slug is None:
+        if not slug:
             slug = self.known_translation_getter(
-                'slug',
-                default=None,
-                language_code=language
-            )[0] or ''
+                'slug', default=None, language_code=language)[0] or ''
 
-        kwargs = {'category_pk': self.pk, 'category_slug': slug}
+        kwargs = {}
+        permalink_type = self.appconfig.permalink_type
+
+        if 'P' in permalink_type:
+            kwargs.update({"category_pk": self.pk})
+        elif 'S' in permalink_type:
+            kwargs.update({"category_slug": slug})
+        else:
+            kwargs = {'category_pk': self.pk, 'category_slug': slug}
 
         if self.appconfig_id and self.appconfig.namespace:
             namespace = '{0}:'.format(self.appconfig.namespace)
@@ -93,10 +103,17 @@ class Category(TranslationHelperMixin, TranslatableModel):
 
 @python_2_unicode_compatible
 @version_controlled_content(follow=['category'])
-class Question(TranslatableModel):
+class Question(TranslatedAutoSlugifyMixin, TranslationHelperMixin,
+               TranslatableModel):
+    slug_source_field_name = 'title'
+
     translations = TranslatedFields(
         title=models.CharField(_('Title'), max_length=255),
-        answer_text=HTMLField(_('Short description'))
+        answer_text=HTMLField(_('Short description')),
+        slug=models.SlugField(
+            verbose_name=_('Slug'), max_length=255, blank=True,
+            help_text=_('Provide a "slug" for this category or leave blank for '
+                        'an auto-generated one.')),
     )
     category = models.ForeignKey(Category, related_name='questions')
 
@@ -130,31 +147,42 @@ class Question(TranslatableModel):
         Returns the absolute_url of this question object, respecting the
         configured fallback languages.
         """
-        if language is None:
-            language = get_current_language()
+        language = language or get_current_language()
 
         category_slug = self.category.known_translation_getter(
-            'slug',
-            default=None,
-            language_code=language
-        )[0] or ''
+            'slug', default='', language_code=language)[0]
+
+        question_slug = self.known_translation_getter(
+            'slug', default='', language_code=language)[0]
 
         try:
             namespace = self.category.appconfig.namespace
-        except:
+        except AttributeError:
             namespace = False
+
+        permalink_type = self.category.appconfig.permalink_type
+
+        kwargs = {}
+        if 'P' in permalink_type:
+            kwargs.update({"category_pk": self.category.pk})
+        elif 'S' in permalink_type:
+            kwargs.update({"category_slug": category_slug})
+        else:
+            kwargs = {
+                'category_pk': self.category.pk,
+                'category_slug': category_slug
+            }
+        if 'p' in permalink_type:
+            kwargs.update({"pk": self.pk})
+        else:
+            kwargs.update({"slug": question_slug})
 
         if namespace and category_slug:
             with override(language):
                 url_name = '{0}:faq-answer'.format(namespace)
-                url_kwargs = {
-                    'pk': self.pk,
-                    'category_pk': self.category.pk,
-                    'category_slug': category_slug,
-                }
-                return reverse(url_name, kwargs=url_kwargs)
+                return reverse(url_name, kwargs=kwargs)
 
-        # No suitable translations exist, return the category's url
+        # No suitable translation exists, return the category's url
         return self.category.get_absolute_url(language)
 
 
