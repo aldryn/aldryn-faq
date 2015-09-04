@@ -99,11 +99,9 @@ class FaqToolbar(CMSToolbar):
             )
         elif isinstance(obj, Question):
             category = obj.category
+            lang = obj.get_current_language()
             if category:
-                url = reverse(
-                    '{0}:faq-category'.format(self.config.namespace),
-                    kwargs={'category_slug': category.slug, }
-                )
+                url = category.get_absolute_url(language=lang)
             else:
                 url = reverse(
                     '{0}:faq-category-list'.format(self.config.namespace)
