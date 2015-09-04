@@ -105,19 +105,12 @@ class FaqCategoryMixin(AppConfigMixin):
         return super(FaqCategoryMixin, self).dispatch(
             request, *args, **kwargs)
 
-    def get_language(self):
-        """
-        Define the language of the current view, defaults to the active
-        language.
-        """
-        return get_language()
-
     def get_language_choices(self):
         """
         Define the language choices for the view, defaults to the defined
         settings.
         """
-        return get_active_language_choices(self.get_language())
+        return get_active_language_choices(self.current_language)
 
     def get_category(self, queryset=None):
         """
