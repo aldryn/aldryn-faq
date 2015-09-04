@@ -78,8 +78,8 @@ class QuestionAdmin(VersionedPlaceholderAdminMixin,
         fieldsets = [
             (None, {
                 'fields': [
-                    'title', 'category', 'answer_text', 'tags', 'is_top',
-                    'number_of_visits']
+                    'title', 'slug', 'category', 'answer_text', 'tags',
+                    'is_top', 'number_of_visits']
             })
         ]
         cms_compat_fieldset = {
@@ -104,6 +104,7 @@ class FaqConfigAdmin(VersionedPlaceholderAdminMixin,
     def get_config_fields(self):
         return (
             'app_title',
+            'permalink_type', 'non_permalink_handling',
             'config.show_description',
         )
 
