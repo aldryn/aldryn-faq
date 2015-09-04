@@ -70,4 +70,4 @@ urlpatterns = patterns('',
         FaqAnswerView.as_view(),
         name='faq-answer'
     ),
- )
+)

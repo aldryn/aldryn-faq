@@ -28,6 +28,7 @@ NON_PERMALINK_HANDLING = (
     (404, _('Return 404: Not Found')),
 )
 
+
 @version_controlled_content()
 class FaqConfig(TranslatableModel, AppHookConfig):
     """Adds some translatable, per-app-instance fields."""
