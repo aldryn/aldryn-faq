@@ -50,12 +50,15 @@ class AldrynFaqTestMixin(TestUtilityMixin, object):
             "de": {"name": "Beispiel2", "slug": "beispiel2", }
         },
         "question1": {
-            "en": {"title": "Test Question", "answer_text": "Test Answer", },
-            "de": {"title": "Testfrage", "answer_text": "Test Antwort"},
+            "en": {"title": "Test Question", "answer_text": "Test Answer",
+                   "slug": "test-question", },
+            "de": {"title": "Testfrage", "answer_text": "Test Antwort",
+                   "slug": "Testfrage", },
         },
         "question2": {
             # This should *not* have a EN translation
-            "de": {"title": "Testfrage2", "answer_text": "Test Antwort2"},
+            "de": {"title": "Testfrage2", "answer_text": "Test Antwort2",
+                   "slug": "testfrage2", },
         },
     }
 
@@ -166,7 +169,9 @@ class CMSRequestBasedTest(TestUtilityMixin, TransactionTestCase):
             self.language,
             published=True
         )
-        self.app_config = FaqConfig.objects.create(namespace='aldryn_faq')
+        self.app_config = FaqConfig.objects.create(namespace='aldryn_faq',
+                                                   permalink_type='Bp',
+                                                   non_permalink_handling=301)
         self.page = api.create_page(
             'faq',
             self.template,

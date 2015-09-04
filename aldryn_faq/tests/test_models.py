@@ -43,17 +43,159 @@ class TestCategory(AldrynFaqTest):
             ct.pk
         )
 
-    def test_get_absolute_url(self):
+    def test_get_absolute_url_pk_pk(self):
+        question_1 = self.question1
         category_1 = self.category1
 
+        old = self.app_config.permalink_type
+        self.app_config.permalink_type = "Pp"
+        self.app_config.save()
+
         self.assertEqual(
-            category_1.get_absolute_url("en"),
-            "/en/faq/{pk}-example/".format(pk=category_1.pk)
+            question_1.get_absolute_url("en"),
+            "/en/faq/{category_pk}/{pk}/".format(
+                category_pk=category_1.pk,
+                pk=question_1.pk)
         )
         self.assertEqual(
-            category_1.get_absolute_url("de"),
-            "/de/faq/{pk}-beispiel/".format(pk=category_1.pk)
+            question_1.get_absolute_url("de"),
+            "/de/faq/{category_pk}/{pk}/".format(
+                category_pk=category_1.pk,
+                pk=question_1.pk)
         )
+
+        self.app_config.permalink_type = old
+        self.app_config.save()
+
+    def test_get_absolute_url_pk_slug(self):
+        question_1 = self.question1
+        category_1 = self.category1
+
+        old = self.app_config.permalink_type
+        self.app_config.permalink_type = "Ps"
+        self.app_config.save()
+
+        self.assertEqual(
+            question_1.get_absolute_url("en"),
+            "/en/faq/{category_pk}/{slug}/".format(
+                category_pk=category_1.pk,
+                slug=get_slug_in_language(question_1, "en"))
+        )
+        self.assertEqual(
+            question_1.get_absolute_url("de"),
+            "/de/faq/{category_pk}/{slug}/".format(
+                category_pk=category_1.pk,
+                slug=get_slug_in_language(question_1, "de"))
+        )
+
+        self.app_config.permalink_type = old
+        self.app_config.save()
+
+    def test_get_absolute_url_slug_pk(self):
+        question_1 = self.question1
+        category_1 = self.category1
+
+        old = self.app_config.permalink_type
+        self.app_config.permalink_type = "Sp"
+        self.app_config.save()
+
+        self.assertEqual(
+            question_1.get_absolute_url("en"),
+            "/en/faq/{category_slug}/{pk}/".format(
+                category_slug=get_slug_in_language(category_1, "en"),
+                pk=question_1.pk
+            )
+        )
+        self.assertEqual(
+            question_1.get_absolute_url("de"),
+            "/de/faq/{category_slug}/{pk}/".format(
+                category_slug=get_slug_in_language(category_1, "de"),
+                pk=question_1.pk
+            )
+        )
+
+        self.app_config.permalink_type = old
+        self.app_config.save()
+
+    def test_get_absolute_url_slug_slug(self):
+        question_1 = self.question1
+        category_1 = self.category1
+
+        old = self.app_config.permalink_type
+        self.app_config.permalink_type = "Ss"
+        self.app_config.save()
+
+        self.assertEqual(
+            question_1.get_absolute_url("en"),
+            "/en/faq/{category_slug}/{slug}/".format(
+                category_slug=get_slug_in_language(category_1, "en"),
+                slug=get_slug_in_language(question_1, "en")
+            )
+        )
+        self.assertEqual(
+            question_1.get_absolute_url("de"),
+            "/de/faq/{category_slug}/{slug}/".format(
+                category_slug=get_slug_in_language(category_1, "de"),
+                slug=get_slug_in_language(question_1, "de")
+            )
+        )
+
+        self.app_config.permalink_type = old
+        self.app_config.save()
+
+    def test_get_absolute_url_both_pk(self):
+        question_1 = self.question1
+        category_1 = self.category1
+
+        old = self.app_config.permalink_type
+        self.app_config.permalink_type = "Bp"
+        self.app_config.save()
+
+        self.assertEqual(
+            question_1.get_absolute_url("en"),
+            "/en/faq/{category_pk}-{category_slug}/{pk}/".format(
+                category_slug=get_slug_in_language(category_1, "en"),
+                category_pk=category_1.pk,
+                pk=question_1.pk
+            )
+        )
+        self.assertEqual(
+            question_1.get_absolute_url("de"),
+            "/de/faq/{category_pk}-{category_slug}/{pk}/".format(
+                category_slug=get_slug_in_language(category_1, "de"),
+                category_pk=category_1.pk,
+                pk=question_1.pk
+            )
+        )
+
+        self.app_config.permalink_type = old
+        self.app_config.save()
+
+    def test_get_absolute_url_both_slug(self):
+        question_1 = self.question1
+        category_1 = self.category1
+
+        old = self.app_config.permalink_type
+        self.app_config.permalink_type = "Bs"
+        self.app_config.save()
+
+        self.assertEqual(
+            question_1.get_absolute_url("en"),
+            "/en/faq/{category_pk}-{category_slug}/{slug}/".format(
+                category_slug=get_slug_in_language(category_1, "en"),
+                category_pk=category_1.pk,
+                slug=get_slug_in_language(question_1, "en"))
+        )
+        self.assertEqual(
+            question_1.get_absolute_url("de"),
+            "/de/faq/{category_pk}-{category_slug}/{slug}/".format(
+                category_slug=get_slug_in_language(category_1, "de"),
+                category_pk=category_1.pk,
+                slug=get_slug_in_language(question_1, "de"))
+        )
+
+        self.app_config.permalink_type = old
+        self.app_config.save()
 
     def test_manager_get_categories(self):
         # Test case when no language is passed. Apparently, this returns only

@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+1.0.6 (2015-09-04)
+------------------
+
+* Support for Django 1.8
+* Updated requirements
+* More reversion support
+* Added permalink options and support
+
+
 1.0.5 (2015-08-07)
 ------------------
 
