@@ -11,7 +11,6 @@ from django.http import (
     HttpResponsePermanentRedirect,
 )
 from django.utils.translation import (
-    get_language,
     get_language_from_request,
     override as force_language,
     ugettext,
