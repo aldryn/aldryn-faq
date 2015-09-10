@@ -11,7 +11,6 @@ from django.http import (
     HttpResponsePermanentRedirect,
 )
 from django.utils.translation import (
-    get_language,
     get_language_from_request,
     override as force_language,
     ugettext,
@@ -105,19 +104,12 @@ class FaqCategoryMixin(AppConfigMixin):
         return super(FaqCategoryMixin, self).dispatch(
             request, *args, **kwargs)
 
-    def get_language(self):
-        """
-        Define the language of the current view, defaults to the active
-        language.
-        """
-        return get_language()
-
     def get_language_choices(self):
         """
         Define the language choices for the view, defaults to the defined
         settings.
         """
-        return get_active_language_choices(self.get_language())
+        return get_active_language_choices(self.current_language)
 
     def get_category(self, queryset=None):
         """
@@ -199,7 +191,11 @@ class FaqAnswerView(CanonicalUrlMixin, FaqCategoryMixin, AllowPKsTooMixin,
                 FaqAnswerView, self).get_non_canonical_url_response_type()
 
     def get(self, request, *args, **kwargs):
-        category = self.get_category()
+        try:
+            category = self.get_category()
+        except FallbackLanguageResolved as flr:
+            # We have the category, but it is in a fallback language.
+            category = flr.object
 
         # only look at questions within this category
         queryset = self.get_queryset().filter(category=category.pk)
