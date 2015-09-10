@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 HAYSTACK_CONNECTIONS = {
     'default': {
@@ -35,8 +36,6 @@ HELPER_SETTINGS = {
     'INSTALLED_APPS': [
         'adminsortable2',
         'aldryn_apphook_reload',
-        'aldryn_boilerplates',
-        'aldryn_faq',
         'aldryn_reversion',
         'aldryn_translation_tools',
         'djangocms_text_ckeditor',
@@ -63,19 +62,6 @@ HELPER_SETTINGS = {
         'cms.middleware.page.CurrentPageMiddleware',
         'cms.middleware.toolbar.ToolbarMiddleware',
         'cms.middleware.language.LanguageCookieMiddleware'
-    ],
-    'STATICFILES_FINDERS': [
-        'django.contrib.staticfiles.finders.FileSystemFinder',
-        # important! place right before django.contrib.staticfiles.finders.AppDirectoriesFinder  # NOQA
-        'aldryn_boilerplates.staticfile_finders.AppDirectoriesFinder',
-        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    ],
-    'TEMPLATE_LOADERS': [
-        'django.template.loaders.filesystem.Loader',
-        # important! place right before django.template.loaders.app_directories.Loader  # NOQA
-        'aldryn_boilerplates.template_loaders.AppDirectoriesLoader',
-        'django.template.loaders.app_directories.Loader',
-        'django.template.loaders.eggs.Loader',
     ],
     'ALDRYN_BOILERPLATE_NAME': 'bootstrap3',
     'HAYSTACK_CONNECTIONS': HAYSTACK_CONNECTIONS,
@@ -118,7 +104,7 @@ HELPER_SETTINGS = {
 
 def run():
     from djangocms_helper import runner
-    runner.cms('aldryn_faq')
+    runner.cms('aldryn_faq', extra_args=['--boilerplate'])
 
 if __name__ == "__main__":
     run()
