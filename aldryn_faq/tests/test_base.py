@@ -26,7 +26,7 @@ User = get_user_model()
 
 class TestUtilityMixin(object):
     """Just adds some common test utilities to the testing class."""
-    def rand_str(prefix='', length=16, chars=string.ascii_letters):
+    def rand_str(self, prefix='', length=16, chars=string.ascii_letters):
         return prefix + ''.join(random.choice(chars) for _ in range(length))
 
     def assertEqualItems(self, a, b):
