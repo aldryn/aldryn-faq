@@ -21,7 +21,9 @@ from .models import Category, Question, FaqConfig
 from .forms import CategoryAdminForm
 
 
-class CategoryAdmin(AllTranslationsMixin, TranslatableAdmin):
+class CategoryAdmin(VersionedPlaceholderAdminMixin,
+                    AllTranslationsMixin,
+                    TranslatableAdmin):
 
     list_display = ('__str__', 'appconfig', )
 
