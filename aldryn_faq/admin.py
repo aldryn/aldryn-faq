@@ -21,7 +21,9 @@ from .models import Category, Question, FaqConfig
 from .forms import CategoryAdminForm
 
 
-class CategoryAdmin(AllTranslationsMixin, TranslatableAdmin):
+class CategoryAdmin(AllTranslationsMixin,
+                    VersionedPlaceholderAdminMixin,
+                    TranslatableAdmin):
 
     list_display = ('__str__', 'appconfig', )
 
@@ -53,10 +55,10 @@ class CategoryAdmin(AllTranslationsMixin, TranslatableAdmin):
         return self._fieldsets
 
 
-class QuestionAdmin(VersionedPlaceholderAdminMixin,
+class QuestionAdmin(AllTranslationsMixin,
+                    VersionedPlaceholderAdminMixin,
                     FrontendEditableAdminMixin,
                     SortableAdminMixin,
-                    AllTranslationsMixin,
                     TranslatableAdmin):
 
     render_placeholder_language_tabs = False
@@ -97,8 +99,8 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Question, QuestionAdmin)
 
 
-class FaqConfigAdmin(VersionedPlaceholderAdminMixin,
-                     AllTranslationsMixin,
+class FaqConfigAdmin(AllTranslationsMixin,
+                     VersionedPlaceholderAdminMixin,
                      BaseAppHookConfig,
                      TranslatableAdmin):
     def get_config_fields(self):
