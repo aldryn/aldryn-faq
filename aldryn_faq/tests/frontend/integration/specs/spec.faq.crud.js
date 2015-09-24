@@ -9,6 +9,7 @@
 // #############################################################################
 // INTEGRATION TEST
 var faqPage = require('../pages/page.faq.crud.js');
+var cmsProtractorHelper = require('cms-protractor-helper');
 
 describe('Aldryn FAQ tests: ', function () {
     // create random question name
@@ -19,7 +20,7 @@ describe('Aldryn FAQ tests: ', function () {
         browser.get(faqPage.site);
 
         // check if the page already exists
-        faqPage.testLink.isPresent().then(function (present) {
+        return faqPage.testLink.isPresent().then(function (present) {
             if (present === true) {
                 // go to the main page
                 browser.get(faqPage.site + '?edit');
@@ -40,58 +41,44 @@ describe('Aldryn FAQ tests: ', function () {
 
     it('creates a new test page', function () {
         // click the example.com link in the top menu
-        faqPage.userMenus.first().click().then(function () {
+        return faqPage.userMenus.first().click().then(function () {
             // wait for top menu dropdown options to appear
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.userMenuDropdown);
-            }, faqPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.userMenuDropdown);
 
             return faqPage.administrationOptions.first().click();
         }).then(function () {
             // wait for modal iframe to appear
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.sideMenuIframe);
-            }, faqPage.iframeWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.sideMenuIframe);
 
             // switch to sidebar menu iframe
             browser.switchTo().frame(browser.findElement(
                 By.css('.cms_sideframe-frame iframe')));
 
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.pagesLink);
-            }, faqPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.pagesLink);
 
             faqPage.pagesLink.click();
 
             // wait for iframe side menu to reload
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.addConfigsButton);
-            }, faqPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.addConfigsButton);
 
             // check if the page already exists and return the status
             return faqPage.addPageLink.isPresent();
         }).then(function (present) {
             if (present === true) {
                 // page is absent - create new page
-                browser.wait(function () {
-                    return browser.isElementPresent(faqPage.addPageLink);
-                }, faqPage.mainElementsWaitTime);
+                cmsProtractorHelper.waitFor(faqPage.addPageLink);
 
                 faqPage.addPageLink.click();
 
-                browser.wait(function () {
-                    return browser.isElementPresent(faqPage.titleInput);
-                }, faqPage.mainElementsWaitTime);
+                cmsProtractorHelper.waitFor(faqPage.titleInput);
 
-                faqPage.titleInput.sendKeys('Test').then(function () {
+                return faqPage.titleInput.sendKeys('Test').then(function () {
                     faqPage.saveButton.click();
 
                     return faqPage.slugErrorNotification.isPresent();
                 }).then(function (present) {
                     if (present === false) {
-                        browser.wait(function () {
-                            return browser.isElementPresent(faqPage.editPageLink);
-                        }, faqPage.mainElementsWaitTime);
+                        cmsProtractorHelper.waitFor(faqPage.editPageLink);
 
                         // wait till the editPageLink will become clickable
                         browser.sleep(500);
@@ -102,9 +89,7 @@ describe('Aldryn FAQ tests: ', function () {
                         // switch to default page content
                         browser.switchTo().defaultContent();
 
-                        browser.wait(function () {
-                            return browser.isElementPresent(faqPage.testLink);
-                        }, faqPage.mainElementsWaitTime);
+                        cmsProtractorHelper.waitFor(faqPage.testLink);
 
                         // validate test link text
                         faqPage.testLink.getText().then(function (title) {
@@ -118,28 +103,22 @@ describe('Aldryn FAQ tests: ', function () {
 
     it('creates a new apphook config', function () {
         // check if the focus is on sidebar ifarme
-        faqPage.editPageLink.isPresent().then(function (present) {
+        return faqPage.editPageLink.isPresent().then(function (present) {
             if (present === false) {
                 // wait for modal iframe to appear
-                browser.wait(function () {
-                    return browser.isElementPresent(faqPage.sideMenuIframe);
-                }, faqPage.iframeWaitTime);
+                cmsProtractorHelper.waitFor(faqPage.sideMenuIframe);
 
                 // switch to sidebar menu iframe
                 return browser.switchTo().frame(browser.findElement(By.css(
                     '.cms_sideframe-frame iframe')));
             }
         }).then(function () {
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.breadcrumbsLinks.first());
-            }, faqPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.breadcrumbsLinks.first());
 
             // click the Home link in breadcrumbs
             faqPage.breadcrumbsLinks.first().click();
 
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.faqConfigsLink);
-            }, faqPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.faqConfigsLink);
 
             faqPage.faqConfigsLink.click();
 
@@ -148,140 +127,95 @@ describe('Aldryn FAQ tests: ', function () {
         }).then(function (present) {
             if (present === false) {
                 // apphook config is absent - create new apphook config
-                browser.wait(function () {
-                    return browser.isElementPresent(faqPage.addConfigsButton);
-                }, faqPage.mainElementsWaitTime);
+                cmsProtractorHelper.waitFor(faqPage.addConfigsButton);
 
                 faqPage.addConfigsButton.click();
 
-                browser.wait(function () {
-                    return browser.isElementPresent(faqPage.namespaceInput);
-                }, faqPage.mainElementsWaitTime);
+                cmsProtractorHelper.waitFor(faqPage.namespaceInput);
 
-                faqPage.namespaceInput.sendKeys('aldryn_faq')
+                return faqPage.namespaceInput.sendKeys('aldryn_faq')
                     .then(function () {
                     return faqPage.applicationTitleInput.sendKeys('Test title');
                 }).then(function () {
                     faqPage.saveButton.click();
 
-                    browser.wait(function () {
-                        return browser.isElementPresent(faqPage.successNotification);
-                    }, faqPage.mainElementsWaitTime);
+                    cmsProtractorHelper.waitFor(faqPage.successNotification);
                 });
             }
         });
     });
 
     it('creates a new category', function () {
-        browser.wait(function () {
-            return browser.isElementPresent(faqPage.breadcrumbsLinks.first());
-        }, faqPage.mainElementsWaitTime);
+        cmsProtractorHelper.waitFor(faqPage.breadcrumbsLinks.first());
 
         // click the Home link in breadcrumbs
         faqPage.breadcrumbsLinks.first().click();
 
-        browser.wait(function () {
-            return browser.isElementPresent(faqPage.categoriesLink);
-        }, faqPage.mainElementsWaitTime);
+        cmsProtractorHelper.waitFor(faqPage.categoriesLink);
 
         faqPage.categoriesLink.click();
 
         // wait for iframe side menu to reload
-        browser.wait(function () {
-            return browser.isElementPresent(faqPage.addConfigsButton);
-        }, faqPage.mainElementsWaitTime);
+        cmsProtractorHelper.waitFor(faqPage.addConfigsButton);
 
         // check if the category already exists and return the status
-        faqPage.editConfigsLink.isPresent().then(function (present) {
+        return faqPage.editConfigsLink.isPresent().then(function (present) {
             if (present === false) {
                 // category is absent - create new category
-                browser.wait(function () {
-                    return browser.isElementPresent(faqPage.addConfigsButton);
-                }, faqPage.mainElementsWaitTime);
+                cmsProtractorHelper.waitFor(faqPage.addConfigsButton);
 
                 faqPage.addConfigsButton.click();
 
-                browser.wait(function () {
-                    return browser.isElementPresent(faqPage.languageTabs.first());
-                }, faqPage.mainElementsWaitTime);
+                cmsProtractorHelper.waitFor(faqPage.languageTabs.first());
 
                 // switch to English language tab
                 faqPage.languageTabs.first().click().then(function () {
-                    browser.wait(function () {
-                        return browser.isElementPresent(faqPage.nameInput);
-                    }, faqPage.mainElementsWaitTime);
+                    cmsProtractorHelper.waitFor(faqPage.nameInput);
 
                     return faqPage.nameInput.sendKeys('Test category');
                 }).then(function () {
-                    // wait for Appconfig select to appear
-                    browser.wait(function () {
-                        return browser.isElementPresent(faqPage.appconfigSelect);
-                    }, faqPage.mainElementsWaitTime);
-
                     // set Appconfig
-                    return faqPage.appconfigSelect.click();
+                    return cmsProtractorHelper.selectOption(faqPage.appconfigSelect,
+                        'FAQ / aldryn_faq', faqPage.appconfigOption);
                 }).then(function () {
-                    faqPage.appconfigSelect.sendKeys('FAQ / aldryn_faq');
-                    return faqPage.appconfigOption.click();
-                }).then(function () {
-                    faqPage.appconfigSelect.click();
-
                     faqPage.saveButton.click();
 
-                    browser.wait(function () {
-                        return browser.isElementPresent(faqPage.successNotification);
-                    }, faqPage.mainElementsWaitTime);
+                    cmsProtractorHelper.waitFor(faqPage.successNotification);
                 });
             }
         });
     });
 
     it('creates a new question', function () {
-        browser.wait(function () {
-            return browser.isElementPresent(faqPage.breadcrumbsLinks.first());
-        }, faqPage.mainElementsWaitTime);
+        cmsProtractorHelper.waitFor(faqPage.breadcrumbsLinks.first());
 
         // click the Home link in breadcrumbs
         faqPage.breadcrumbsLinks.first().click();
 
-        browser.wait(function () {
-            return browser.isElementPresent(faqPage.addQuestionButton);
-        }, faqPage.mainElementsWaitTime);
+        cmsProtractorHelper.waitFor(faqPage.addQuestionButton);
 
         faqPage.addQuestionButton.click();
 
-        browser.wait(function () {
-            return browser.isElementPresent(faqPage.languageTabs.first());
-        }, faqPage.mainElementsWaitTime);
+        cmsProtractorHelper.waitFor(faqPage.languageTabs.first());
 
         // switch to English language tab
-        faqPage.languageTabs.first().click().then(function () {
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.titleInput);
-            }, faqPage.mainElementsWaitTime);
+        return faqPage.languageTabs.first().click().then(function () {
+            cmsProtractorHelper.waitFor(faqPage.titleInput);
 
             return faqPage.titleInput.sendKeys(questionName);
         }).then(function () {
             // set Category
-            return faqPage.categorySelect.click();
-        }).then(function () {
-            faqPage.categorySelect.sendKeys('Test category');
-            return faqPage.categoryOption.click();
-        }).then(function () {
-            return faqPage.categorySelect.click();
+            return cmsProtractorHelper.selectOption(faqPage.categorySelect,
+                        'Test category', faqPage.categoryOption);
         }).then(function () {
             // wait for cke iframe to appear
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.ckeIframe);
-            }, faqPage.iframeWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.ckeIframe);
 
             // switch to cke iframe
             browser.switchTo().frame(browser.findElement(
                 By.css('#cke_1_contents iframe')));
 
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.ckeEditableBlock);
-            }, faqPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.ckeEditableBlock);
 
             return faqPage.ckeEditableBlock.sendKeys('Test question');
         }).then(function () {
@@ -289,25 +223,19 @@ describe('Aldryn FAQ tests: ', function () {
             browser.switchTo().defaultContent();
 
             // wait for modal iframe to appear
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.sideMenuIframe);
-            }, faqPage.iframeWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.sideMenuIframe);
 
             // switch to sidebar menu iframe
             browser.switchTo().frame(browser.findElement(By.css(
                 '.cms_sideframe-frame iframe')));
 
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.saveAndContinueButton);
-            }, faqPage.iframeWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.saveAndContinueButton);
 
             browser.actions().mouseMove(faqPage.saveAndContinueButton)
                 .perform();
             faqPage.saveButton.click();
 
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.successNotification);
-            }, faqPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.successNotification);
 
             // validate success notification
             expect(faqPage.successNotification.isDisplayed()).toBeTruthy();
@@ -322,45 +250,33 @@ describe('Aldryn FAQ tests: ', function () {
         browser.switchTo().defaultContent();
 
         // add faq to the page only if it was not added before
-        faqPage.aldrynFAQBlock.isPresent().then(function (present) {
+        return faqPage.aldrynFAQBlock.isPresent().then(function (present) {
             if (present === false) {
                 // click the Page link in the top menu
                 return faqPage.userMenus.get(1).click().then(function () {
                     // wait for top menu dropdown options to appear
-                    browser.wait(function () {
-                        return browser.isElementPresent(faqPage.userMenuDropdown);
-                    }, faqPage.mainElementsWaitTime);
+                    cmsProtractorHelper.waitFor(faqPage.userMenuDropdown);
 
                     faqPage.advancedSettingsOption.click();
 
                     // wait for modal iframe to appear
-                    browser.wait(function () {
-                        return browser.isElementPresent(faqPage.modalIframe);
-                    }, faqPage.iframeWaitTime);
+                    cmsProtractorHelper.waitFor(faqPage.modalIframe);
 
                     // switch to modal iframe
                     browser.switchTo().frame(browser.findElement(By.css(
                         '.cms_modal-frame iframe')));
 
                     // wait for Application select to appear
-                    browser.wait(function () {
-                        return browser.isElementPresent(faqPage.applicationSelect);
-                    }, faqPage.mainElementsWaitTime);
+                    cmsProtractorHelper.waitFor(faqPage.applicationSelect);
 
                     // set Application
-                    faqPage.applicationSelect.click().then(function () {
-                        faqPage.applicationSelect.sendKeys('FAQ');
-                        return faqPage.faqOption.click();
-                    }).then(function () {
-                        return faqPage.applicationSelect.click();
-                    });
-
+                    return cmsProtractorHelper.selectOption(faqPage.applicationSelect,
+                        'FAQ', faqPage.faqOption);
+                }).then(function () {
                     // switch to default page content
                     browser.switchTo().defaultContent();
 
-                    browser.wait(function () {
-                        return browser.isElementPresent(faqPage.saveModalButton);
-                    }, faqPage.mainElementsWaitTime);
+                    cmsProtractorHelper.waitFor(faqPage.saveModalButton);
 
                     browser.actions().mouseMove(faqPage.saveModalButton)
                         .perform();
@@ -369,22 +285,16 @@ describe('Aldryn FAQ tests: ', function () {
             }
         }).then(function () {
             // wait for aldryn-faq block to appear
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.aldrynFAQBlock);
-            }, faqPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.aldrynFAQBlock);
 
             faqPage.categoryLink.click();
 
             // wait for question link to appear
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.questionLink);
-            }, faqPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.questionLink);
 
             faqPage.questionLink.click();
 
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.questionTitle);
-            }, faqPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.questionTitle);
 
             // validate question title
             expect(faqPage.questionTitle.isDisplayed()).toBeTruthy();
@@ -393,21 +303,17 @@ describe('Aldryn FAQ tests: ', function () {
 
     it('deletes question', function () {
         // wait for modal iframe to appear
-        browser.wait(function () {
-            return browser.isElementPresent(faqPage.sideMenuIframe);
-        }, faqPage.iframeWaitTime);
+        cmsProtractorHelper.waitFor(faqPage.sideMenuIframe);
 
         // switch to sidebar menu iframe
         browser.switchTo()
             .frame(browser.findElement(By.css('.cms_sideframe-frame iframe')));
 
         // wait for edit question link to appear
-        browser.wait(function () {
-            return browser.isElementPresent(faqPage.editQuestionLinks.first());
-        }, faqPage.mainElementsWaitTime);
+        cmsProtractorHelper.waitFor(faqPage.editQuestionLinks.first());
 
         // validate edit question links texts to delete proper question
-        faqPage.editQuestionLinks.first().getText().then(function (text) {
+        return faqPage.editQuestionLinks.first().getText().then(function (text) {
             if (text === questionName) {
                 return faqPage.editQuestionLinks.first().click();
             } else {
@@ -427,28 +333,21 @@ describe('Aldryn FAQ tests: ', function () {
             }
         }).then(function () {
             // wait for delete button to appear
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.deleteButton);
-            }, faqPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.deleteButton);
 
             browser.actions().mouseMove(faqPage.saveAndContinueButton)
                 .perform();
             return faqPage.deleteButton.click();
         }).then(function () {
             // wait for confirmation button to appear
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.sidebarConfirmationButton);
-            }, faqPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.sidebarConfirmationButton);
 
             faqPage.sidebarConfirmationButton.click();
 
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.successNotification);
-            }, faqPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.successNotification);
 
             // validate success notification
-            expect(faqPage.successNotification.isDisplayed())
-                .toBeTruthy();
+            expect(faqPage.successNotification.isDisplayed()).toBeTruthy();
 
             // switch to default page content
             browser.switchTo().defaultContent();
