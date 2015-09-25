@@ -30,9 +30,7 @@ describe('Aldryn FAQ tests: ', function () {
             }
 
             // wait for username input to appear
-            browser.wait(function () {
-                return browser.isElementPresent(faqPage.usernameInput);
-            }, faqPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(faqPage.usernameInput);
 
             // login to the site
             faqPage.cmsLogin();
