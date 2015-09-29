@@ -62,6 +62,7 @@ In your project's ``settings.py`` make sure you have all of::
     'parler',
     'sortedm2m',
     'aldryn_faq',
+    'taggit',
 
 listed in ``INSTALLED_APPS``, *after* ``'cms'``.
 
@@ -119,14 +120,15 @@ Now run ``python manage.py migrate aldryn_faq``.
 .. note::
 
     Aldryn FAQ supports both South and Django 1.7 migrations.
+    If using Django 1.6 and South < 1.0 you may need to add the following to
+    your settings: ::
 
-If using Django 1.7, you may need to add the following to your settings: ::
-
-    MIGRATION_MODULES = {
-       ...
-       'aldryn_faq': 'aldryn_faq.migrations_django',
-       ...
-    }
+        SOUTH_MIGRATION_MODULES = {
+           ...
+           'taggit': 'taggit.south_migrations',
+           'aldryn_faq': 'aldryn_faq.south_migrations',
+           ...
+        }
 
 
 Server
