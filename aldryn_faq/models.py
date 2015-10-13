@@ -85,9 +85,9 @@ class Category(TranslatedAutoSlugifyMixin, TranslationHelperMixin,
                 'slug', default=None, language_code=language)[0] or ''
 
         kwargs = {}
-        if self.appconfig and hasattr(self.appconfig, "permalink_type"):
+        try:
             permalink_type = self.appconfig.permalink_type
-        else:
+        except AttributeError:
             permalink_type = "Ss"
 
         if 'P' in permalink_type:
