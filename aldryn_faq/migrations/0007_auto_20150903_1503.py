@@ -19,6 +19,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='faqconfig',
             name='permalink_type',
-            field=models.CharField(default='slug', help_text='Choose the style of urls to use from the examples. (Note, all types are relative to apphook)', max_length=2, verbose_name='permalink type', choices=[('Pp', '1/2/'), ('Ps', '1/question-slug/'), ('Sp', 'category-slug/2/'), ('Ss', 'category-slug/question-slug/'), ('Bp', '1-category-slug/2/'), ('Bs', '1-category-slug/question-slug/')]),
+            field=models.CharField(default='Ss', help_text='Choose the style of urls to use from the examples. (Note, all types are relative to apphook)', max_length=2, verbose_name='permalink type', choices=[('Pp', '1/2/'), ('Ps', '1/question-slug/'), ('Sp', 'category-slug/2/'), ('Ss', 'category-slug/question-slug/'), ('Bp', '1-category-slug/2/'), ('Bs', '1-category-slug/question-slug/')]),
         ),
     ]
