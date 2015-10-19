@@ -3,11 +3,31 @@ from south.utils import datetime_utils as datetime
 from south.db import db
 from south.v2 import DataMigration
 from django.db import models
+from django.utils.encoding import force_text
 
-from parler.utils.context import switch_language
-# we need to use real models since otherwise fake class is provided
-# by Django, which doesn't has any parler methods.
-from aldryn_faq.models import Question
+from django.utils.text import slugify
+
+
+def get_slug_candidate(question_model, translation, language_code):
+    """
+    Generate the slug candidate the same way as
+    aldryn-translation-tools.TranslatedAutoSlugifyMixin does that.
+    Simplified, since we know in advance
+    """
+    if not getattr(translation, 'slug', ''):
+        slug_source = translation.title
+        slug = force_text(slugify(slug_source))
+        candidate = force_text(slugify(slug_source))
+        qs = question_model.objects.filter(translations__language_code=language_code).exclude(pk=translation.master_id)
+        idx = 1
+
+        while qs.filter(translations__slug=candidate).exists():
+            # at this point max length for
+            if len(candidate) > 255:
+                slug = slug[:255-len(str(idx))]
+            candidate = "{slug}-{idx}".format(slug=slug, idx=idx)
+            idx += 1
+        return candidate
 
 
 class Migration(DataMigration):
@@ -17,11 +37,11 @@ class Migration(DataMigration):
         Trigger Question.save method (aldryn-translation-tools) to generate
         slug from question.title.
         """
+        Question = orm.Question
         for question in Question.objects.all():
             for translation in question.translations.all():
-                with switch_language(question,
-                                     language_code=translation.language_code):
-                    question.save()
+                translation.slug = get_slug_candidate(Question, translation, translation.language_code)
+                translation.save()
 
     def backwards(self, orm):
         "Write your backwards methods here."
