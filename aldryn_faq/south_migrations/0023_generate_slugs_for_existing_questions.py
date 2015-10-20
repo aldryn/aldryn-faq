@@ -18,7 +18,9 @@ def get_slug_candidate(question_model, translation, language_code):
         slug_source = translation.title
         slug = force_text(slugify(slug_source))
         candidate = force_text(slugify(slug_source))
-        qs = question_model.objects.filter(translations__language_code=language_code).exclude(pk=translation.master_id)
+        qs = question_model.objects.filter(
+            translations__language_code=language_code).exclude(
+            pk=translation.master_id)
         idx = 1
 
         while qs.filter(translations__slug=candidate).exists():
@@ -40,7 +42,8 @@ class Migration(DataMigration):
         Question = orm.Question
         for question in Question.objects.all():
             for translation in question.translations.all():
-                translation.slug = get_slug_candidate(Question, translation, translation.language_code)
+                translation.slug = get_slug_candidate(
+                    Question, translation, translation.language_code)
                 translation.save()
 
     def backwards(self, orm):
