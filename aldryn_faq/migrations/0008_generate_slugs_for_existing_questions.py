@@ -6,29 +6,31 @@ from django.db import models, migrations
 from django.utils.text import slugify
 from django.utils.encoding import force_text
 
+from aldryn_translation_tools.models import TranslatedAutoSlugifyMixin
 
-def get_slug_candidate(question_model, translation, language_code):
-    """
-    Generate the slug candidate the same way as
-    aldryn-translation-tools.TranslatedAutoSlugifyMixin does that.
-    Simplified, since we know in advance
-    """
-    if not getattr(translation, 'slug', ''):
-        slug_source = translation.title
-        slug = force_text(slugify(slug_source))
-        candidate = force_text(slugify(slug_source))
-        qs = question_model.objects.filter(
-            translations__language_code=language_code).exclude(
-            pk=translation.master_id)
-        idx = 1
 
-        while qs.filter(translations__slug=candidate).exists():
-            # at this point max length for
-            if len(candidate) > 255:
-                slug = slug[:255-len(str(idx))]
-            candidate = "{slug}-{idx}".format(slug=slug, idx=idx)
-            idx += 1
-        return candidate
+class AutoSlugifyQuestions(TranslatedAutoSlugifyMixin):
+    slug_max_length = 255
+    slug_source_field_name = 'title'
+
+    def __init__(self, translation, query_model=None):
+        self.translation = translation
+        self.query_model = query_model
+
+    # override some methods since we are performing operaions on the translation
+    # not the question itself.
+    def get_slug_source(self):
+        return getattr(self.translation, self.slug_source_field_name, None)
+
+    def _get_existing_slug(self):
+        getattr(self.translation, self.slug_field_name, None)
+
+    def _get_slug_queryset(self, lookup_model=None):
+        return super(AutoSlugifyQuestions, self)._get_slug_queryset(
+            lookup_model=self.query_model)
+
+    def get_current_language(self):
+        return self.translation.language_code
 
 
 def resave_questions_for_slug_autogeneration(apps, schema_editor):
@@ -36,8 +38,9 @@ def resave_questions_for_slug_autogeneration(apps, schema_editor):
     Question = apps.get_model("aldryn_faq", "Question")
     for question in Question.objects.all():
         for translation in question.translations.all():
-            translation.slug = get_slug_candidate(Question, translation,
-                                                  translation.language_code)
+            AutoSlugify = AutoSlugifyQuestions(translation)
+            translation.slug = AutoSlugify.make_new_slug(
+                qs=Question.objects.all())
             translation.save()
 
 
