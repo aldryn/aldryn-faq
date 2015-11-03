@@ -29,7 +29,7 @@ class ConfigCheckMixin(object):
         """
         # No one can create an Article, if there is no app_config yet.
         configs = FaqConfig.objects.all()
-        if configs.count() < 1:
+        if not configs:
             return False
         if not any([namespace_is_apphooked(config.namespace)
                     for config in configs]):
@@ -60,10 +60,7 @@ class FaqQuestionWizard(ConfigCheckMixin, Wizard):
         """
         base_perm = super(FaqQuestionWizard, self).user_has_add_permission(
             user, **kwargs)
-        if base_perm and Category.objects.count() > 0:
-            return True
-        # By default, no permission.
-        return False
+        return base_perm and Category.objects.exists()
 
 
 class CreateFaqCategoryForm(BaseFormMixin, TranslatableModelForm):
@@ -113,8 +110,7 @@ class CreateFaqQuestionForm(BaseFormMixin, TranslatableModelForm):
         super(CreateFaqQuestionForm, self).__init__(**kwargs)
 
         # If there's only 1 category, don't bother show the empty label (choice)
-        category = Category.objects.all()
-        if category.count() == 1:
+        if Category.objects.count() == 1:
             self.fields['category'].empty_label = None
 
     def save(self, commit=True):
