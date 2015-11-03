@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
+from django.core.urlresolvers import reverse, NoReverseMatch
 
 default_cms_plugin_table_mapping = (
     # (old_name, new_name),
@@ -46,3 +47,15 @@ def rename_tables_old_to_new(db, table_mapping=None):
 
 def rename_tables_new_to_old(db, table_mapping=None):
     return rename_tables(db, table_mapping, reverse=True)
+
+
+def namespace_is_apphooked(namespace):
+    """
+    Check if provided namespace has an app-hooked page.
+    Returns True or False.
+    """
+    try:
+        reverse('{0}:faq-category-list'.format(namespace))
+    except (NoReverseMatch, AttributeError):
+        return False
+    return True
