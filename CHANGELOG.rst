@@ -5,7 +5,8 @@ CHANGELOG
 ------------------
 
 * Wizards for CMS 3.2
-* Fix issue when updating form <1.0.6 to 1.0.6 (slug generation for questions)
+* Fix issue when updating form <1.0.6 to 1.0.7+ (slug generation for questions)
+  **Note** that 1.0.6 is still affected.
 
 1.0.6 (2015-09-04)
 ------------------
