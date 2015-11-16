@@ -83,7 +83,8 @@ class Category(TranslatedAutoSlugifyMixin, TranslationHelperMixin,
                 'slug', default=None, language_code=language)[0] or ''
 
         kwargs = {}
-        permalink_type = self.appconfig.permalink_type
+        # since appconfig may be null/None, do not produce Attribute errors.
+        permalink_type = getattr(self.appconfig, 'permalink_type', '')
 
         if 'P' in permalink_type:
             kwargs.update({"category_pk": self.pk})

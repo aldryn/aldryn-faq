@@ -77,7 +77,7 @@ class FaqToolbar(CMSToolbar):
     watch_models = (Category, )
     config = None
 
-    def __get_newsblog_config(self):
+    def __get_faq_config(self):
         try:
             __, config = get_app_instance(self.request)
             if not isinstance(config, FaqConfig):
@@ -91,7 +91,7 @@ class FaqToolbar(CMSToolbar):
 
     def get_on_delete_redirect_url(self, obj):
         if not self.config:
-            self.config = self.__get_newsblog_config()
+            self.config = self.__get_faq_config()
 
         if isinstance(obj, Category):
             url = reverse(
@@ -109,7 +109,7 @@ class FaqToolbar(CMSToolbar):
         return url
 
     def populate(self):
-        self.config = self.__get_newsblog_config()
+        self.config = self.__get_faq_config()
         user = getattr(self.request, 'user', None)
         try:
             view_name = self.request.resolver_match.view_name
