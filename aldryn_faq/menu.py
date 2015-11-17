@@ -22,9 +22,9 @@ class FaqCategoryMenu(CMSAttachMenu):
     def get_nodes(self, request):
         nodes = []
         language = get_language_from_request(request, check_path=True)
+        # don't bother with categories that don't have appconfig.
         categories = Category.objects.active_translations(
-            language_code=language).distinct()
-
+            language_code=language).exclude(appconfig__isnull=True).distinct()
         if hasattr(self, 'instance') and self.instance:
             #
             # If self has a property `instance`
@@ -37,7 +37,6 @@ class FaqCategoryMenu(CMSAttachMenu):
             config = app.get_config(self.instance.application_namespace)
             if config:
                 categories = categories.filter(appconfig=config)
-
         for category in categories:
             try:
                 url = category.get_absolute_url(language=language)
