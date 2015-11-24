@@ -24,6 +24,7 @@ from taggit.managers import TaggableManager
 
 from .cms_appconfig import FaqConfig
 from .managers import CategoryManager, RelatedManager
+from .utils import is_valid_namespace, is_valid_app_config
 
 
 def get_translation(obj, language_code):
@@ -42,6 +43,22 @@ def get_slug_in_language(record, language):
         return None
     return record.safe_translation_getter(
         field="slug", language_code=language, default=None, )
+
+
+def filter_question_qs(question_qs):
+    """
+    Filters provided question queryset to ensure that only apphooked
+    namespaces are being used.
+    :param question_qs: QuestionQueryset
+    :return: filtered question_qs
+    """
+    app_configs = set()
+    for question in question_qs.iterator():
+        app_config = question.category.appconfig
+        if (is_valid_app_config(app_config) and
+                is_valid_namespace(app_config.namespace)):
+            app_configs.add(app_config)
+    return question_qs.filter(category__appconfig__in=app_configs)
 
 
 @python_2_unicode_compatible
@@ -194,7 +211,9 @@ class QuestionsPlugin(models.Model):
     )
 
     def get_queryset(self):
-        return Question.objects.filter_by_language(self.language)
+        qs = filter_question_qs(
+            Question.objects.filter_by_language(self.language))
+        return qs
 
     def get_questions(self):
         questions = self.get_queryset()
@@ -212,7 +231,8 @@ class QuestionListPlugin(CMSPlugin):
         self.questions = oldinstance.questions.all()
 
     def get_questions(self):
-        return self.questions.all()
+        qs = filter_question_qs(self.questions.all())
+        return qs
 
     def __str__(self):
         question_count = self.questions.count()
@@ -236,7 +256,12 @@ class CategoryListPlugin(CMSPlugin):
         By default, if no categories were chosen return all categories.
         Otherwise, return the chosen categories.
         """
-        categories = Category.objects.get_categories(language=self.language)
+        # ensure we don't try to resolve categories we cannot resolve
+        categories = [
+            category for category in Category.objects.get_categories(
+                language=self.language)
+            if is_valid_app_config(category.appconfig) and is_valid_namespace(
+                category.appconfig.namespace)]
 
         if self.selected_categories.exists():
             category_ids = self.selected_categories.values_list(

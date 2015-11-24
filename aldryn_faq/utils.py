@@ -49,7 +49,7 @@ def rename_tables_new_to_old(db, table_mapping=None):
     return rename_tables(db, table_mapping, reverse=True)
 
 
-def namespace_is_apphooked(namespace):
+def is_valid_namespace(namespace):
     """
     Check if provided namespace has an app-hooked page.
     Returns True or False.
@@ -59,3 +59,10 @@ def namespace_is_apphooked(namespace):
     except (NoReverseMatch, AttributeError):
         return False
     return True
+
+
+def is_valid_app_config(app_config):
+    """
+    Checks if provided app_config is valid. Tries to get namespace.
+    """
+    return getattr(app_config, 'namespace', None)

@@ -15,7 +15,7 @@ from parler.forms import TranslatableModelForm
 
 from .cms_appconfig import FaqConfig
 from .models import Category, Question
-from .utils import namespace_is_apphooked
+from .utils import is_valid_namespace
 
 
 class ConfigCheckMixin(object):
@@ -32,7 +32,7 @@ class ConfigCheckMixin(object):
         configs = FaqConfig.objects.all()
         if not configs:
             return False
-        if not any([namespace_is_apphooked(config.namespace)
+        if not any([is_valid_namespace(config.namespace)
                     for config in configs]):
             return False
 
@@ -85,7 +85,7 @@ class CreateFaqCategoryForm(BaseFormMixin, TranslatableModelForm):
         # check if app config is apphooked
         app_configs = [app_config
                        for app_config in app_configs
-                       if namespace_is_apphooked(app_config.namespace)]
+                       if is_valid_namespace(app_config.namespace)]
         if len(app_configs) == 1:
             self.fields['appconfig'].widget = forms.HiddenInput()
             self.fields['appconfig'].initial = app_configs[0].pk
