@@ -24,7 +24,7 @@ from taggit.managers import TaggableManager
 
 from .cms_appconfig import FaqConfig
 from .managers import CategoryManager, RelatedManager
-from .utils import namespace_is_apphooked
+from .utils import is_valid_namespace, is_valid_app_config
 
 
 def get_translation(obj, language_code):
@@ -52,10 +52,12 @@ def filter_question_qs(question_qs):
     :param question_qs: QuestionQueryset
     :return: filtered question_qs
     """
-    app_configs = [
-        app_config for app_config in question_qs.values_list(
-            'category__appconfig', flat=True).distinct()
-        if namespace_is_apphooked(getattr(app_config, 'namespace', None))]
+    app_configs = set()
+    for question in question_qs.iterator():
+        app_config = question.category.appconfig
+        if (is_valid_app_config(app_config) and
+                is_valid_namespace(app_config.namespace)):
+            app_configs.add(app_config)
     return question_qs.filter(category__appconfig__in=app_configs)
 
 
@@ -258,8 +260,8 @@ class CategoryListPlugin(CMSPlugin):
         categories = [
             category for category in Category.objects.get_categories(
                 language=self.language)
-            if namespace_is_apphooked(
-                getattr(category.appconfig, 'namespace', None))]
+            if is_valid_app_config(category.appconfig) and is_valid_namespace(
+                category.appconfig.namespace)]
 
         if self.selected_categories.exists():
             category_ids = self.selected_categories.values_list(
