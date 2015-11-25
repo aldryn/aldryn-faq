@@ -13,6 +13,7 @@ from django.utils.translation import ugettext as _, get_language_from_request
 
 from cms.toolbar_pool import toolbar_pool
 from cms.toolbar_base import CMSToolbar
+from cms.utils.i18n import force_language
 from cms.utils.urlutils import admin_reverse
 
 from aldryn_apphooks_config.utils import get_app_instance
@@ -89,23 +90,29 @@ class FaqToolbar(CMSToolbar):
 
         return config
 
-    def get_on_delete_redirect_url(self, obj):
+    def get_category_list_url(self, lang=None):
+        """
+        Returns url for faq-category-list view with respect to lang or
+        current_lang
+        """
+        with force_language(lang if lang else self.current_lang):
+            url = reverse('{0}:faq-category-list'.format(
+                self.config.namespace))
+        return url
+
+    def get_on_delete_redirect_url(self, obj, lang=None):
         if not self.config:
             self.config = self.__get_faq_config()
 
         if isinstance(obj, Category):
-            url = reverse(
-                '{0}:faq-category-list'.format(self.config.namespace)
-            )
+            url = self.get_category_list_url(lang)
         elif isinstance(obj, Question):
             category = obj.category
-            lang = obj.get_current_language()
+            lang = lang if lang else self.current_lang
             if category:
                 url = category.get_absolute_url(language=lang)
             else:
-                url = reverse(
-                    '{0}:faq-category-list'.format(self.config.namespace)
-                )
+                url = self.get_category_list_url(lang)
         return url
 
     def populate(self):
@@ -181,7 +188,8 @@ class FaqToolbar(CMSToolbar):
                                     active=True)
 
             if delete_category_perm and category:
-                redirect_url = self.get_on_delete_redirect_url(category)
+                redirect_url = self.get_on_delete_redirect_url(
+                    category, language)
                 url = get_admin_url('aldryn_faq_category_delete',
                                     [category.pk, ])
                 menu.add_modal_item(_('Delete this category'), url=url,
@@ -211,7 +219,8 @@ class FaqToolbar(CMSToolbar):
                                     active=True)
 
             if delete_question_perm and question:
-                redirect_url = self.get_on_delete_redirect_url(question)
+                redirect_url = self.get_on_delete_redirect_url(
+                    question, language)
                 url = get_admin_url('aldryn_faq_question_delete',
                                     [question.pk, ])
                 menu.add_modal_item(_('Delete this question'), url=url,
