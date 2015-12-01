@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+1.0.8 (2015-12-01)
+------------------
+
+* Fixes issue with toolbar (when language is different than the page language)
+* Fixes issue for plugins if category didn't had a valid namespace
+* Fixes Attribute error on menu processing
+
+
 1.0.7 (2015-11-12)
 ------------------
 
