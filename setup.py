@@ -11,6 +11,7 @@ REQUIREMENTS = [
     'django>=1.6,<1.9',
     'django-admin-sortable2>=0.5.2',
     'django-cms>=3.0.12,<3.3',
+    'djangocms-text-ckeditor',
     'django-parler>=1.4',
     'django-reversion>=1.8.2,<1.9',
     'django-sortedm2m',
