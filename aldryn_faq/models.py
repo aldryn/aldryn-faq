@@ -68,7 +68,9 @@ class Category(TranslatedAutoSlugifyMixin, TranslationHelperMixin,
     slug_source_field_name = 'name'
 
     translations = TranslatedFields(
-        name=models.CharField(max_length=255),
+        name=models.CharField(
+            _('name'), max_length=255,
+            help_text=_(u"Provide the category’s name")),
         slug=models.SlugField(
             verbose_name=_('Slug'), max_length=255, blank=True,
             help_text=_('Provide a "slug" for this category or leave blank for '
@@ -100,8 +102,10 @@ class Category(TranslatedAutoSlugifyMixin, TranslationHelperMixin,
                 'slug', default=None, language_code=language)[0] or ''
 
         kwargs = {}
-        # since appconfig may be null/None, do not produce Attribute errors.
-        permalink_type = getattr(self.appconfig, 'permalink_type', '')
+        try:
+            permalink_type = self.appconfig.permalink_type
+        except AttributeError:
+            permalink_type = "Ss"
 
         if 'P' in permalink_type:
             kwargs.update({"category_pk": self.pk})
@@ -126,7 +130,9 @@ class Question(TranslatedAutoSlugifyMixin, TranslationHelperMixin,
     slug_source_field_name = 'title'
 
     translations = TranslatedFields(
-        title=models.CharField(_('Title'), max_length=255),
+        title=models.CharField(
+            _('Title'), max_length=255,
+            help_text=_(u"This should be a short form of the question")),
         answer_text=HTMLField(_('Short description')),
         slug=models.SlugField(
             verbose_name=_('Slug'), max_length=255, blank=True,
