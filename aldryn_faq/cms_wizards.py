@@ -97,7 +97,6 @@ class CreateFaqCategoryForm(BaseFormMixin, TranslatableModelForm):
             self.fields['appconfig'].widget = forms.HiddenInput()
             self.fields['appconfig'].initial = app_configs[0].pk
 
-
     def save(self, commit=True):
         """
         Ensure we create a revision for reversion.
