@@ -77,6 +77,8 @@ class CreateFaqCategoryForm(BaseFormMixin, TranslatableModelForm):
     class Meta:
         model = Category
         fields = ['name', 'slug', 'appconfig']
+        # The natural widget for app_config is meant for normal Admin views and
+        # contains JS to refresh the page on change. This is not wanted here.
         widgets = {'appconfig': forms.Select()}
 
     def __init__(self, **kwargs):
