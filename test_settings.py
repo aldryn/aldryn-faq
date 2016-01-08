@@ -99,6 +99,9 @@ HELPER_SETTINGS = {
             'hide_untranslated': False,
         }
     },
+    'SOUTH_MIGRATION_MODULES': {
+        'taggit': 'taggit.south_migrations',
+    }
 }
 
 

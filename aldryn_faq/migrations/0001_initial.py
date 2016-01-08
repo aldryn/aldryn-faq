@@ -61,7 +61,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('type', models.CharField(max_length=100, verbose_name='type')),
                 ('namespace', models.CharField(default=None, unique=True, max_length=100, verbose_name='instance namespace')),
-                ('app_data', app_data.fields.AppDataField(default=b'{}', editable=False)),
+                ('app_data', app_data.fields.AppDataField(default=dict, editable=False)),
             ],
             options={
                 'abstract': False,
