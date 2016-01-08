@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.utils.translation import ugettext_lazy as _
 from django import forms
+from django.db import transaction
+from django.utils.translation import ugettext_lazy as _, ugettext
 
 from cms.api import add_plugin
 from cms.utils import permissions
@@ -14,6 +15,7 @@ from cms.wizards.forms import BaseFormMixin
 from djangocms_text_ckeditor.widgets import TextEditorWidget
 from djangocms_text_ckeditor.html import clean_html
 from parler.forms import TranslatableModelForm
+from reversion import create_revision, set_user, set_comment
 
 from .cms_appconfig import FaqConfig
 from .models import Category, Question
@@ -75,6 +77,9 @@ class CreateFaqCategoryForm(BaseFormMixin, TranslatableModelForm):
     class Meta:
         model = Category
         fields = ['name', 'slug', 'appconfig']
+        # The natural widget for app_config is meant for normal Admin views and
+        # contains JS to refresh the page on change. This is not wanted here.
+        widgets = {'appconfig': forms.Select()}
 
     def __init__(self, **kwargs):
         super(CreateFaqCategoryForm, self).__init__(**kwargs)
@@ -91,6 +96,22 @@ class CreateFaqCategoryForm(BaseFormMixin, TranslatableModelForm):
         if len(app_configs) == 1:
             self.fields['appconfig'].widget = forms.HiddenInput()
             self.fields['appconfig'].initial = app_configs[0].pk
+
+    def save(self, commit=True):
+        """
+        Ensure we create a revision for reversion.
+        """
+        category = super(CreateFaqCategoryForm, self).save(commit=False)
+
+        # Ensure we make an initial revision
+        with transaction.atomic():
+            with create_revision():
+                category.save()
+                if self.user:
+                    set_user(self.user)
+                set_comment(ugettext("Initial version."))
+
+        return category
 
 
 class CreateFaqQuestionForm(BaseFormMixin, TranslatableModelForm):
@@ -142,8 +163,13 @@ class CreateFaqQuestionForm(BaseFormMixin, TranslatableModelForm):
                 }
                 add_plugin(**plugin_kwarg)
 
-        if commit:
-            question.save()
+        # Ensure we make an initial revision
+        with transaction.atomic():
+            with create_revision():
+                question.save()
+                if self.user:
+                    set_user(self.user)
+                set_comment(ugettext("Initial version."))
 
         return question
 
