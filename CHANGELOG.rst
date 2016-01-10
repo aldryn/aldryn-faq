@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.0.9 (2016-01-09)
+------------------
+
+* Adds reversion support to wizards
+* Updates test configuration
+
+
 1.0.8 (2015-12-01)
 ------------------
 
@@ -15,6 +22,7 @@ CHANGELOG
 * Wizards for CMS 3.2
 * Fix issue when updating form <1.0.6 to 1.0.7+ (slug generation for questions)
   **Note** that 1.0.6 is still affected.
+
 
 1.0.6 (2015-09-04)
 ------------------
