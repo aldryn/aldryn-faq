@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from distutils.version import LooseVersion
+from cms import __version__ as cms_string_version
+
+cms_version = LooseVersion(cms_string_version)
+
+
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
@@ -33,6 +39,7 @@ HELPER_SETTINGS = {
         ('de', 'German'),
         ('fr', 'French'),
     ),
+    'CMS_PERMISSION': True,
     'INSTALLED_APPS': [
         'adminsortable2',
         'aldryn_apphook_reload',
@@ -50,7 +57,7 @@ HELPER_SETTINGS = {
     ],
     # This set of MW classes should work for Django 1.6 and 1.7.
     'MIDDLEWARE_CLASSES': [
-        'aldryn_apphook_reload.middleware.ApphookReloadMiddleware',
+        'cms.middleware.utils.ApphookReloadMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -103,6 +110,15 @@ HELPER_SETTINGS = {
         'taggit': 'taggit.south_migrations',
     }
 }
+
+
+# If using CMS 3.2+, use the CMS middleware for ApphookReloading, otherwise,
+# use aldryn_apphook_reload's.
+if cms_version < LooseVersion('3.2.0'):
+    HELPER_SETTINGS['MIDDLEWARE_CLASSES'].remove(
+        'cms.middleware.utils.ApphookReloadMiddleware')
+    HELPER_SETTINGS['MIDDLEWARE_CLASSES'].insert(
+        0, 'aldryn_apphook_reload.middleware.ApphookReloadMiddleware')
 
 
 def run():
