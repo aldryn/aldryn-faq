@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.0.10 (2006-01-12)
+-------------------
+
+* Improves support for current versions of django-reversion
+* Adds FE tests against DMS 3.2
+
 1.0.9 (2016-01-09)
 ------------------
 
