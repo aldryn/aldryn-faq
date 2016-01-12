@@ -33,6 +33,7 @@ HELPER_SETTINGS = {
         ('de', 'German'),
         ('fr', 'French'),
     ),
+    'CMS_PERMISSION': True,
     'INSTALLED_APPS': [
         'adminsortable2',
         'aldryn_apphook_reload',
