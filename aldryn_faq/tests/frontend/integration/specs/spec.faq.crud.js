@@ -20,17 +20,13 @@ describe('Aldryn FAQ tests: ', function () {
         browser.get(faqPage.site);
 
         // check if the page already exists
-        return faqPage.testLink.isPresent().then(function (present) {
+        faqPage.testLink.isPresent().then(function (present) {
             if (present === true) {
                 // go to the main page
                 browser.get(faqPage.site + '?edit');
-            } else {
-                // click edit mode link
-                faqPage.editModeLink.click();
+                browser.sleep(1000);
+                cmsProtractorHelper.waitForDisplayed(faqPage.usernameInput);
             }
-
-            // wait for username input to appear
-            cmsProtractorHelper.waitFor(faqPage.usernameInput);
 
             // login to the site
             faqPage.cmsLogin();
@@ -38,6 +34,17 @@ describe('Aldryn FAQ tests: ', function () {
     });
 
     it('creates a new test page', function () {
+        // close the wizard if necessary
+        faqPage.modalCloseButton.isDisplayed().then(function (displayed) {
+            if (displayed) {
+                faqPage.modalCloseButton.click();
+            }
+        });
+
+        cmsProtractorHelper.waitForDisplayed(faqPage.userMenus.first());
+        // have to wait till animation finished
+        browser.sleep(300);
+
         // click the example.com link in the top menu
         return faqPage.userMenus.first().click().then(function () {
             // wait for top menu dropdown options to appear
@@ -50,7 +57,7 @@ describe('Aldryn FAQ tests: ', function () {
 
             // switch to sidebar menu iframe
             browser.switchTo().frame(browser.findElement(
-                By.css('.cms_sideframe-frame iframe')));
+                By.css('.cms-sideframe-frame iframe')));
 
             cmsProtractorHelper.waitFor(faqPage.pagesLink);
 
@@ -108,13 +115,19 @@ describe('Aldryn FAQ tests: ', function () {
 
                 // switch to sidebar menu iframe
                 return browser.switchTo().frame(browser.findElement(By.css(
-                    '.cms_sideframe-frame iframe')));
+                    '.cms-sideframe-frame iframe')));
             }
         }).then(function () {
-            cmsProtractorHelper.waitFor(faqPage.breadcrumbsLinks.first());
-
             // click the Home link in breadcrumbs
-            faqPage.breadcrumbsLinks.first().click();
+            browser.sleep(1000);
+
+            faqPage.breadcrumbs.isPresent().then(function (present) {
+                if (present) {
+                    // click the Home link in breadcrumbs
+                    cmsProtractorHelper.waitFor(faqPage.breadcrumbsLinks.first());
+                    faqPage.breadcrumbsLinks.first().click();
+                }
+            });
 
             cmsProtractorHelper.waitFor(faqPage.faqConfigsLink);
 
@@ -225,7 +238,7 @@ describe('Aldryn FAQ tests: ', function () {
 
             // switch to sidebar menu iframe
             browser.switchTo().frame(browser.findElement(By.css(
-                '.cms_sideframe-frame iframe')));
+                '.cms-sideframe-frame iframe')));
 
             cmsProtractorHelper.waitFor(faqPage.saveAndContinueButton);
 
@@ -244,8 +257,16 @@ describe('Aldryn FAQ tests: ', function () {
     });
 
     it('adds a new faq block on the page', function () {
+        // go to the main page
+        browser.get(faqPage.site);
+
         // switch to default page content
         browser.switchTo().defaultContent();
+
+        cmsProtractorHelper.waitFor(faqPage.testLink);
+
+        // wait till animation finishes
+        browser.sleep(300);
 
         // add faq to the page only if it was not added before
         return faqPage.aldrynFAQBlock.isPresent().then(function (present) {
@@ -262,7 +283,7 @@ describe('Aldryn FAQ tests: ', function () {
 
                     // switch to modal iframe
                     browser.switchTo().frame(browser.findElement(By.css(
-                        '.cms_modal-frame iframe')));
+                        '.cms-modal-frame iframe')));
 
                     // wait for Application select to appear
                     cmsProtractorHelper.waitFor(faqPage.applicationSelect);
@@ -282,8 +303,21 @@ describe('Aldryn FAQ tests: ', function () {
                 });
             }
         }).then(function () {
+            // refresh the page to see changes
+            browser.refresh();
+
             // wait for aldryn-faq block to appear
             cmsProtractorHelper.waitFor(faqPage.aldrynFAQBlock);
+
+            // wait till animation of sideframe opening finishes
+            browser.sleep(300);
+
+            // close sideframe (it covers the link)
+            cmsProtractorHelper.waitFor(faqPage.sideFrameClose);
+            faqPage.sideFrameClose.click();
+
+            // wait till animation finishes
+            browser.sleep(300);
 
             faqPage.categoryLink.click();
 
@@ -300,18 +334,34 @@ describe('Aldryn FAQ tests: ', function () {
     });
 
     it('deletes question', function () {
-        // wait for modal iframe to appear
-        cmsProtractorHelper.waitFor(faqPage.sideMenuIframe);
+        cmsProtractorHelper.waitForDisplayed(faqPage.userMenus.first());
+        // have to wait till animation finished
+        browser.sleep(300);
+        // click the example.com link in the top menu
+        faqPage.userMenus.first().click().then(function () {
+            // wait for top menu dropdown options to appear
+            cmsProtractorHelper.waitForDisplayed(faqPage.userMenuDropdown);
+
+            return faqPage.administrationOptions.first().click();
+        }).then(function () {
+            // wait for modal iframe to appear
+            cmsProtractorHelper.waitFor(faqPage.sideMenuIframe);
+        });
+
 
         // switch to sidebar menu iframe
         browser.switchTo()
-            .frame(browser.findElement(By.css('.cms_sideframe-frame iframe')));
+            .frame(browser.findElement(By.css('.cms-sideframe-frame iframe')));
 
-        // wait for edit question link to appear
-        cmsProtractorHelper.waitFor(faqPage.editQuestionLinks.first());
-
-        // validate edit question links texts to delete proper question
-        return faqPage.editQuestionLinks.first().getText().then(function (text) {
+        cmsProtractorHelper.waitFor(faqPage.editQuestionButton);
+        browser.sleep(100);
+        faqPage.editQuestionButton.click().then(function () {
+            // wait for edit job opening link to appear
+            return cmsProtractorHelper.waitFor(faqPage.editQuestionLinksTable);
+        }).then(function () {
+            // validate edit faq entry links texts to delete proper faq entry
+            return faqPage.editQuestionLinks.first().getText();
+        }).then(function (text) {
             if (text === questionName) {
                 return faqPage.editQuestionLinks.first().click();
             } else {
