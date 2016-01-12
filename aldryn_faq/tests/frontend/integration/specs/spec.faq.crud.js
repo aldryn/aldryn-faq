@@ -129,7 +129,6 @@ describe('Aldryn FAQ tests: ', function () {
                 }
             });
 
-
             cmsProtractorHelper.waitFor(faqPage.faqConfigsLink);
 
             faqPage.faqConfigsLink.click();
