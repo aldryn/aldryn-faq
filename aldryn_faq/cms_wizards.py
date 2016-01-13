@@ -109,7 +109,8 @@ class CreateFaqCategoryForm(BaseFormMixin, TranslatableModelForm):
                 category.save()
                 if self.user:
                     revision_context_manager.set_user(self.user)
-                revision_context_manager.set_comment(ugettext("Initial version."))
+                revision_context_manager.set_comment(
+                    ugettext("Initial version."))
 
         return category
 
@@ -165,11 +166,12 @@ class CreateFaqQuestionForm(BaseFormMixin, TranslatableModelForm):
 
         # Ensure we make an initial revision
         with transaction.atomic():
-            with create_revision():
+            with revision_context_manager.create_revision():
                 question.save()
                 if self.user:
-                    set_user(self.user)
-                set_comment(ugettext("Initial version."))
+                    revision_context_manager.set_user(self.user)
+                revision_context_manager.set_comment(
+                    ugettext("Initial version."))
 
         return question
 
