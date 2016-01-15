@@ -1,12 +1,12 @@
 CHANGELOG
 =========
 
-1.0.11 (2006-01-12)
+1.0.11 (2016-01-12)
 -------------------
 
 * Adjust requirements for django-reversion to allow 1.10
 
-1.0.10 (2006-01-12)
+1.0.10 (2016-01-12)
 -------------------
 
 * Improves support for current versions of django-reversion
