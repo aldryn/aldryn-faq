@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.conf import settings
-from django.db import models, migrations, transaction
-from django.db.models import get_model
-from django.db.utils import ProgrammingError, OperationalError
+from django.db import models, migrations
 import aldryn_translation_tools.models
 import app_data.fields
 import cms.models.fields
