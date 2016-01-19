@@ -33,7 +33,7 @@ def create_placeholders(app_config, orm):
         # since there is no placeholder - create it, we cannot use
         # get_or_create because it can get placeholder from other config
         new_placeholder = Placeholder.objects.create(
-            slot=placeholder_name)
+            slot=field.slotname)
         setattr(app_config, placeholder_id_name, new_placeholder.pk)
     # after we process all placeholder fields - save config,
     # so that django can pick up them.

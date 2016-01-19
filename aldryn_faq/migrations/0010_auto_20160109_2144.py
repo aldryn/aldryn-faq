@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='faqconfig',
             name='app_data',
-            field=app_data.fields.AppDataField(default=b'{}', editable=False),
+            field=app_data.fields.AppDataField(default='{}', editable=False),
         ),
     ]

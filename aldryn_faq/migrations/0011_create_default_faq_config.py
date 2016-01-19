@@ -22,7 +22,7 @@ def get_config_count(model_class):
     return count
 
 
-def create_placeholders(app_config):
+def create_placeholders(app_config, save=True):
     """
     Creates placeholder instances for each Placeholder field on provided
     app_config.
@@ -43,11 +43,12 @@ def create_placeholders(app_config):
         # since there is no placeholder - create it, we cannot use
         # get_or_create because it can get placeholder from other config
         new_placeholder = Placeholder.objects.create(
-            slot=placeholder_name)
+            slot=field.slotname)
         setattr(app_config, placeholder_id_name, new_placeholder.pk)
     # after we process all placeholder fields - save config,
     # so that django can pick up them.
-    # app_config.save()
+    if save:
+        app_config.save()
 
 
 def create_default_config(apps, schema_editor):
@@ -69,6 +70,8 @@ def create_default_config(apps, schema_editor):
         count = get_config_count(FaqConfig)
 
     if not count == 0:
+        for cfg in FaqConfig.objects.all():
+            create_placeholders(cfg)
         return
     # create only if there is no configs because user may already have
     # existing and configured config.
@@ -82,7 +85,7 @@ def create_default_config(apps, schema_editor):
     # are faked models. To prevent that we need to manually set instance pk.
     app_config.pk = 1
     # placeholders
-    create_placeholders(app_config)
+    create_placeholders(app_config, save=False)
     app_config.save()
 
     # translations
@@ -90,9 +93,6 @@ def create_default_config(apps, schema_editor):
     app_config_translation.language_code = settings.LANGUAGES[0][0]
     app_config_translation.app_title = DEFAULT_APP_TITLE
     app_config_translation.save()
-
-
-
 
 
 class Migration(migrations.Migration):
