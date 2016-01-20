@@ -98,7 +98,7 @@ HELPER_SETTINGS = {
             },
             {
                 'code': 'fr',
-                'name': u'Française',
+                'name': 'French',
                 'fallbacks': ['en', ]
             },
         ],

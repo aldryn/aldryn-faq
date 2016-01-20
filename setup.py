@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+import sys
 from setuptools import setup, find_packages
 from aldryn_faq import __version__
+
+py26 = (2, 7, 0) > sys.version_info >= (2, 6, 0)
 
 REQUIREMENTS = [
     'aldryn-apphooks-config>=0.2.4',
@@ -15,12 +18,21 @@ REQUIREMENTS = [
     'django-parler>=1.4,<1.7',
     'django-reversion>=1.8.2,<1.11',
     'django-sortedm2m',
-    'django-taggit',
 
     # THIS IS HERE TO SUPPORT EXISTING MIGRATIONS AND CAN BE REMOVED ONLY ONCE
     # WE NO LONGER SUPPORT SOUTH MIGRATIONS.
     'django-admin-sortable',
 ]
+
+# use appropriate 3rd party packages versions
+if py26:
+    REQUIREMENTS += [
+        'django-taggit<0.18.0',
+    ]
+else:
+    REQUIREMENTS += [
+        'django-taggit',
+    ]
 
 # https://pypi.python.org/pypi?%3Aaction=list_classifiers
 CLASSIFIERS = [
