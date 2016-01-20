@@ -25,6 +25,9 @@ def create_placeholders(app_config, orm):
             continue
 
         placeholder_name = field.name
+        # south doesn't keeps the field.slotname, so we have to pick it
+        # up from field.name
+        slot_name = placeholder_name.replace('placeholder_', '')
         placeholder_id_name = '{0}_id'.format(placeholder_name)
         placeholder_id = getattr(app_config, placeholder_id_name, None)
         if placeholder_id is not None:
@@ -33,7 +36,7 @@ def create_placeholders(app_config, orm):
         # since there is no placeholder - create it, we cannot use
         # get_or_create because it can get placeholder from other config
         new_placeholder = Placeholder.objects.create(
-            slot=field.slotname)
+            slot=slot_name)
         setattr(app_config, placeholder_id_name, new_placeholder.pk)
     # after we process all placeholder fields - save config,
     # so that django can pick up them.
