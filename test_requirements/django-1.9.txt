@@ -1,0 +1,6 @@
+aldryn-reversion>=1.0.8
+django-taggit
+django>=1.9.0,<1.10
+django-reversion>=1.10,<1.11
+
+-r base.txt

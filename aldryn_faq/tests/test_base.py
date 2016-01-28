@@ -17,8 +17,6 @@ from cms.utils import get_cms_setting
 from cms.utils.i18n import get_language_list
 from djangocms_helper.utils import create_user
 
-from aldryn_search.helpers import get_request
-
 from ..models import Category, Question, FaqConfig
 
 User = get_user_model()
@@ -32,10 +30,13 @@ class TestUtilityMixin(object):
     def assertEqualItems(self, a, b):
         try:
             # In Python3, this method has been renamed (poorly)
-            return self.assertCountEqual(a, b)
-        except:
+            assertCountEqual = self.assertCountEqual
+        except AttributeError:
             # In 2.6, assertItemsEqual() doesn't sort first
-            return self.assertItemsEqual(sorted(a), sorted(b))
+            def assertCountEqual(a, b):
+                return self.assertItemsEqual(sorted(a), sorted(b))
+
+        return assertCountEqual(a, b)
 
 
 class AldrynFaqTestMixin(TestUtilityMixin, object):
@@ -182,7 +183,6 @@ class CMSRequestBasedTest(TestUtilityMixin, TransactionTestCase):
             apphook_namespace=self.app_config.namespace
         )
         self.placeholder = self.page.placeholders.all()[0]
-        self.request = get_request('en')
 
         for page in [self.root_page, self.page]:
             for language, _ in settings.LANGUAGES[1:]:
