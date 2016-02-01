@@ -40,6 +40,7 @@ class TestUtilityMixin(object):
 
         return assertCountEqual(a, b)
 
+
 class AldrynFaqTestMixin(TestUtilityMixin, object):
     """Sets up basic Category and Question objects for testing."""
     data = {
