@@ -32,11 +32,13 @@ class TestUtilityMixin(object):
     def assertEqualItems(self, a, b):
         try:
             # In Python3, this method has been renamed (poorly)
-            return self.assertCountEqual(a, b)
-        except:
+            assertCountEqual = self.assertCountEqual
+        except AttributeError:
             # In 2.6, assertItemsEqual() doesn't sort first
-            return self.assertItemsEqual(sorted(a), sorted(b))
+            def assertCountEqual(a, b):
+                return self.assertItemsEqual(sorted(a), sorted(b))
 
+        return assertCountEqual(a, b)
 
 class AldrynFaqTestMixin(TestUtilityMixin, object):
     """Sets up basic Category and Question objects for testing."""
