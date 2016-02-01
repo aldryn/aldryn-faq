@@ -6,10 +6,6 @@ from aldryn_faq import __version__
 py26 = (2, 7, 0) > sys.version_info >= (2, 6, 0)
 
 REQUIREMENTS = [
-    # django-appconf 1.0.2 (unreleased) aldryn search needs it
-    # Also used in:
-    # aldryn-boilerplates
-    # aldryn-search
     'aldryn-apphooks-config>=0.2.4',
     'aldryn-boilerplates>=0.7.4,<0.8',
     'aldryn-reversion>=1.0.0,<1.1',
@@ -45,6 +41,8 @@ CLASSIFIERS = [
     'Framework :: Django',
     'Framework :: Django :: 1.6',
     'Framework :: Django :: 1.7',
+    'Framework :: Django :: 1.8',
+    'Framework :: Django :: 1.9',
     'Intended Audience :: Developers',
     'License :: OSI Approved :: BSD License',
     'Operating System :: OS Independent',

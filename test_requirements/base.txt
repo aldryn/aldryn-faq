@@ -1,14 +1,11 @@
 aldryn-boilerplates>=0.6.0
 aldryn-reversion>=1.0.4
 aldryn-translation-tools>=0.1.0
-aldryn-apphook-reload
 coverage==3.7.1
 django-classy-tags
-django-mptt<0.7
 django-parler>=1.4
 django-sekizai>=0.8.2
 django-sortedm2m
-django-taggit
 djangocms-admin-style
 djangocms-helper>=0.9.4
 djangocms-text-ckeditor
@@ -29,9 +26,10 @@ django-admin-sortable
 
 # The following are for aldryn-search
 lxml
-django-appconf==0.6 # rq.filter: <0.6
+django-appconf
 aldryn-common
 django-haystack>=2.0.0
 django-spurl
 django-standard-form
-aldryn-search
+# TODO: use release once it is out
+https://github.com/aldryn/aldryn-search/archive/feature/django-19-support.zip
