@@ -1,5 +1,4 @@
 aldryn-boilerplates>=0.6.0
-aldryn-reversion>=1.0.4
 aldryn-translation-tools>=0.1.0
 coverage==3.7.1
 django-classy-tags
