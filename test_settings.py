@@ -42,7 +42,6 @@ HELPER_SETTINGS = {
     'CMS_PERMISSION': True,
     'INSTALLED_APPS': [
         'adminsortable2',
-        'aldryn_apphook_reload',
         'aldryn_reversion',
         'aldryn_translation_tools',
         'djangocms_text_ckeditor',
@@ -55,7 +54,6 @@ HELPER_SETTINGS = {
         # required for testing the migrations.
         'adminsortable',
     ],
-    # This set of MW classes should work for Django 1.6 and 1.7.
     'MIDDLEWARE_CLASSES': [
         'cms.middleware.utils.ApphookReloadMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
@@ -111,10 +109,10 @@ HELPER_SETTINGS = {
     }
 }
 
-
 # If using CMS 3.2+, use the CMS middleware for ApphookReloading, otherwise,
 # use aldryn_apphook_reload's.
 if cms_version < LooseVersion('3.2.0'):
+    HELPER_SETTINGS['INSTALLED_APPS'].insert(0, 'aldryn_apphook_reload'),
     HELPER_SETTINGS['MIDDLEWARE_CLASSES'].remove(
         'cms.middleware.utils.ApphookReloadMiddleware')
     HELPER_SETTINGS['MIDDLEWARE_CLASSES'].insert(
