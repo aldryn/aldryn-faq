@@ -4,7 +4,10 @@ from __future__ import unicode_literals
 
 from django.core.urlresolvers import reverse
 
-import reversion
+try:
+    from reversion.revisions import create_revision, get_for_object
+except ImportError:
+    from reversion import create_revision, get_for_object
 
 from django.db import transaction
 
@@ -46,7 +49,7 @@ class CommonAldrynReversionsAdminMixinTestCaseMixin(object):
         for field in self.text_fields_to_change:
             setattr(object_instance, field, self.rand_str(prefix='dummy_'))
         with transaction.atomic():
-            with reversion.create_revision():
+            with create_revision():
                 object_instance.save()
 
     def get_object_instance(self):
@@ -59,7 +62,7 @@ class CommonAldrynReversionsAdminMixinTestCaseMixin(object):
 
     def test_category_recovery_accessible(self):
         object_instance = self.get_object_instance()
-        version = reversion.get_for_object(object_instance)[0]
+        version = get_for_object(object_instance)[0]
         object_pk = object_instance.pk
         self.assertEqual(self.model_class.objects.filter(
             pk=object_pk).count(), 1)
