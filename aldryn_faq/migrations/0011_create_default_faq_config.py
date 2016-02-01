@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.db import models, migrations, transaction
-from django.db.models import get_model
+from django.apps import apps as django_apps
 from django.db.utils import ProgrammingError, OperationalError
 
 APP_PACKAGE = 'aldryn_faq'
@@ -66,7 +66,7 @@ def create_default_config(apps, schema_editor):
         count = get_config_count(FaqConfig)
     except (ProgrammingError, OperationalError):
         model_path = '{0}.{1}'.format(APP_PACKAGE, APP_CONFIG)
-        FaqConfig = get_model(model_path)
+        FaqConfig = django_apps.get_model(model_path)
         count = get_config_count(FaqConfig)
 
     if not count == 0:
