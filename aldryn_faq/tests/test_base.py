@@ -17,8 +17,6 @@ from cms.utils import get_cms_setting
 from cms.utils.i18n import get_language_list
 from djangocms_helper.utils import create_user
 
-from aldryn_search.helpers import get_request
-
 from ..models import Category, Question, FaqConfig
 
 User = get_user_model()
