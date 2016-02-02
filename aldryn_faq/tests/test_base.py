@@ -185,7 +185,6 @@ class CMSRequestBasedTest(TestUtilityMixin, TransactionTestCase):
             apphook_namespace=self.app_config.namespace
         )
         self.placeholder = self.page.placeholders.all()[0]
-        self.request = get_request('en')
 
         for page in [self.root_page, self.page]:
             for language, _ in settings.LANGUAGES[1:]:
