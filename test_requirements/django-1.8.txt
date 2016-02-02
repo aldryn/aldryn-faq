@@ -1,7 +1,6 @@
 aldryn-reversion>=1.0.4
 django-taggit
 django>=1.8.0,<1.9
-# fixme: replace to >=1.9.3,<1.11 after cms issue would be fixed
-django-reversion>=1.9.3,<1.10
+django-reversion>=1.9.3,<1.11
 
 -r base.txt

@@ -1,5 +1,4 @@
 django>=1.9.0,<1.10
-# fixme: replace to >=1.9.3,<1.11 after cms issue would be fixed
 django-reversion>=1.10,<1.11
 djangocms-helper
 aldryn-apphook-reload
