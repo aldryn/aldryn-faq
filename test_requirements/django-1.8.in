@@ -1,4 +1,5 @@
 django>=1.8.0,<1.9
+aldryn-reversion>=1.0.4
 # fixme: replace to >=1.9.3,<1.11 after cms issue would be fixed
 django-reversion>=1.9.3,<1.10
 djangocms-helper
