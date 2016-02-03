@@ -31,4 +31,4 @@ django-haystack>=2.0.0
 django-spurl
 django-standard-form
 # TODO: use release once it is out
-https://github.com/aldryn/aldryn-search/archive/feature/django-19-support.zip
+aldryn-search>=0.2.11,<0.3
