@@ -1,5 +1,5 @@
 # TODO: use release once it is out
-https://github.com/aldryn/aldryn-reversion/archive/feature/django-1.9-support.zip
+aldryn-reversion>=1.0.7
 django-taggit
 django>=1.9.0,<1.10
 django-reversion>=1.10,<1.11
