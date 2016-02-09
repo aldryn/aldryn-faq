@@ -72,7 +72,7 @@ class QuestionAdmin(AllTranslationsMixin,
         """
         Displays Taggit tags to a comma-separated list of the tags’ names.
         """
-        return ", ".join([str(tag) for tag in obj.tags.get_query_set()])
+        return ", ".join([tag.name for tag in obj.tags.get_query_set()])
     tag_list.short_description = 'Tags'
     tag_list.allow_tags = True
 
