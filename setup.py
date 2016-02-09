@@ -8,7 +8,7 @@ py26 = (2, 7, 0) > sys.version_info >= (2, 6, 0)
 REQUIREMENTS = [
     'aldryn-apphooks-config>=0.2.4',
     'aldryn-boilerplates>=0.7.4,<0.8',
-    'aldryn-reversion>=1.0.0,<1.1',
+    'aldryn-reversion>=1.0.4,<1.1',
     'aldryn-search',
     'aldryn-translation-tools>=0.2.1',
     'django>=1.6,<1.9.999',
