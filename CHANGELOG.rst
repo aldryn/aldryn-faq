@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+x.x.xx (xxxx-xx-xx)
+-------------------
+
+* Add Django 1.9 support.
+* Clean up test environments.
+* Add default FaqConfig migrations.
+
 1.0.11 (2016-01-12)
 -------------------
 
