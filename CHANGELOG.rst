@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-x.x.xx (xxxx-xx-xx)
+1.0.12 (2016-02-12)
 -------------------
 
 * Add Django 1.9 support.
