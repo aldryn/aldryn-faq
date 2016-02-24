@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n cms_tags %}
 
 <div class="aldryn aldryn-faq aldryn-faq-categories">
     <div class="list-group">
@@ -8,6 +8,9 @@
                 {{ category }}
                 <span class="badge">{{ category.count }}</span>
             </a>
+            {% if category.description %}
+                {% render_model category "description" %}
+            {% endif %}
         {% empty %}
             <p class="list-group-item">{% trans "No entry found." %}</p>
         {% endfor %}
