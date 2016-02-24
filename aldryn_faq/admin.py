@@ -36,6 +36,10 @@ class CategoryAdmin(AllTranslationsMixin,
         (_('Language Independent Fields'), {
             'fields': ('appconfig', )
         }),
+        (_('Advanced options'), {
+            'classes': ('collapse',),
+            'fields': ('description',)
+        }),
     ]
 
     class Media:

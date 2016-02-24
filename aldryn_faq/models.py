@@ -75,6 +75,9 @@ class Category(TranslatedAutoSlugifyMixin, TranslationHelperMixin,
             verbose_name=_('Slug'), max_length=255, blank=True,
             help_text=_('Provide a "slug" for this category or leave blank for '
                         'an auto-generated one.')),
+        description=HTMLField(
+            verbose_name=_('description'), blank=True, default='',
+            help_text=_('Optional. Description of this category.'))
     )
     appconfig = models.ForeignKey(
         FaqConfig, verbose_name=_('appconfig'), blank=True, null=True
