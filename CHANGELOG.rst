@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.0.13 (2016-02-25)
+-------------------
+
+* Fixes error if tags were filled with non-ascii characters.
+* Added an optional description field to category.
+
 1.0.12 (2016-02-12)
 -------------------
 
