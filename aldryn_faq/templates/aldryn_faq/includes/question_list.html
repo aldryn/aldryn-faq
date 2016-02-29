@@ -1,0 +1,40 @@
+{% load i18n cms_tags %}
+
+{% regroup object_list|dictsort:"category_id" by category as qgroups %}
+{% for qgroup in qgroups %}
+    {% if list %}
+        <h2>{{ qgroup.grouper }}</h2>
+    {% endif %}
+
+    <ul>
+        {% for question in qgroup.list %}
+            <li>
+                <a href="{{ question.get_absolute_url }}">
+                    <h3>
+                        {% render_model question "title" %}
+                        {% if not list %}
+                            {{ qgroup.grouper }}
+                        {% endif %}
+                        {% for tag in question.tags.all %}
+                            <span>{{ tag }}{% if not forloop.last %}, {% endif %}</span>
+                        {% endfor %}
+                    </h3>
+                    {% if view.config.app_data.config.show_description %}
+                        {% render_model question "answer_text" %}
+                    {% endif %}
+                </a>
+            </li>
+        {% empty %}
+            <li>{% trans "No entry found." %}</li>
+        {% endfor %}
+    </ul>
+{% empty %}
+    {% if list %}
+        <h3>{{ qgroup.grouper|default:_("Category") }}</h3>
+    {% endif %}
+    <p>{% trans "No entry found." %}</p>
+{% endfor %}
+
+{% if list and title %}
+    <p><a href="{{ object.category.get_absolute_url }}">{% trans "Back to Category" %}</a></p>
+{% endif %}

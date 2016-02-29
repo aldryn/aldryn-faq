@@ -1,0 +1,30 @@
+{% extends "aldryn_faq/base.html" %}
+{% load i18n cms_tags %}
+
+{% block faq_content %}
+    <article>
+        <h2>{% render_model object "title" %}</h2>
+
+        <p>
+            <a href="{{ category_url }}">
+                {% render_model object "category" "category" %}
+            </a>
+        </p>
+
+        {% if object.tags.all %}
+            <p>
+                {% for tag in object.tags.all %}
+                    {{ tag }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+        {% endif %}
+
+        {% if question.answer_text %}
+            {% render_model object "answer_text" "answer_text" "" safe %}
+        {% endif %}
+
+        {% render_placeholder object.answer 800 %}
+
+        <p><a href="{{ category_url }}">{% trans "Back to Category" %}</a></p>
+    </article>
+{% endblock %}

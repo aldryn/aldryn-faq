@@ -1,0 +1,10 @@
+{% extends "aldryn_faq/base.html" %}
+{% load i18n %}
+
+{% block faq_content %}
+    {% with list="true" %}
+        {% include "aldryn_faq/includes/question_list.html" %}
+    {% endwith %}
+
+    <p><a href="{% url "aldryn_faq:faq-category-list" %}">{% trans "Back to Overview" %}</a></p>
+{% endblock %}
