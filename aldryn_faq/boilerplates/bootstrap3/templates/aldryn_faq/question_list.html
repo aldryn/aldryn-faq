@@ -2,14 +2,10 @@
 {% load i18n cms_tags %}
 
 {% block faq_content %}
-    {% render_placeholder view.config.placeholder_faq_list_top %}
     {% with list="true" %}
         {% include "aldryn_faq/includes/question_list.html" %}
     {% endwith %}
-{% endblock %}
 
-{% block faq_footer %}
     {% url 'aldryn_faq:faq-category-list' as category_list_url %}
     {% include "aldryn_faq/includes/pager.html" with title=_("Back to Overview") slug=category_list_url %}
-    {% render_placeholder view.config.placeholder_faq_list_bottom %}
 {% endblock %}

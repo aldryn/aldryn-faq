@@ -1,15 +1,12 @@
-{% load i18n cms_tags %}
+{% load i18n %}
 
 <div class="aldryn aldryn-faq aldryn-faq-categories">
     <div class="list-group">
         {% for category in categories %}
             <a href="{{ category.get_absolute_url }}" class="list-group-item
                 {% if category.pk == active_category.pk %} active{% endif %}">
+                {{ category }}
                 <span class="badge">{{ category.count }}</span>
-                <h5 class="list-group-item-heading">{{ category }}</h5>
-                {% if category.description %}
-                    {% render_model category "description" %}
-                {% endif %}
             </a>
         {% empty %}
             <p class="list-group-item">{% trans "No entry found." %}</p>

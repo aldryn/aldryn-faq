@@ -6,18 +6,14 @@
         <div class="row">
             <div class="col-md-17 col-md-push-7">
                 <div class="aldryn aldryn-faq">
-                    {% block faq_title %}{% endblock %}
                     {% block faq_content %}
-                        {% render_placeholder view.config.placeholder_faq_content %}
+                        {% static_placeholder "faq_article_list" %}
                     {% endblock %}
-                    {% block faq_footer %}{% endblock %}
                 </div>
             </div>
             <div class="col-md-7 col-md-pull-17 aldryn-faq aldryn-faq-sidebar">
                 {% block faq_sidebar %}
-                    {% render_placeholder view.config.placeholder_faq_sidebar_top %}
                     {% include "aldryn_faq/plugins/category_list.html" with categories=category_list %}
-                    {% render_placeholder view.config.placeholder_faq_sidebar_bottom %}
                 {% endblock %}
             </div>
         </div>
