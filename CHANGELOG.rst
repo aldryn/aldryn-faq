@@ -1,11 +1,22 @@
 CHANGELOG
 =========
 
+
+1.1.0 UNRELEASED)
+-------------------
+
+* Add stripped default django templates to `/aldryn_newsblog/templates`
+* Remove unused render_placeholder configs
+* Add static_placeholders where necessary
+* Simplify templates
+
+
 1.0.13 (2016-02-25)
 -------------------
 
 * Fixes error if tags were filled with non-ascii characters.
 * Added an optional description field to category.
+
 
 1.0.12 (2016-02-12)
 -------------------
@@ -14,16 +25,19 @@ CHANGELOG
 * Clean up test environments.
 * Add default FaqConfig migrations.
 
+
 1.0.11 (2016-01-12)
 -------------------
 
 * Adjust requirements for django-reversion to allow 1.10
+
 
 1.0.10 (2016-01-12)
 -------------------
 
 * Improves support for current versions of django-reversion
 * Adds FE tests against DMS 3.2
+
 
 1.0.9 (2016-01-09)
 ------------------
