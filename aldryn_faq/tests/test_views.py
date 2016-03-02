@@ -13,6 +13,7 @@ from django.utils.translation import override
 
 import parler.appsettings
 
+from ..models import Category
 from ..views import FaqByCategoryView, FaqAnswerView
 
 from .test_base import AldrynFaqTest
@@ -102,6 +103,26 @@ class TestFaqByCategoryView(AldrynFaqTest):
 
         self.assertEquals(response.status_code, 301)
         self.assertEquals(response.url, category_1_url_new)
+
+    def test_list_view(self):
+        """Test category list view to contain a proper set of categories"""
+        def _do_test_list_view(language_code):
+            with override(language_code):
+                categories = Category.objects.language(
+                    language_code).active_translations(language_code).filter(
+                        appconfig=self.app_config)
+                url = reverse('{ns}:faq-category-list'.format(
+                    ns=self.app_config.namespace))
+                response = self.client.get(url, follow=True)
+                for category in categories:
+                    self.assertContains(response, category.name)
+
+        for language_code in ('en', 'de'):
+            _do_test_list_view(language_code)
+
+        with self.settings(**self.settings_en):
+            reload(parler.appsettings)
+            _do_test_list_view('en')
 
 
 class TestFaqAnswerView(AldrynFaqTest):

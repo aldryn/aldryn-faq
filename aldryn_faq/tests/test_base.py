@@ -89,6 +89,29 @@ class AldrynFaqTestMixin(TestUtilityMixin, object):
         }
     }
 
+    settings_en = {
+        'LANGUAGES': (
+            ('en', 'English'),
+        ),
+        'LANGUAGE': 'en',
+        'PARLER_LANGUAGES': {
+            1: (
+                {'code': 'en'},
+            ),
+            'default': {
+                'hide_untranslated': False,
+            },
+        },
+        'CMS_LANGUAGES': {
+            1: (
+                {'code': 'en', 'name': 'English'},
+            ),
+            'default': {
+                'hide_untranslated': False,
+            },
+        },
+    }
+
     @staticmethod
     def reload(obj, language=None):
         """Simple convenience method for re-fetching an object from the ORM,
