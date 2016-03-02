@@ -59,7 +59,7 @@ class TestCategoryIndex(AldrynFaqTest):
         idx_obj = CategoryIndex()
         category1 = self.reload(self.category1, "en")
         search_data = idx_obj.get_search_data(category1, "en", None)
-        self.assertEqual(search_data, "Example")
+        self.assertEqual(search_data, category1.name)
 
         # This isn't working, but I think it proves that the search index
         # doesn't actually work translatedly.

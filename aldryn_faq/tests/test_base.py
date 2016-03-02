@@ -43,8 +43,8 @@ class AldrynFaqTestMixin(TestUtilityMixin, object):
     """Sets up basic Category and Question objects for testing."""
     data = {
         "category1": {
-            "en": {"name": "Example", "slug": "example", },
-            "de": {"name": "Beispiel", "slug": "beispiel", }
+            "en": {"name": "Example1", "slug": "example", },
+            "de": {"name": "Beispiel1", "slug": "beispiel", }
         },
         "category2": {
             # This should *not* have a EN translation
