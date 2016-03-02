@@ -273,7 +273,9 @@ class FaqByCategoryView(CanonicalUrlMixin, FaqCategoryMixin, ListView):
         return super(FaqByCategoryView, self).get_category()
 
     def get_context_data(self, **kwargs):
-        kwargs['category_list'] = self.get_category_queryset()
+        kwargs['category_list'] = self.get_category_queryset(
+            ).active_translations(self.current_language).filter(
+                appconfig=self.config)
         kwargs['active_category'] = self.get_category()
         return super(FaqByCategoryView, self).get_context_data(**kwargs)
 
@@ -313,5 +315,5 @@ class FaqByCategoryListView(FaqCategoryMixin, ListView):
 
     def get_queryset(self):
         return self.model.objects.language(
-            language_code=self.current_language).filter(
-                appconfig=self.config)
+            language_code=self.current_language).active_translations(
+                self.current_language).filter(appconfig=self.config)
