@@ -65,16 +65,16 @@ var page = {
         '.results th > [href*="/aldryn_faq/question/"]')),
 
     // adding faq block to the page
-    aldrynFAQBlock: element(by.css('.aldryn-faq-categories')),
+    aldrynFAQBlock: element(by.css('ul.nav ~ ul')),
     advancedSettingsOption: element(by.css(
         '.cms-toolbar-item-navigation [href*="advanced-settings"]')),
     modalIframe: element(by.css('.cms-modal-frame iframe')),
     applicationSelect: element(by.id('application_urls')),
     faqOption: element(by.css('option[value="FaqApp"]')),
     saveModalButton: element(by.css('.cms-modal-buttons .cms-btn-action')),
-    categoryLink: element(by.css('.aldryn-faq-categories a')),
-    questionLink: element(by.css('.aldryn-faq .list-group a')),
-    questionTitle: element(by.css('.aldryn-faq-detail h2 > div')),
+    categoryLink: element(by.css('a[href*="/test-category/"]')),
+    questionLink: element(by.css('a[href*="/test-category/test-question"]')),
+    questionTitle: element(by.css('article h2')),
 
     // deleting question
     deleteButton: element(by.css('.deletelink-box a')),
