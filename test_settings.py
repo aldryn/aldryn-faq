@@ -68,7 +68,6 @@ HELPER_SETTINGS = {
         'cms.middleware.toolbar.ToolbarMiddleware',
         'cms.middleware.language.LanguageCookieMiddleware'
     ],
-    'ALDRYN_BOILERPLATE_NAME': 'bootstrap3',
     'HAYSTACK_CONNECTIONS': HAYSTACK_CONNECTIONS,
     'PARLER_LANGUAGES': {
         1: (
@@ -121,7 +120,7 @@ if cms_version < LooseVersion('3.2.0'):
 
 def run():
     from djangocms_helper import runner
-    runner.cms('aldryn_faq', extra_args=['--boilerplate'])
+    runner.cms('aldryn_faq', extra_args=[])
 
 if __name__ == "__main__":
     run()
