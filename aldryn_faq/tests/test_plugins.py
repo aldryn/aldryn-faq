@@ -42,7 +42,7 @@ class TestQuestionListPlugin(AldrynFaqTest):
             page1, self.user, None, lang_code="en", edit=False)
         context = RequestContext(request, {})
         rendered = plugin.render_plugin(context, ph)
-        self.assertTrue(rendered.find(">No entry found.</p>") > -1)
+        self.assertTrue(rendered.find("No entry found.") > -1)
 
         # Now, add a question, and test that it renders.
         question1 = self.reload(self.question1, "en")
