@@ -1,13 +1,13 @@
 {% extends "aldryn_faq/fullwidth.html" %}
 {% load i18n cms_tags %}
 
+{% block breadcrumb %}{% endblock %}
+
 {% block faq_content %}
     <article class="aldryn aldryn-faq aldryn-faq-detail">
-        {% block faq_detail_categories %}
-            <a href="{{ category_url }}" class="label label-primary">
-                {% render_model object "category" "category" %}
-            </a>
-        {% endblock faq_detail_categories %}
+        <a href="{{ category_url }}" class="label label-primary">
+            {% render_model object "category" "category" %}
+        </a>
 
         {% if object.tags.all %}
             <div class="tags pull-right">
@@ -17,27 +17,20 @@
             </div>
         {% endif %}
 
-        {% block faq_detail_title %}
-            <h2>{% render_model object "title" %}</h2>
-        {% endblock faq_detail_title %}
+        <h2>{% render_model object "title" %}</h2>
 
-        {% block faq_detail_lead %}
-            {% if question.answer_text %}
-                <div class="lead">
-                    {% render_model object "answer_text" "answer_text" "" safe %}
-                </div>
-            {% endif %}
-        {% endblock faq_detail_lead %}
-
-        {% block faq_detail_content %}
-            <div class="content">
-                {% render_placeholder object.answer 800 %}
+        {% if question.answer_text %}
+            <div class="lead">
+                {% render_model object "answer_text" "answer_text" "" safe %}
             </div>
-        {% endblock faq_detail_content %}
+        {% endif %}
+
+        <div class="content">
+            {% render_placeholder object.answer 800 %}
+        </div>
     </article>
 {% endblock %}
 
 {% block faq_footer %}
     {% include "aldryn_faq/includes/pager.html" with title=_("Back to Category") slug=category_url %}
-    {% static_placeholder "faq_detail_bottom" %}
 {% endblock %}

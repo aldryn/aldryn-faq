@@ -1,0 +1,21 @@
+{% load cms_tags i18n %}
+
+<ul>
+    {% for question in object_list %}
+        <li>
+            <a href="{{ question.get_absolute_url }}">
+                <h3>
+                    {% render_model question "title" %}
+                    {% for tag in question.tags.all %}
+                        <span>{{ tag }}</span>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </h3>
+                {% if view.config.app_data.config.show_description %}
+                    {% render_model question "answer_text" %}
+                {% endif %}
+            </a>
+        </li>
+    {% empty %}
+        <li>{% trans "No entry found." %}</li>
+    {% endfor %}
+</ul>

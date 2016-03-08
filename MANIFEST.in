@@ -1,4 +1,5 @@
 include app.yaml
 include README.rst
 recursive-include aldryn_faq/boilerplates *
+recursive-include aldryn_faq/templates *
 recursive-exclude * *.pyc

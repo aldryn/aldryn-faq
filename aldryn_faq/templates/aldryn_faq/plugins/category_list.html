@@ -1,0 +1,19 @@
+{% load i18n cms_tags %}
+
+<ul>
+    {% for category in categories %}
+        <li>
+            <a href="{{ category.get_absolute_url }}">
+                <h3>
+                    {{ category }}
+                    <span>{{ category.count }}</span>
+                </h3>
+                {% if category.description %}
+                    {% render_model category "description" %}
+                {% endif %}
+            </a>
+        </li>
+    {% empty %}
+        <li>{% trans "No entry found." %}</li>
+    {% endfor %}
+</ul>
