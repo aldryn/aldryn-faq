@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 
-__version__ = '1.0.13'
+__version__ = '1.1.0'
 
 # TODO: Check if these are still required
 request_faq_category_identifier = 'aldryn_faq_current_category'
