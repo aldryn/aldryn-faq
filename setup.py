@@ -17,7 +17,7 @@ REQUIREMENTS = [
     'djangocms-text-ckeditor',
     'django-parler>=1.4,<1.7',
     'django-reversion>=1.8.2,<1.11',
-    'django-sortedm2m',
+    'django-sortedm2m>=1.2.2',
 
     # THIS IS HERE TO SUPPORT EXISTING MIGRATIONS AND CAN BE REMOVED ONLY ONCE
     # WE NO LONGER SUPPORT SOUTH MIGRATIONS.
