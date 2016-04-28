@@ -7,6 +7,7 @@ from distutils.version import LooseVersion
 from django.contrib import admin
 from django.templatetags.static import static
 from django.utils.translation import ugettext as _
+from django.utils.html import escape
 
 import cms
 from cms.admin.placeholderadmin import FrontendEditableAdminMixin
@@ -76,7 +77,8 @@ class QuestionAdmin(AllTranslationsMixin,
         """
         Displays Taggit tags to a comma-separated list of the tags’ names.
         """
-        return ", ".join([tag.name for tag in obj.tags.get_query_set()])
+        escaped_tags = [escape(tag.name) for tag in obj.tags.get_query_set()]
+        return ", ".join(escaped_tags)
     tag_list.short_description = 'Tags'
     tag_list.allow_tags = True
 
