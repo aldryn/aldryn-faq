@@ -1,5 +1,0 @@
-django>=1.7.0,<1.8
-aldryn-reversion>=1.0.4
-djangocms-helper
-aldryn-apphook-reload
-tox
