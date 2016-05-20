@@ -16,7 +16,7 @@ class TestMenu(AldrynFaqTest):
         request = self.get_page_request(None, self.user, '/en/')
         try:
             renderer = menu_pool.get_renderer(request)
-            menu = FaqCategoryMenu(renderer)
+            menu = FaqCategoryMenu(renderer=renderer)
         except AttributeError:
             menu = FaqCategoryMenu()
         category1 = self.reload(self.category1, 'en')
@@ -31,7 +31,7 @@ class TestMenu(AldrynFaqTest):
         request = self.get_page_request(None, self.user, '/de/')
         try:
             renderer = menu_pool.get_renderer(request)
-            menu = FaqCategoryMenu(renderer)
+            menu = FaqCategoryMenu(renderer=renderer)
         except AttributeError:
             menu = FaqCategoryMenu()
         nodes = menu.get_nodes(request)
