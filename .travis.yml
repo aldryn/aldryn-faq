@@ -18,23 +18,33 @@ env:
     #   PY strategy: do not test 3.3 at all.
     #   FE strategy: only test on Django/CMS3.2 combinations, but place tests on
     #                different Python ENVs if possible.
-    # NOTE: FE-TESTS ARE DISABLED UNTIL THEY ARE FIXED FOR CMS 3.2
+    # NOTE: FE-TESTS ARE DISABLED UNTIL THEY ARE FIXED FOR CMS 3.3 and PhantomJS
     - TOXENV=flake8
+    - TOXENV=py35-dj19-cms33
+    - TOXENV=py35-dj19-cms32
+    - TOXENV=py34-dj19-cms33
     - TOXENV=py34-dj19-cms32
+    - TOXENV=py27-dj19-cms33
     - TOXENV=py27-dj19-cms32
-    - TOXENV=py34-dj18-cms32-fe
+    - TOXENV=py35-dj18-cms33
+    - TOXENV=py35-dj18-cms32
+    - TOXENV=py35-dj18-cms31
+    - TOXENV=py34-dj18-cms33
+    - TOXENV=py34-dj18-cms32
     - TOXENV=py34-dj18-cms31
+    - TOXENV=py27-dj18-cms33
     - TOXENV=py27-dj18-cms32
     - TOXENV=py27-dj18-cms31
     - TOXENV=py34-dj17-cms32
     - TOXENV=py34-dj17-cms31
     - TOXENV=py34-dj17-cms30
-    - TOXENV=py27-dj17-cms32-fe
+    - TOXENV=py27-dj17-cms32
     - TOXENV=py27-dj17-cms31
     - TOXENV=py27-dj17-cms30
-    - TOXENV=py27-dj16-cms32-fe
+    - TOXENV=py27-dj16-cms32
     - TOXENV=py27-dj16-cms31
     - TOXENV=py27-dj16-cms30
+    - TOXENV=py26-dj16-cms32
     - TOXENV=py26-dj16-cms31
     - TOXENV=py26-dj16-cms30
 
