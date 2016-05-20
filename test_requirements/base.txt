@@ -7,7 +7,6 @@ django-sekizai>=0.8.2
 django-sortedm2m
 djangocms-admin-style
 djangocms-helper>=0.9.4
-djangocms-text-ckeditor
 docopt
 flake8
 html5lib
