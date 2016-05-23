@@ -145,7 +145,21 @@ class CreateFaqQuestionForm(BaseFormMixin, TranslatableModelForm):
         # If 'content' field has value, create a TextPlugin with same and add
         # it to the PlaceholderField
         answer = clean_html(self.cleaned_data.get('answer', ''), False)
-        content_plugin = get_cms_setting('WIZARD_CONTENT_PLUGIN')
+
+        try:
+            # CMS >= 3.3.x
+            content_plugin = get_cms_setting('PAGE_WIZARD_CONTENT_PLUGIN')
+        except KeyError:
+            # CMS <= 3.2.x
+            content_plugin = get_cms_setting('WIZARD_CONTENT_PLUGIN')
+
+        try:
+            # CMS >= 3.3.x
+            content_field = get_cms_setting('PAGE_WIZARD_CONTENT_PLUGIN_BODY')
+        except KeyError:
+            # CMS <= 3.2.x
+            content_field = get_cms_setting('WIZARD_CONTENT_PLUGIN_BODY')
+
         if answer and permissions.has_plugin_permission(
                 self.user, content_plugin, 'add'):
 
@@ -160,7 +174,7 @@ class CreateFaqQuestionForm(BaseFormMixin, TranslatableModelForm):
                     'placeholder': question.answer,
                     'plugin_type': content_plugin,
                     'language': self.language_code,
-                    get_cms_setting('WIZARD_CONTENT_PLUGIN_BODY'): answer,
+                    content_field: answer,
                 }
                 add_plugin(**plugin_kwarg)
 
