@@ -7,8 +7,6 @@ import cms
 
 from djangocms_helper.utils import create_user
 
-from aldryn_faq.cms_wizards import CreateFaqQuestionForm
-
 from .test_base import AldrynFaqTest
 
 
@@ -37,6 +35,9 @@ class TestFAQWizard(AldrynFaqTest):
         self.client.login(username=username, password=password)
 
     def test_question_wizard(self):
+        # Import here to avoid logic wizard machinery
+        from aldryn_faq.cms_wizards import CreateFaqQuestionForm
+
         data = {
             'title': 'Where are we?',
             'answer': 'Here.',
