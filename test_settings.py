@@ -71,8 +71,8 @@ HELPER_SETTINGS = {
     'HAYSTACK_CONNECTIONS': HAYSTACK_CONNECTIONS,
     'PARLER_LANGUAGES': {
         1: (
-            {'code': 'de', },
             {'code': 'en', },
+            {'code': 'de', },
             {'code': 'fr', },
         ),
         'default': {
@@ -84,14 +84,14 @@ HELPER_SETTINGS = {
     'CMS_LANGUAGES': {
         1: [
             {
-                'code': 'de',
-                'name': 'Deutsche',
-                'fallbacks': ['en', ]
-            },
-            {
                 'code': 'en',
                 'name': 'English',
-                'fallbacks': ['de', ]
+                'fallbacks': []
+            },
+            {
+                'code': 'de',
+                'name': 'Deutsche',
+                'fallbacks': ['fr', ]
             },
             {
                 'code': 'fr',
