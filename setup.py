@@ -13,7 +13,7 @@ REQUIREMENTS = [
     'aldryn-translation-tools>=0.2.1',
     'django>=1.6,<1.9.999',
     'django-admin-sortable2>=0.5.2',
-    'django-cms>=3.0.12,<3.3',
+    'django-cms>=3.0.12,<3.4',
     'djangocms-text-ckeditor',
     'django-parler>=1.4,<1.7',
     'django-reversion>=1.8.2,<1.11',
