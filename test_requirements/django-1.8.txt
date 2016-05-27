@@ -1,6 +1,8 @@
+django>=1.8.0,<1.9
+#django-reversion>=1.9.3,<1.10
+django-reversion==1.9.1
+
 aldryn-reversion>=1.0.4
 django-taggit
-django>=1.8.0,<1.9
-django-reversion>=1.9.3,<1.10
 
 -r base.txt
