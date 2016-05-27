@@ -53,7 +53,6 @@ env:
     - TOXENV=py26-dj16-cms31
     - TOXENV=py26-dj16-cms30
 
-
 cache:
   directories:
     - $HOME/.wheelhouse
