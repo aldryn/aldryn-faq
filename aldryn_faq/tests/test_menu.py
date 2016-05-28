@@ -13,7 +13,7 @@ class TestMenu(AldrynFaqTest):
     def test_get_nodes(self):
         # Test that the EN version of the menu has only category1 and its
         # question1, and is shown in English.
-        request = self.get_page_request(None, self.user, '/en/')
+        request = self.get_page_request(None, self.user, path='/en/', lang_code='en')
         try:
             renderer = menu_pool.get_renderer(request)
             menu = FaqCategoryMenu(renderer=renderer)
@@ -28,7 +28,7 @@ class TestMenu(AldrynFaqTest):
 
         # Test that the DE version has 2 categories and their questions that
         # they are shown in German.
-        request = self.get_page_request(None, self.user, '/de/')
+        request = self.get_page_request(None, self.user, path='/de/', lang_code='de')
         try:
             renderer = menu_pool.get_renderer(request)
             menu = FaqCategoryMenu(renderer=renderer)
