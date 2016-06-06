@@ -16,7 +16,19 @@ casper.test.tearDown(function (done) {
     casper.start()
         .then(cms.logout())
         .run(done);
+
 });
+
+/**
+ * @function switchToEnglish
+ * @public
+ * @returns {Function}
+ */
+function switchToEnglish() {
+    return function () {
+        this.click(xPath('//*[contains(@class, "parler-language-tabs")]//a[contains(text(), "English")]'));
+    };
+}
 
 casper.test.begin('Creation / deletion of the apphook', function (test) {
     casper
@@ -101,6 +113,9 @@ casper.test.begin('Creation / deletion of the category and question', function (
         })
         .waitForUrl(/add/)
         .waitUntilVisible('#category_form')
+        .then(switchToEnglish())
+        .waitForUrl(/add/)
+        .waitUntilVisible('#category_form')
         .then(function () {
             test.assertVisible('#category_form', 'Category creation form loaded');
 
@@ -133,6 +148,9 @@ casper.test.begin('Creation / deletion of the category and question', function (
                 }))
             );
         })
+        .waitForUrl(/add/)
+        .waitUntilVisible('#question_form')
+        .then(switchToEnglish())
         .waitForUrl(/add/)
         .waitUntilVisible('#question_form')
         .then(function () {
@@ -202,7 +220,6 @@ casper.test.begin('Creation / deletion of the category and question', function (
         .waitUntilVisible('.success', function () {
             test.assertSelectorHasText(
                 '.success',
-                'The question "What is the Answer to the Ultimate Question of Life, The Universe, and Everything?" ' +
                 'was deleted successfully.',
                 'Question was deleted'
             );
@@ -247,6 +264,8 @@ casper.test.begin('Latest questions plugin', function (test) {
                 })
                 .waitForUrl(/add/)
                 .waitUntilVisible('#question_form')
+                .then(switchToEnglish())
+                .waitForUrl(/add/)
                 .then(function () {
                     test.assertVisible('#question_form', 'Question creation form loaded');
 
