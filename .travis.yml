@@ -2,6 +2,8 @@
 
 language: python
 
+python: 3.5
+
 # Use container based infrastructure
 sudo: false
 
@@ -15,12 +17,11 @@ env:
     - secure: gCi1UP9rgOnfvLT+UNiQkysnXUKvMi5ichNwPNxiXkLYlc66bJLIc/h8YI3V9vV4ICzyMJqEDHXV7T8NP0tsdxdNdEQNvStoaleLz7xsbjW7MZ2XxF13xncG6fksYr/5cjhBbiwg06HTn/VH+TD1FT1u9WUe+0/BJSx1JMnJQgs=
   matrix:
     # Matrix-size reduction strategies:
-    #   PY strategy: do not test 3.3 at all.
+    #   PY strategy: do not test 3.3 on Travis at all. (keep in tox.ini though)
     #   FE strategy: only test on Django/CMS3.3 combinations, but place tests on
     #                different Python ENVs if possible.
-    # NOTE: FE-TESTS ARE DISABLED UNTIL THEY ARE FIXED FOR CMS 3.2
+    # NOTE: FE-TESTS ARE DISABLED UNTIL THEY ARE FIXED FOR CMS 3.3 and PhantomJS
     - TOXENV=flake8
-
     - TOXENV=py35-dj19-cms33-fe FE=1
     - TOXENV=py35-dj19-cms32
     - TOXENV=py34-dj19-cms33
@@ -51,7 +52,6 @@ env:
     - TOXENV=py26-dj16-cms32
     - TOXENV=py26-dj16-cms31
     - TOXENV=py26-dj16-cms30
-
 
 cache:
   directories:

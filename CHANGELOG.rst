@@ -1,9 +1,14 @@
 CHANGELOG
 =========
 
+1.1.1 (2016-05-20)
+------------------
+
+* Update test matrices for Py35, Dj19, and CMS33 combinations
+
 
 1.1.0 (2016-03-10)
--------------------
+------------------
 
 * Add stripped default django templates to `/aldryn_faq/templates`
 * Remove unused render_placeholder configs
