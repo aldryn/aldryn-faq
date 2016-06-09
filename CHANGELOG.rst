@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.2.0 (2016-06-09)
+------------------
+
+* Compatibility for Py35, Dj19, and CMS33 combinations
+* Improved frontend testing
+
+
 1.1.1 (2016-05-20)
 ------------------
 
