@@ -3,12 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Translators:
+# Angelo Dini <finalangeljp@hotmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Aldryn FAQ\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-17 12:02+0200\n"
-"PO-Revision-Date: 2016-06-20 09:21+0000\n"
+"POT-Creation-Date: 2016-06-20 11:22+0200\n"
+"PO-Revision-Date: 2016-06-20 09:45+0000\n"
 "Last-Translator: Angelo Dini <finalangeljp@hotmail.com>\n"
 "Language-Team: German (http://www.transifex.com/divio/aldryn-faq/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -17,276 +19,283 @@ msgstr ""
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: admin.py:36
+#: admin.py:37
 msgid "Language Independent Fields"
-msgstr ""
+msgstr "Sprach unabhängige Felder"
 
-#: admin.py:39
+#: admin.py:40
 msgid "Advanced options"
-msgstr ""
+msgstr "Erweiterte Einstellungen"
 
 #: boilerplates/bootstrap3/templates/aldryn_faq/includes/question_list.html:41
-#: models.py:306
+#: models.py:306 templates/aldryn_faq/includes/question_list.html:33
 msgid "Category"
-msgstr ""
+msgstr "Kategorie"
 
 #: boilerplates/bootstrap3/templates/aldryn_faq/includes/question_list.html:45
 #: boilerplates/bootstrap3/templates/aldryn_faq/includes/ungrouped_question_list.html:26
-#: boilerplates/bootstrap3/templates/aldryn_faq/plugins/category_list.html:15
+#: boilerplates/bootstrap3/templates/aldryn_faq/plugins/category_list.html:12
 #: boilerplates/legacy/templates/aldryn_faq/includes/question_groups.html:13
 #: boilerplates/legacy/templates/aldryn_faq/includes/question_list.html:27
 #: boilerplates/legacy/templates/aldryn_faq/plugins/category_list.html:8
+#: templates/aldryn_faq/includes/question_list.html:28
+#: templates/aldryn_faq/includes/question_list.html:35
+#: templates/aldryn_faq/includes/ungrouped_question_list.html:19
+#: templates/aldryn_faq/plugins/category_list.html:17
 msgid "No entry found."
-msgstr ""
+msgstr "Kein Eintrage gefunden."
 
 #: boilerplates/bootstrap3/templates/aldryn_faq/includes/question_list.html:51
-#: boilerplates/bootstrap3/templates/aldryn_faq/question_detail.html:41
+#: boilerplates/bootstrap3/templates/aldryn_faq/question_detail.html:35
+#: templates/aldryn_faq/includes/question_list.html:39
+#: templates/aldryn_faq/question_detail.html:28
 msgid "Back to Category"
-msgstr ""
+msgstr "Zurück zur Kategorie"
 
-#: boilerplates/bootstrap3/templates/aldryn_faq/question_list.html:13
+#: boilerplates/bootstrap3/templates/aldryn_faq/question_list.html:10
+#: templates/aldryn_faq/question_list.html:11
 msgid "Back to Overview"
-msgstr ""
+msgstr "Zurück zur Übersicht"
 
 #: boilerplates/legacy/templates/aldryn_faq/includes/question_list.html:18
 msgid "No answer available."
-msgstr ""
+msgstr "Keine Antwort verfügbar."
 
 #: boilerplates/legacy/templates/aldryn_faq/includes/question_list.html:20
 msgid "Read more"
-msgstr ""
+msgstr "Weiterlesen"
 
 #: boilerplates/legacy/templates/aldryn_faq/includes/question_list.html:32
 #: boilerplates/legacy/templates/aldryn_faq/question_detail.html:10
 msgid "Back"
-msgstr ""
+msgstr "Zurück"
 
 #: cms_app.py:14 menu.py:20
 msgid "FAQ"
-msgstr ""
+msgstr "FAQ"
 
 #: cms_appconfig.py:16
 msgid "1/2/"
-msgstr ""
+msgstr "1/2/"
 
 #: cms_appconfig.py:17
 msgid "1/question-slug/"
-msgstr ""
+msgstr "1/frage-url/"
 
 #: cms_appconfig.py:18
 msgid "category-slug/2/"
-msgstr ""
+msgstr "kategorie-url/2/"
 
 #: cms_appconfig.py:19
 msgid "category-slug/question-slug/"
-msgstr ""
+msgstr "kategorie-url/frage-url/"
 
 #: cms_appconfig.py:20
 msgid "1-category-slug/2/"
-msgstr ""
+msgstr "1-kategorie-url/2/"
 
 #: cms_appconfig.py:21
 msgid "1-category-slug/question-slug/"
-msgstr ""
+msgstr "1-kategorie-url/frage-url/"
 
 #: cms_appconfig.py:25
 msgid "Allow"
-msgstr ""
+msgstr "Erlauben"
 
 #: cms_appconfig.py:26
 msgid "Redirect to permalink (default)"
-msgstr ""
+msgstr "Weiterleitung zum Permalink (Standard)"
 
 #: cms_appconfig.py:27
 msgid "Permanent redirect to permalink"
-msgstr ""
+msgstr "Permanente Weiterleitung zum Permalink"
 
 #: cms_appconfig.py:28
 msgid "Return 404: Not Found"
-msgstr ""
+msgstr "Zeige 404: Nicht gefunden"
 
 #: cms_appconfig.py:36
 msgid "application title"
-msgstr ""
+msgstr "Applikations Titel"
 
 #: cms_appconfig.py:39
 msgid "permalink type"
-msgstr ""
+msgstr "Permalink Typ"
 
 #: cms_appconfig.py:41
 msgid ""
 "Choose the style of urls to use from the examples. (Note, all types are "
 "relative to apphook)"
-msgstr ""
+msgstr "Stil der URLs aus den Beispielen auswählen. (Notiz, alle Typen sind relativ zur Applikations Seite)"
 
 #: cms_appconfig.py:45
 msgid "non-permalink handling"
-msgstr ""
+msgstr "Nicht-Permanente Links Handhabung"
 
 #: cms_appconfig.py:48
 msgid "How to handle non-permalink urls?"
-msgstr ""
+msgstr "Wie sollen nicht-Permamente Links gehandhabt werden?"
 
 #: cms_appconfig.py:72
 msgid "untitled"
-msgstr ""
+msgstr "kein Titel"
 
 #: cms_plugins.py:25
 msgid "Question List"
-msgstr ""
+msgstr "Frageliste"
 
 #: cms_plugins.py:37
 msgid "Latest questions"
-msgstr ""
+msgstr "Letzten Fragen"
 
 #: cms_plugins.py:48
 msgid "Top questions"
-msgstr ""
+msgstr "Beste Fragen"
 
 #: cms_plugins.py:59
 msgid "Most read questions"
-msgstr ""
+msgstr "Am meiste gelesene Fragen"
 
 #: cms_plugins.py:85
 msgid "List of categories"
-msgstr ""
+msgstr "Liste der Kategorien"
 
 #: cms_toolbar.py:161
 msgid "Configure addon"
-msgstr ""
+msgstr "Addon konfigurieren"
 
 #: cms_toolbar.py:172
 msgid "Category list"
-msgstr ""
+msgstr "Kategorien Liste"
 
 #: cms_toolbar.py:179
 msgid "Add new category"
-msgstr ""
+msgstr "Neue Kategorie hinzufügen"
 
 #: cms_toolbar.py:187
 msgid "Edit this category"
-msgstr ""
+msgstr "Diese Kategorie bearbeiten"
 
 #: cms_toolbar.py:195
 msgid "Delete this category"
-msgstr ""
+msgstr "Diese Kategorie löschen"
 
 #: cms_toolbar.py:210
 msgid "Add new question"
-msgstr ""
+msgstr "Neue Frage hinzufügen"
 
 #: cms_toolbar.py:218
 msgid "Edit this question"
-msgstr ""
+msgstr "Diese Frage bearbeiten"
 
 #: cms_toolbar.py:226
 msgid "Delete this question"
-msgstr ""
+msgstr "Diese Frage löschen"
 
-#: cms_wizards.py:113 cms_wizards.py:174
+#: cms_wizards.py:113 cms_wizards.py:188
 msgid "Initial version."
-msgstr ""
+msgstr "Initiale Version."
 
 #: cms_wizards.py:126
 msgid ""
 "Optional. If provided, will be added to the main body of the Question "
 "answer."
-msgstr ""
+msgstr "Optional. Falls angegeben, wird in Hauptbereich der Frage dargestellt."
 
-#: cms_wizards.py:179
+#: cms_wizards.py:193
 msgid "New FAQ category"
-msgstr ""
+msgstr "Neue FAQ Kategorie"
 
-#: cms_wizards.py:182
+#: cms_wizards.py:196
 msgid "Create a new FAQ category."
-msgstr ""
+msgstr "Erstelle eine neue FAQ Kategorie"
 
-#: cms_wizards.py:188
+#: cms_wizards.py:202
 msgid "New FAQ question"
-msgstr ""
+msgstr "Neue FAQ Frage"
 
-#: cms_wizards.py:191
+#: cms_wizards.py:205
 msgid "Create a new FAQ question."
-msgstr ""
+msgstr "Erstelle eine neue FAQ Frage."
 
 #: models.py:72
 msgid "name"
-msgstr ""
+msgstr "Name"
 
 #: models.py:73
 msgid "Provide the category’s name"
-msgstr ""
+msgstr "Kategoriename definieren"
 
 #: models.py:75 models.py:141
 msgid "Slug"
-msgstr ""
+msgstr "Url"
 
 #: models.py:76 models.py:142
 msgid ""
 "Provide a \"slug\" for this category or leave blank for an auto-generated "
 "one."
-msgstr ""
+msgstr "\"Slug\" definieren, falls leer wird automatisch vom System generiert."
 
 #: models.py:79
 msgid "description"
-msgstr ""
+msgstr "Beschreibung"
 
 #: models.py:80
 msgid "Optional. Description of this category."
-msgstr ""
+msgstr "Optional. Beschreibung dieser Kategorie."
 
 #: models.py:83
 msgid "appconfig"
-msgstr ""
+msgstr "Applikations Konfiguration"
 
 #: models.py:88 models.py:298
 msgid "category"
-msgstr ""
+msgstr "Kategorie"
 
 #: models.py:89
 msgid "categories"
-msgstr ""
+msgstr "Kategorien"
 
 #: models.py:137
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 #: models.py:138
 msgid "This should be a short form of the question"
-msgstr ""
+msgstr "Dies sollte die kurze Variante der Frage sein"
 
 #: models.py:139
 msgid "Short description"
-msgstr ""
+msgstr "Kurz Beschreibung"
 
 #: models.py:159
 msgid "question"
-msgstr ""
+msgstr "Frage"
 
 #: models.py:160
 msgid "questions"
-msgstr ""
+msgstr "Fragen"
 
 #: models.py:219
 msgid "The number of questions to be displayed."
-msgstr ""
+msgstr "Die Anzahl der Fragen welche dargestellt werden."
 
 #: models.py:249
 #, python-format
 msgid "%(count)d question selected"
 msgid_plural "%(count)d questions selected"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d Frage selektiert"
+msgstr[1] "%(count)d Fragen selektiert"
 
 #: models.py:300
 msgid "position"
-msgstr ""
+msgstr "Position"
 
 #: models.py:307
 msgid "Categories"
-msgstr ""
+msgstr "Kategorien"
 
 #: views.py:128
 #, python-format
 msgid "No %(verbose_name)s found matching the query"
-msgstr ""
+msgstr "Keine %(verbose_name)s gefunden mit der ausgewählten Suche"
