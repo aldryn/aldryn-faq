@@ -286,13 +286,6 @@ class CategoryListPlugin(CMSPlugin):
         return categories
 
 
-class LatestQuestionsPlugin(CMSPlugin, QuestionsPlugin):
-
-    def get_queryset(self):
-        qs = super(LatestQuestionsPlugin, self).get_queryset()
-        return qs.order_by('-id')
-
-
 @python_2_unicode_compatible
 class SelectedCategory(models.Model):
     category = models.ForeignKey(to=Category, verbose_name=_('category'))
@@ -310,14 +303,39 @@ class SelectedCategory(models.Model):
         return self.category.name
 
 
-class TopQuestionsPlugin(CMSPlugin, QuestionsPlugin):
+class AdjustableCacheModelMixin(models.Model):
+    # NOTE: This field shouldn't even be displayed in the plugin's change form
+    # if using django CMS < 3.3.0
+    cache_duration = models.PositiveSmallIntegerField(
+        default=0,  # not the most sensible, but consistent with older versions
+        blank=False,
+        help_text=_(
+            "The maximum duration (in seconds) that this plugin's content "
+            "should be cached.")
+    )
+
+    class Meta:
+        abstract = True
+
+
+class LatestQuestionsPlugin(CMSPlugin, AdjustableCacheModelMixin,
+                            QuestionsPlugin):
+
+    def get_queryset(self):
+        qs = super(LatestQuestionsPlugin, self).get_queryset()
+        return qs.order_by('-id')
+
+
+class TopQuestionsPlugin(CMSPlugin, AdjustableCacheModelMixin,
+                         QuestionsPlugin):
 
     def get_queryset(self):
         qs = super(TopQuestionsPlugin, self).get_queryset()
         return qs.filter(is_top=True)
 
 
-class MostReadQuestionsPlugin(CMSPlugin, QuestionsPlugin):
+class MostReadQuestionsPlugin(CMSPlugin, AdjustableCacheModelMixin,
+                              QuestionsPlugin):
 
     def get_queryset(self):
         qs = super(MostReadQuestionsPlugin, self).get_queryset()
