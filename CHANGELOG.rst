@@ -1,10 +1,12 @@
 CHANGELOG
 =========
 
-1.2.1 (UNRELEASED)
+1.2.1 (2016-06-28)
 ------------------
 
+* Added support for cache durations fields in "time-sensitive" plugins on django CMS 3.3.0+
 * Updated translations
+
 
 1.2.0 (2016-06-09)
 ------------------
