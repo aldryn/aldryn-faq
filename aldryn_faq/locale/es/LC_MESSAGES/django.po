@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Translators:
 msgid ""
 msgstr ""
 "Project-Id-Version: Aldryn FAQ\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-17 12:02+0200\n"
-"PO-Revision-Date: 2016-06-20 09:21+0000\n"
-"Last-Translator: Angelo Dini <finalangeljp@hotmail.com>\n"
+"POT-Creation-Date: 2016-06-28 21:45-0400\n"
+"PO-Revision-Date: 2016-06-29 01:47+0000\n"
+"Last-Translator: Martin Koistinen <mkoistinen@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/divio/aldryn-faq/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,34 +18,41 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: admin.py:36
+#: admin.py:37
 msgid "Language Independent Fields"
 msgstr ""
 
-#: admin.py:39
+#: admin.py:40
 msgid "Advanced options"
 msgstr ""
 
 #: boilerplates/bootstrap3/templates/aldryn_faq/includes/question_list.html:41
-#: models.py:306
+#: models.py:299 templates/aldryn_faq/includes/question_list.html:33
 msgid "Category"
 msgstr ""
 
 #: boilerplates/bootstrap3/templates/aldryn_faq/includes/question_list.html:45
 #: boilerplates/bootstrap3/templates/aldryn_faq/includes/ungrouped_question_list.html:26
-#: boilerplates/bootstrap3/templates/aldryn_faq/plugins/category_list.html:15
+#: boilerplates/bootstrap3/templates/aldryn_faq/plugins/category_list.html:12
 #: boilerplates/legacy/templates/aldryn_faq/includes/question_groups.html:13
 #: boilerplates/legacy/templates/aldryn_faq/includes/question_list.html:27
 #: boilerplates/legacy/templates/aldryn_faq/plugins/category_list.html:8
+#: templates/aldryn_faq/includes/question_list.html:28
+#: templates/aldryn_faq/includes/question_list.html:35
+#: templates/aldryn_faq/includes/ungrouped_question_list.html:19
+#: templates/aldryn_faq/plugins/category_list.html:17
 msgid "No entry found."
 msgstr ""
 
 #: boilerplates/bootstrap3/templates/aldryn_faq/includes/question_list.html:51
-#: boilerplates/bootstrap3/templates/aldryn_faq/question_detail.html:41
+#: boilerplates/bootstrap3/templates/aldryn_faq/question_detail.html:35
+#: templates/aldryn_faq/includes/question_list.html:39
+#: templates/aldryn_faq/question_detail.html:28
 msgid "Back to Category"
 msgstr ""
 
-#: boilerplates/bootstrap3/templates/aldryn_faq/question_list.html:13
+#: boilerplates/bootstrap3/templates/aldryn_faq/question_list.html:10
+#: templates/aldryn_faq/question_list.html:11
 msgid "Back to Overview"
 msgstr ""
 
@@ -131,23 +139,23 @@ msgstr ""
 msgid "untitled"
 msgstr ""
 
-#: cms_plugins.py:25
+#: cms_plugins.py:59
 msgid "Question List"
 msgstr ""
 
-#: cms_plugins.py:37
+#: cms_plugins.py:71
 msgid "Latest questions"
 msgstr ""
 
-#: cms_plugins.py:48
+#: cms_plugins.py:82
 msgid "Top questions"
 msgstr ""
 
-#: cms_plugins.py:59
+#: cms_plugins.py:93
 msgid "Most read questions"
 msgstr ""
 
-#: cms_plugins.py:85
+#: cms_plugins.py:118
 msgid "List of categories"
 msgstr ""
 
@@ -183,7 +191,7 @@ msgstr ""
 msgid "Delete this question"
 msgstr ""
 
-#: cms_wizards.py:113 cms_wizards.py:174
+#: cms_wizards.py:113 cms_wizards.py:188
 msgid "Initial version."
 msgstr ""
 
@@ -193,19 +201,19 @@ msgid ""
 "answer."
 msgstr ""
 
-#: cms_wizards.py:179
+#: cms_wizards.py:193
 msgid "New FAQ category"
 msgstr ""
 
-#: cms_wizards.py:182
+#: cms_wizards.py:196
 msgid "Create a new FAQ category."
 msgstr ""
 
-#: cms_wizards.py:188
+#: cms_wizards.py:202
 msgid "New FAQ question"
 msgstr ""
 
-#: cms_wizards.py:191
+#: cms_wizards.py:205
 msgid "Create a new FAQ question."
 msgstr ""
 
@@ -239,7 +247,7 @@ msgstr ""
 msgid "appconfig"
 msgstr ""
 
-#: models.py:88 models.py:298
+#: models.py:88 models.py:291
 msgid "category"
 msgstr ""
 
@@ -278,12 +286,18 @@ msgid_plural "%(count)d questions selected"
 msgstr[0] ""
 msgstr[1] ""
 
-#: models.py:300
+#: models.py:293
 msgid "position"
 msgstr ""
 
-#: models.py:307
+#: models.py:300
 msgid "Categories"
+msgstr ""
+
+#: models.py:313
+msgid ""
+"The maximum duration (in seconds) that this plugin's content should be "
+"cached."
 msgstr ""
 
 #: views.py:128

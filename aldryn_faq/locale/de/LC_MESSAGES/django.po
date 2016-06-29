@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aldryn FAQ\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-20 11:22+0200\n"
-"PO-Revision-Date: 2016-06-20 09:45+0000\n"
-"Last-Translator: Angelo Dini <finalangeljp@hotmail.com>\n"
+"POT-Creation-Date: 2016-06-28 21:45-0400\n"
+"PO-Revision-Date: 2016-06-29 01:47+0000\n"
+"Last-Translator: Martin Koistinen <mkoistinen@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/divio/aldryn-faq/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,7 +28,7 @@ msgid "Advanced options"
 msgstr "Erweiterte Einstellungen"
 
 #: boilerplates/bootstrap3/templates/aldryn_faq/includes/question_list.html:41
-#: models.py:306 templates/aldryn_faq/includes/question_list.html:33
+#: models.py:299 templates/aldryn_faq/includes/question_list.html:33
 msgid "Category"
 msgstr "Kategorie"
 
@@ -140,23 +140,23 @@ msgstr "Wie sollen nicht-Permamente Links gehandhabt werden?"
 msgid "untitled"
 msgstr "kein Titel"
 
-#: cms_plugins.py:25
+#: cms_plugins.py:59
 msgid "Question List"
 msgstr "Frageliste"
 
-#: cms_plugins.py:37
+#: cms_plugins.py:71
 msgid "Latest questions"
 msgstr "Letzten Fragen"
 
-#: cms_plugins.py:48
+#: cms_plugins.py:82
 msgid "Top questions"
 msgstr "Beste Fragen"
 
-#: cms_plugins.py:59
+#: cms_plugins.py:93
 msgid "Most read questions"
 msgstr "Am meiste gelesene Fragen"
 
-#: cms_plugins.py:85
+#: cms_plugins.py:118
 msgid "List of categories"
 msgstr "Liste der Kategorien"
 
@@ -248,7 +248,7 @@ msgstr "Optional. Beschreibung dieser Kategorie."
 msgid "appconfig"
 msgstr "Applikations Konfiguration"
 
-#: models.py:88 models.py:298
+#: models.py:88 models.py:291
 msgid "category"
 msgstr "Kategorie"
 
@@ -287,13 +287,19 @@ msgid_plural "%(count)d questions selected"
 msgstr[0] "%(count)d Frage selektiert"
 msgstr[1] "%(count)d Fragen selektiert"
 
-#: models.py:300
+#: models.py:293
 msgid "position"
 msgstr "Position"
 
-#: models.py:307
+#: models.py:300
 msgid "Categories"
 msgstr "Kategorien"
+
+#: models.py:313
+msgid ""
+"The maximum duration (in seconds) that this plugin's content should be "
+"cached."
+msgstr ""
 
 #: views.py:128
 #, python-format
