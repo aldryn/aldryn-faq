@@ -1,6 +1,7 @@
 aldryn-reversion>=1.0.8
 django-taggit
 django>=1.9.0,<1.10
+django-haystack
 django-reversion>=1.10.2,<1.11
 
 -r base.txt
