@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aldryn FAQ\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-28 21:45-0400\n"
+"POT-Creation-Date: 2016-08-24 07:35-0400\n"
 "PO-Revision-Date: 2016-06-20 09:21+0000\n"
 "Last-Translator: Angelo Dini <finalangeljp@hotmail.com>\n"
 "Language-Team: English (http://www.transifex.com/divio/aldryn-faq/language/"
@@ -27,7 +27,7 @@ msgid "Advanced options"
 msgstr "Advanced options"
 
 #: boilerplates/bootstrap3/templates/aldryn_faq/includes/question_list.html:41
-#: models.py:299 templates/aldryn_faq/includes/question_list.html:33
+#: models.py:323 templates/aldryn_faq/includes/question_list.html:33
 msgid "Category"
 msgstr "Category"
 
@@ -68,10 +68,6 @@ msgstr "Read more"
 #: boilerplates/legacy/templates/aldryn_faq/question_detail.html:10
 msgid "Back"
 msgstr "Back"
-
-#: cms_app.py:14 menu.py:20
-msgid "FAQ"
-msgstr "FAQ"
 
 #: cms_appconfig.py:16
 msgid "1/2/"
@@ -141,55 +137,59 @@ msgstr "How to handle non-permalink urls?"
 msgid "untitled"
 msgstr "untitled"
 
+#: cms_apps.py:14 menu.py:20
+msgid "FAQ"
+msgstr "FAQ"
+
 #: cms_plugins.py:59
 msgid "Question List"
 msgstr "Question List"
 
-#: cms_plugins.py:71
+#: cms_plugins.py:67
 msgid "Latest questions"
 msgstr "Latest questions"
 
-#: cms_plugins.py:82
+#: cms_plugins.py:74
 msgid "Top questions"
 msgstr "Top questions"
 
-#: cms_plugins.py:93
+#: cms_plugins.py:81
 msgid "Most read questions"
 msgstr "Most read questions"
 
-#: cms_plugins.py:118
+#: cms_plugins.py:102
 msgid "List of categories"
 msgstr "List of categories"
 
-#: cms_toolbar.py:161
+#: cms_toolbars.py:161
 msgid "Configure addon"
 msgstr "Configure addon"
 
-#: cms_toolbar.py:172
+#: cms_toolbars.py:172
 msgid "Category list"
 msgstr "Category list"
 
-#: cms_toolbar.py:179
+#: cms_toolbars.py:179
 msgid "Add new category"
 msgstr "Add new category"
 
-#: cms_toolbar.py:187
+#: cms_toolbars.py:187
 msgid "Edit this category"
 msgstr "Edit this category"
 
-#: cms_toolbar.py:195
+#: cms_toolbars.py:195
 msgid "Delete this category"
 msgstr "Delete this category"
 
-#: cms_toolbar.py:210
+#: cms_toolbars.py:210
 msgid "Add new question"
 msgstr "Add new question"
 
-#: cms_toolbar.py:218
+#: cms_toolbars.py:218
 msgid "Edit this question"
 msgstr "Edit this question"
 
-#: cms_toolbar.py:226
+#: cms_toolbars.py:226
 msgid "Delete this question"
 msgstr "Delete this question"
 
@@ -219,19 +219,19 @@ msgstr "New FAQ question"
 msgid "Create a new FAQ question."
 msgstr "Create a new FAQ question."
 
-#: models.py:72
+#: models.py:93
 msgid "name"
 msgstr "name"
 
-#: models.py:73
+#: models.py:94
 msgid "Provide the category’s name"
 msgstr "Provide the category’s name"
 
-#: models.py:75 models.py:141
+#: models.py:96 models.py:162
 msgid "Slug"
 msgstr "Slug"
 
-#: models.py:76 models.py:142
+#: models.py:97 models.py:163
 msgid ""
 "Provide a \"slug\" for this category or leave blank for an auto-generated "
 "one."
@@ -239,66 +239,66 @@ msgstr ""
 "Provide a \"slug\" for this category or leave blank for an auto-generated "
 "one."
 
-#: models.py:79
+#: models.py:100
 msgid "description"
 msgstr "description"
 
-#: models.py:80
+#: models.py:101
 msgid "Optional. Description of this category."
 msgstr "Optional. Description of this category."
 
-#: models.py:83
+#: models.py:104
 msgid "appconfig"
 msgstr "appconfig"
 
-#: models.py:88 models.py:291
+#: models.py:109 models.py:315
 msgid "category"
 msgstr "category"
 
-#: models.py:89
+#: models.py:110
 msgid "categories"
 msgstr "categories"
 
-#: models.py:137
+#: models.py:158
 msgid "Title"
 msgstr "Title"
 
-#: models.py:138
+#: models.py:159
 msgid "This should be a short form of the question"
 msgstr "This should be a short form of the question"
 
-#: models.py:139
+#: models.py:160
 msgid "Short description"
 msgstr "Short description"
 
-#: models.py:159
+#: models.py:180
 msgid "question"
 msgstr "question"
 
-#: models.py:160
+#: models.py:181
 msgid "questions"
 msgstr "questions"
 
-#: models.py:219
+#: models.py:240
 msgid "The number of questions to be displayed."
 msgstr "The number of questions to be displayed."
 
-#: models.py:249
+#: models.py:272
 #, python-format
 msgid "%(count)d question selected"
 msgid_plural "%(count)d questions selected"
 msgstr[0] "%(count)d question selected"
 msgstr[1] "%(count)d questions selected"
 
-#: models.py:293
+#: models.py:317
 msgid "position"
 msgstr "position"
 
-#: models.py:300
+#: models.py:324
 msgid "Categories"
 msgstr "Categories"
 
-#: models.py:313
+#: models.py:337
 msgid ""
 "The maximum duration (in seconds) that this plugin's content should be "
 "cached."

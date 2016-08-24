@@ -60,20 +60,12 @@ class QuestionListPlugin(FAQPlugin):
     model = models.QuestionListPlugin
     form = QuestionListPluginForm
 
-    def render(self, context, instance, placeholder):
-        context['instance'] = instance
-        return context
-
 
 class LatestQuestionsPlugin(AdjustableCacheMixin, FAQPlugin):
 
     render_template = 'aldryn_faq/plugins/latest_questions.html'
     name = _('Latest questions')
     model = models.LatestQuestionsPlugin
-
-    def render(self, context, instance, placeholder):
-        context['instance'] = instance
-        return context
 
 
 class TopQuestionsPlugin(AdjustableCacheMixin, FAQPlugin):
@@ -82,20 +74,12 @@ class TopQuestionsPlugin(AdjustableCacheMixin, FAQPlugin):
     name = _('Top questions')
     model = models.TopQuestionsPlugin
 
-    def render(self, context, instance, placeholder):
-        context['instance'] = instance
-        return context
-
 
 class MostReadQuestionsPlugin(AdjustableCacheMixin, FAQPlugin):
 
     render_template = 'aldryn_faq/plugins/most_read_questions.html'
     name = _('Most read questions')
     model = models.MostReadQuestionsPlugin
-
-    def render(self, context, instance, placeholder):
-        context['instance'] = instance
-        return context
 
 
 class SelectedCategoryInline(SortableInlineAdminMixin, TabularInline):
@@ -121,7 +105,8 @@ class CategoryListPlugin(FAQPlugin):
 
     def render(self, context, instance, placeholder):
         context['categories'] = instance.get_categories()
-        return context
+        return super(CategoryListPlugin, self).render(
+            context, instance, placeholder)
 
 
 plugin_pool.register_plugin(CategoryListPlugin)
