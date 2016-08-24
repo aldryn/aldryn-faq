@@ -9,25 +9,36 @@ from django.utils.translation import override
 
 from cms.api import add_plugin
 
-from aldryn_faq.models import SelectedCategory
+from ..compat import LTE_DJANGO_1_7
+from ..models import SelectedCategory
 from .test_base import AldrynFaqTest
 
-# NOTICE:
-#
-# For unknown reasons, in Django 1.8, this statement:
-#
-#     context = RequestContext(request, {})
-#
-# Seems to create a context that does not contain a request object, but only
-# sometimes. This issue does not seem to exist in earlier versions of Django.
-# Investigating further.
-#
-# The fix for now is to explicitly add another context item for the request
-# object like so:
-#
-#     context = RequestContext(request, {"request": request})
-#
-# As required.
+
+def _render_plugin(request, plugin):
+    context = RequestContext(request)
+
+    if not LTE_DJANGO_1_7:
+        from django.template import Engine
+        # On Django <= 1.7, the RequestContext class would call
+        # all context processors and update the context on initialization.
+        # On Django >= 1.8 the logic to update the context
+        # from context processors is now tied to the bind_template
+        # context manager.
+        updates = {}
+        engine = Engine.get_default()
+
+        for processor in engine.template_context_processors:
+            updates.update(processor(context.request))
+        context.dicts[context._processors_index] = updates
+
+    try:
+        from cms.plugin_rendering import ContentRenderer
+    except ImportError:
+        # djangoCMS < 3.4 compatibility
+        pass
+    else:
+        context['cms_content_renderer'] = ContentRenderer(request=request)
+    return plugin.render_plugin(context)
 
 
 class TestQuestionListPlugin(AldrynFaqTest):
@@ -40,8 +51,7 @@ class TestQuestionListPlugin(AldrynFaqTest):
         # First test that it is initially empty
         request = self.get_page_request(
             page1, self.user, None, lang_code="en", edit=False)
-        context = RequestContext(request, {})
-        rendered = plugin.render_plugin(context, ph)
+        rendered = _render_plugin(request, plugin)
         self.assertTrue(rendered.find("No entry found.") > -1)
 
         # Now, add a question, and test that it renders.
@@ -50,8 +60,7 @@ class TestQuestionListPlugin(AldrynFaqTest):
         plugin.save()
         request = self.get_page_request(
             page1, self.user, None, lang_code="en", edit=False)
-        context = RequestContext(request, {"request": request})
-        rendered = plugin.render_plugin(context, ph)
+        rendered = _render_plugin(request, plugin)
         self.assertTrue(rendered.find(question1.title) > -1)
 
         # Test its unicode method
@@ -74,10 +83,9 @@ class TestLatestQuestionsPlugin(AldrynFaqTest):
             plugin = add_plugin(ph, "LatestQuestionsPlugin", language="de")
             request = self.get_page_request(
                 page1, self.user, None, lang_code="de", edit=False)
-            context = RequestContext(request, {"request": request})
             url1 = self.reload(self.question1, "de").get_absolute_url()
             url2 = self.reload(self.question2, "de").get_absolute_url()
-            rendered = plugin.render_plugin(context, ph)
+            rendered = _render_plugin(request, plugin)
         self.assertTrue(rendered.find(url1) > -1)
         self.assertTrue(rendered.find(url2) > -1)
         # Test that question2 appears before question1
@@ -94,8 +102,7 @@ class TestTopQuestionsPlugin(AldrynFaqTest):
         # First test that no plugins are found initially
         request = self.get_page_request(
             page1, self.user, None, lang_code="en", edit=False)
-        context = RequestContext(request, {})
-        rendered = plugin.render_plugin(context, ph)
+        rendered = _render_plugin(request, plugin)
         self.assertTrue(rendered.find("No entry found") > -1)
 
         # Now test, set a question to be "top", then test that it appears.
@@ -103,9 +110,8 @@ class TestTopQuestionsPlugin(AldrynFaqTest):
         self.question1.save()
         request = self.get_page_request(
             page1, self.user, None, lang_code="en", edit=False)
-        context = RequestContext(request, {"request": request})
         question1 = self.reload(self.question1, "en")
-        rendered = plugin.render_plugin(context, ph)
+        rendered = _render_plugin(request, plugin)
         self.assertTrue(rendered.find(question1.title) > -1)
 
 
@@ -123,10 +129,9 @@ class TestMostReadQuestionsPlugin(AldrynFaqTest):
             plugin = add_plugin(ph, "MostReadQuestionsPlugin", language="de")
             request = self.get_page_request(
                 page1, self.user, None, lang_code="de", edit=False)
-            context = RequestContext(request, {"request": request})
             url1 = self.reload(self.question1, "de").get_absolute_url()
             url2 = self.reload(self.question2, "de").get_absolute_url()
-            rendered = plugin.render_plugin(context, ph)
+            rendered = _render_plugin(request, plugin)
         # Ensure both questions appear...
         self.assertTrue(rendered.find(url1) > -1)
         self.assertTrue(rendered.find(url2) > -1)
@@ -142,13 +147,12 @@ class TestCategoryListPlugin(AldrynFaqTest):
 
         request = self.get_page_request(
             page1, self.user, None, lang_code="de", edit=False)
-        context = RequestContext(request, {})
         category1 = self.category1
         category1.save()
         category2 = self.category2
         category2.save()
         url = category1.get_absolute_url(language="de")
-        rendered = plugin.render_plugin(context, ph)
+        rendered = _render_plugin(request, plugin)
         self.assertFalse(rendered.find(url) > -1)
 
         # Add some selected categories
