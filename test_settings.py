@@ -122,5 +122,6 @@ def run():
     from djangocms_helper import runner
     runner.cms('aldryn_faq', extra_args=[])
 
+
 if __name__ == "__main__":
     run()

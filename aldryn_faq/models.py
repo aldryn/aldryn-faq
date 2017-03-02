@@ -163,12 +163,20 @@ class Question(TranslatedAutoSlugifyMixin, TranslationHelperMixin,
             help_text=_('Provide a "slug" for this category or leave blank for '
                         'an auto-generated one.')),
     )
-    category = models.ForeignKey(Category, related_name='questions')
+    category = models.ForeignKey(
+        verbose_name=_('Title'),
+        to=Category,
+        related_name='questions',
+    )
 
     answer = PlaceholderField(
         'faq_question_answer', related_name='faq_questions')
-    is_top = models.BooleanField(default=False)
-    number_of_visits = models.PositiveIntegerField(default=0, editable=False)
+    is_top = models.BooleanField(verbose_name=_('is top'), default=False)
+    number_of_visits = models.PositiveIntegerField(
+        verbose_name=_('number of visits'),
+        default=0,
+        editable=False,
+    )
 
     tags = TaggableManager(blank=True)
 
@@ -236,6 +244,7 @@ class Question(TranslatedAutoSlugifyMixin, TranslationHelperMixin,
 
 class QuestionsPlugin(CMSPlugin):
     questions = models.IntegerField(
+        verbose_name=_('count'),
         default=5,
         help_text=_('The number of questions to be displayed.')
     )
@@ -256,7 +265,7 @@ class QuestionsPlugin(CMSPlugin):
 
 @python_2_unicode_compatible
 class QuestionListPlugin(CMSPlugin):
-    questions = SortedManyToManyField(Question)
+    questions = SortedManyToManyField(verbose_name=_('questions'), to=Question)
     cmsplugin_ptr = CMSPluginField()
 
     def copy_relations(self, oldinstance):
@@ -331,6 +340,7 @@ class AdjustableCacheModelMixin(models.Model):
     # NOTE: This field shouldn't even be displayed in the plugin's change form
     # if using django CMS < 3.3.0
     cache_duration = models.PositiveSmallIntegerField(
+        verbose_name=_('cache duration'),
         default=0,  # not the most sensible, but consistent with older versions
         blank=False,
         help_text=_(

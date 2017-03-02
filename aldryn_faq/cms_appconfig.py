@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext, ugettext_lazy as _
 
 from aldryn_apphooks_config.models import AppHookConfig
 from aldryn_reversion.core import version_controlled_content
@@ -65,8 +65,8 @@ class FaqConfig(TranslatableModel, AppHookConfig):
         'faq_list_bottom', related_name='aldryn_faq_list_bottom')
 
     class Meta:
-        verbose_name = 'config'
-        verbose_name_plural = 'configs'
+        verbose_name = _('config')
+        verbose_name_plural = _('configs')
 
     def get_app_title(self):
-        return getattr(self, 'app_title', _('untitled'))
+        return getattr(self, 'app_title', ugettext('untitled'))

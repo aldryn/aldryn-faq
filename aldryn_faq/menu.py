@@ -71,4 +71,5 @@ class FaqCategoryMenu(CMSAttachMenu):
 
         return nodes
 
+
 menu_pool.register_menu(FaqCategoryMenu)

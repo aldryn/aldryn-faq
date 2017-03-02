@@ -16,4 +16,5 @@ class FaqApp(CMSConfigApp):
     app_name = 'aldryn_faq'
     app_config = FaqConfig
 
+
 apphook_pool.register(FaqApp)

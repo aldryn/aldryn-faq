@@ -122,7 +122,7 @@ class CreateFaqQuestionForm(BaseFormMixin, TranslatableModelForm):
     """
 
     answer = forms.CharField(
-        label="Answer", required=False, widget=TextEditorWidget,
+        label=_('Answer'), required=False, widget=TextEditorWidget,
         help_text=_("Optional. If provided, will be added to the main body of "
                     "the Question answer.")
     )
@@ -188,6 +188,7 @@ class CreateFaqQuestionForm(BaseFormMixin, TranslatableModelForm):
                     ugettext("Initial version."))
 
         return question
+
 
 faq_category_wizard = FaqCategoryWizard(
     title=_(u"New FAQ category"),

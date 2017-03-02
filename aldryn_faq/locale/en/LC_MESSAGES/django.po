@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aldryn FAQ\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-24 07:35-0400\n"
+"POT-Creation-Date: 2017-03-02 08:38-0500\n"
 "PO-Revision-Date: 2016-06-20 09:21+0000\n"
 "Last-Translator: Angelo Dini <finalangeljp@hotmail.com>\n"
 "Language-Team: English (http://www.transifex.com/divio/aldryn-faq/language/"
@@ -27,7 +27,7 @@ msgid "Advanced options"
 msgstr "Advanced options"
 
 #: boilerplates/bootstrap3/templates/aldryn_faq/includes/question_list.html:41
-#: models.py:323 templates/aldryn_faq/includes/question_list.html:33
+#: models.py:332 templates/aldryn_faq/includes/question_list.html:33
 msgid "Category"
 msgstr "Category"
 
@@ -133,6 +133,18 @@ msgstr "non-permalink handling"
 msgid "How to handle non-permalink urls?"
 msgstr "How to handle non-permalink urls?"
 
+#: cms_appconfig.py:68
+#, fuzzy
+#| msgid "appconfig"
+msgid "config"
+msgstr "appconfig"
+
+#: cms_appconfig.py:69
+#, fuzzy
+#| msgid "appconfig"
+msgid "configs"
+msgstr "appconfig"
+
 #: cms_appconfig.py:72
 msgid "untitled"
 msgstr "untitled"
@@ -197,6 +209,10 @@ msgstr "Delete this question"
 msgid "Initial version."
 msgstr "Initial version."
 
+#: cms_wizards.py:125
+msgid "Answer"
+msgstr ""
+
 #: cms_wizards.py:126
 msgid ""
 "Optional. If provided, will be added to the main body of the Question answer."
@@ -218,6 +234,12 @@ msgstr "New FAQ question"
 #: cms_wizards.py:205
 msgid "Create a new FAQ question."
 msgstr "Create a new FAQ question."
+
+#: forms.py:62
+msgid ""
+"This option enables the short description to be available within the list "
+"view rendering for all plugins."
+msgstr ""
 
 #: models.py:93
 msgid "name"
@@ -251,7 +273,7 @@ msgstr "Optional. Description of this category."
 msgid "appconfig"
 msgstr "appconfig"
 
-#: models.py:109 models.py:315
+#: models.py:109 models.py:324
 msgid "category"
 msgstr "category"
 
@@ -259,7 +281,7 @@ msgstr "category"
 msgid "categories"
 msgstr "categories"
 
-#: models.py:158
+#: models.py:158 models.py:167
 msgid "Title"
 msgstr "Title"
 
@@ -271,34 +293,50 @@ msgstr "This should be a short form of the question"
 msgid "Short description"
 msgstr "Short description"
 
-#: models.py:180
+#: models.py:174
+msgid "is top"
+msgstr ""
+
+#: models.py:176
+msgid "number of visits"
+msgstr ""
+
+#: models.py:188
 msgid "question"
 msgstr "question"
 
-#: models.py:181
+#: models.py:189 models.py:268
 msgid "questions"
 msgstr "questions"
 
-#: models.py:240
+#: models.py:247
+msgid "count"
+msgstr ""
+
+#: models.py:249
 msgid "The number of questions to be displayed."
 msgstr "The number of questions to be displayed."
 
-#: models.py:272
+#: models.py:281
 #, python-format
 msgid "%(count)d question selected"
 msgid_plural "%(count)d questions selected"
 msgstr[0] "%(count)d question selected"
 msgstr[1] "%(count)d questions selected"
 
-#: models.py:317
+#: models.py:326
 msgid "position"
 msgstr "position"
 
-#: models.py:324
+#: models.py:333
 msgid "Categories"
 msgstr "Categories"
 
-#: models.py:337
+#: models.py:343
+msgid "cache duration"
+msgstr ""
+
+#: models.py:347
 msgid ""
 "The maximum duration (in seconds) that this plugin's content should be "
 "cached."

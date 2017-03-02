@@ -116,4 +116,5 @@ class FaqConfigAdmin(AllTranslationsMixin,
             'config.show_description',
         )
 
+
 admin.site.register(FaqConfig, FaqConfigAdmin)

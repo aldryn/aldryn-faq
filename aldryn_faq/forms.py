@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 
 from aldryn_apphooks_config.utils import setup_config
 from app_data import AppDataForm
@@ -57,10 +58,11 @@ class QuestionListPluginForm(forms.ModelForm):
 class FaqOptionForm(AppDataForm):
     show_description = forms.BooleanField(
         required=False,
-        help_text=(
-            "This option enables the short descirption to be available "
+        help_text=_(
+            "This option enables the short description to be available "
             "within the list view rendering for all plugins."
         )
     )
+
 
 setup_config(FaqOptionForm, FaqConfig)
