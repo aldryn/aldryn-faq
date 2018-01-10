@@ -10,11 +10,10 @@ from django.utils.translation import ugettext as _
 from django.utils.html import escape
 
 import cms
-from cms.admin.placeholderadmin import FrontendEditableAdminMixin
+from cms.admin.placeholderadmin import PlaceholderAdminMixin, FrontendEditableAdminMixin
 
 from adminsortable2.admin import SortableAdminMixin
 from aldryn_apphooks_config.admin import BaseAppHookConfig
-from aldryn_reversion.admin import VersionedPlaceholderAdminMixin
 from aldryn_translation_tools.admin import AllTranslationsMixin
 from parler.admin import TranslatableAdmin
 
@@ -23,7 +22,7 @@ from .forms import CategoryAdminForm
 
 
 class CategoryAdmin(AllTranslationsMixin,
-                    VersionedPlaceholderAdminMixin,
+                    PlaceholderAdminMixin,
                     TranslatableAdmin):
 
     list_display = ('__str__', 'appconfig', )
@@ -61,7 +60,7 @@ class CategoryAdmin(AllTranslationsMixin,
 
 
 class QuestionAdmin(AllTranslationsMixin,
-                    VersionedPlaceholderAdminMixin,
+                    PlaceholderAdminMixin,
                     FrontendEditableAdminMixin,
                     SortableAdminMixin,
                     TranslatableAdmin):
@@ -106,7 +105,7 @@ admin.site.register(Question, QuestionAdmin)
 
 
 class FaqConfigAdmin(AllTranslationsMixin,
-                     VersionedPlaceholderAdminMixin,
+                     PlaceholderAdminMixin,
                      BaseAppHookConfig,
                      TranslatableAdmin):
     def get_config_fields(self):

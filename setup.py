@@ -8,7 +8,6 @@ py26 = (2, 7, 0) > sys.version_info >= (2, 6, 0)
 REQUIREMENTS = [
     'aldryn-apphooks-config>=0.2.4',
     'aldryn-boilerplates>=0.7.4,<0.8',
-    'aldryn-reversion>=1.0.4',
     'aldryn-search',
     'aldryn-translation-tools>=0.2.1',
     'django>=1.6,<1.9.999',
@@ -16,7 +15,6 @@ REQUIREMENTS = [
     'django-cms>=3.2',
     'djangocms-text-ckeditor',
     'django-parler>=1.4,<1.7',
-    'django-reversion>=1.8.2,<1.11',
     'django-sortedm2m>=1.2.2',
 
     # THIS IS HERE TO SUPPORT EXISTING MIGRATIONS AND CAN BE REMOVED ONLY ONCE

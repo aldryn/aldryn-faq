@@ -11,7 +11,6 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import override, ugettext_lazy as _, ungettext
 
-from aldryn_reversion.core import version_controlled_content
 from aldryn_translation_tools.models import (
     TranslationHelperMixin, TranslatedAutoSlugifyMixin)
 from cms.models.fields import PlaceholderField
@@ -83,7 +82,6 @@ def filter_question_qs(question_qs):
 
 
 @python_2_unicode_compatible
-@version_controlled_content(follow=['appconfig'])
 class Category(TranslatedAutoSlugifyMixin, TranslationHelperMixin,
                TranslatableModel):
     slug_source_field_name = 'name'
@@ -148,7 +146,6 @@ class Category(TranslatedAutoSlugifyMixin, TranslationHelperMixin,
 
 
 @python_2_unicode_compatible
-@version_controlled_content(follow=['category'])
 class Question(TranslatedAutoSlugifyMixin, TranslationHelperMixin,
                TranslatableModel):
     slug_source_field_name = 'title'

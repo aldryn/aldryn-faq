@@ -12,9 +12,12 @@ from .models import FaqConfig
 
 class FaqApp(CMSConfigApp):
     name = _('FAQ')
-    urls = ['aldryn_faq.urls']
     app_name = 'aldryn_faq'
     app_config = FaqConfig
+    urls = ['aldryn_faq.urls']  # COMPAT: CMS3.2
+
+    def get_urls(self, *args, **kwargs):
+        return self.urls
 
 
 apphook_pool.register(FaqApp)

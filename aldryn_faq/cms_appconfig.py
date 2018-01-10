@@ -6,7 +6,6 @@ from django.db import models
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from aldryn_apphooks_config.models import AppHookConfig
-from aldryn_reversion.core import version_controlled_content
 from cms.models.fields import PlaceholderField
 from parler.models import TranslatableModel, TranslatedFields
 
@@ -29,14 +28,14 @@ NON_PERMALINK_HANDLING = (
 )
 
 
-@version_controlled_content()
 class FaqConfig(TranslatableModel, AppHookConfig):
     """Adds some translatable, per-app-instance fields."""
     translations = TranslatedFields(
         app_title=models.CharField(_('application title'), max_length=234),
     )
 
-    permalink_type = models.CharField(_('permalink type'), max_length=2,
+    permalink_type = models.CharField(
+        _('permalink type'), max_length=2,
         blank=False, choices=PERMALINK_CHOICES, default="Ss",
         help_text=_('Choose the style of urls to use from the examples. '
                     '(Note, all types are relative to apphook)'))

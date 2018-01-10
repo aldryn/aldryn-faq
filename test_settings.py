@@ -42,11 +42,9 @@ HELPER_SETTINGS = {
     'CMS_PERMISSION': True,
     'INSTALLED_APPS': [
         'adminsortable2',
-        'aldryn_reversion',
         'aldryn_translation_tools',
         'djangocms_text_ckeditor',
         'parler',
-        'reversion',
         'sortedm2m',
         'taggit',
 

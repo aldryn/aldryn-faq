@@ -56,7 +56,6 @@ In your project's ``settings.py`` make sure you have all of::
 
     'adminsortable2',
     'aldryn_boilerplates',
-    'aldryn_reversion',
     'aldryn_translation_tools',
     'djangocms_text_ckeditor',
     'parler',

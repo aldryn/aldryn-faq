@@ -15,7 +15,6 @@ from cms.wizards.forms import BaseFormMixin
 from djangocms_text_ckeditor.widgets import TextEditorWidget
 from djangocms_text_ckeditor.html import clean_html
 from parler.forms import TranslatableModelForm
-from reversion.revisions import revision_context_manager
 
 from .cms_appconfig import FaqConfig
 from .models import Category, Question
@@ -97,23 +96,6 @@ class CreateFaqCategoryForm(BaseFormMixin, TranslatableModelForm):
             self.fields['appconfig'].widget = forms.HiddenInput()
             self.fields['appconfig'].initial = app_configs[0].pk
 
-    def save(self, commit=True):
-        """
-        Ensure we create a revision for reversion.
-        """
-        category = super(CreateFaqCategoryForm, self).save(commit=False)
-
-        # Ensure we make an initial revision
-        with transaction.atomic():
-            with revision_context_manager.create_revision():
-                category.save()
-                if self.user:
-                    revision_context_manager.set_user(self.user)
-                revision_context_manager.set_comment(
-                    ugettext("Initial version."))
-
-        return category
-
 
 class CreateFaqQuestionForm(BaseFormMixin, TranslatableModelForm):
     """
@@ -179,13 +161,7 @@ class CreateFaqQuestionForm(BaseFormMixin, TranslatableModelForm):
                 add_plugin(**plugin_kwarg)
 
         # Ensure we make an initial revision
-        with transaction.atomic():
-            with revision_context_manager.create_revision():
-                question.save()
-                if self.user:
-                    revision_context_manager.set_user(self.user)
-                revision_context_manager.set_comment(
-                    ugettext("Initial version."))
+        question.save()
 
         return question
 
