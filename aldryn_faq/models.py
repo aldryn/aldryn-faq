@@ -22,29 +22,19 @@ from parler.models import TranslatableModel, TranslatedFields
 from sortedm2m.fields import SortedManyToManyField
 from taggit.managers import TaggableManager
 
-from . import compat
 from .cms_appconfig import FaqConfig
 from .managers import CategoryManager, RelatedManager
 from .utils import is_valid_namespace, is_valid_app_config
 
 
-if compat.LTE_DJANGO_1_6:
-    # related_name='%(app_label)s_%(class)s' does not work on  Django 1.6
-    CMSPluginField = partial(
-        models.OneToOneField,
-        to=CMSPlugin,
-        related_name='+',
-        parent_link=True,
-    )
-else:
-    # Once djangoCMS < 3.3.1 support is dropped
-    # Remove the explicit cmsplugin_ptr field declarations
-    CMSPluginField = partial(
-        models.OneToOneField,
-        to=CMSPlugin,
-        related_name='%(app_label)s_%(class)s',
-        parent_link=True,
-    )
+# Once djangoCMS < 3.3.1 support is dropped
+# Remove the explicit cmsplugin_ptr field declarations
+CMSPluginField = partial(
+    models.OneToOneField,
+    to=CMSPlugin,
+    related_name='%(app_label)s_%(class)s',
+    parent_link=True,
+)
 
 
 def get_translation(obj, language_code):

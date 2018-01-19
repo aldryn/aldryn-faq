@@ -2,8 +2,7 @@
 from __future__ import unicode_literals
 
 from django import forms
-from django.db import transaction
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext_lazy as _
 
 from cms.api import add_plugin
 from cms.utils import permissions
@@ -102,17 +101,14 @@ class CreateFaqQuestionForm(BaseFormMixin, TranslatableModelForm):
     The ModelForm for the FAQ Question wizard. Note that Category has few
     translated fields that we need to access, so, we use TranslatableModelForm
     """
-
-    answer = forms.CharField(
+    answer_content = forms.CharField(
         label=_('Answer'), required=False, widget=TextEditorWidget,
-        help_text=_("Optional. If provided, will be added to the main body of "
-                    "the Question answer.")
+        help_text=_("Optional. If provided, will be added to the main body of the Question answer.")
     )
 
     class Meta:
         model = Question
-        fields = ['title', 'category', 'is_top', 'answer_text',
-                  'answer']
+        fields = ['title', 'category', 'is_top', 'answer_text', 'answer_content']
 
     def __init__(self, **kwargs):
         super(CreateFaqQuestionForm, self).__init__(**kwargs)
@@ -126,23 +122,21 @@ class CreateFaqQuestionForm(BaseFormMixin, TranslatableModelForm):
 
         # If 'content' field has value, create a TextPlugin with same and add
         # it to the PlaceholderField
-        answer = clean_html(self.cleaned_data.get('answer', ''), False)
+        answer_content = clean_html(self.cleaned_data.get('answer_content', ''), False)
 
         try:
-            # CMS >= 3.3.x
             content_plugin = get_cms_setting('PAGE_WIZARD_CONTENT_PLUGIN')
         except KeyError:
-            # CMS <= 3.2.x
+            # COMPAT: CMS3.2
             content_plugin = get_cms_setting('WIZARD_CONTENT_PLUGIN')
 
         try:
-            # CMS >= 3.3.x
             content_field = get_cms_setting('PAGE_WIZARD_CONTENT_PLUGIN_BODY')
         except KeyError:
-            # CMS <= 3.2.x
+            # COMPAT: CMS3.2
             content_field = get_cms_setting('WIZARD_CONTENT_PLUGIN_BODY')
 
-        if answer and permissions.has_plugin_permission(
+        if answer_content and permissions.has_plugin_permission(
                 self.user, content_plugin, 'add'):
 
             # If the question has not been saved, then there will be no
@@ -156,7 +150,7 @@ class CreateFaqQuestionForm(BaseFormMixin, TranslatableModelForm):
                     'placeholder': question.answer,
                     'plugin_type': content_plugin,
                     'language': self.language_code,
-                    content_field: answer,
+                    content_field: answer_content,
                 }
                 add_plugin(**plugin_kwarg)
 

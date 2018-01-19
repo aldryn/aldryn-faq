@@ -3,8 +3,10 @@
 from __future__ import unicode_literals
 
 from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers import reverse
 from django.utils.encoding import force_text
 from django.utils.translation import override
+from cms.utils.i18n import force_language
 
 from aldryn_faq.models import Category, Question, get_slug_in_language
 
@@ -51,18 +53,26 @@ class TestCategory(AldrynFaqTest):
         self.app_config.permalink_type = "Pp"
         self.app_config.save()
 
-        self.assertEqual(
-            question_1.get_absolute_url("en"),
-            "/en/faq/{category_pk}/{pk}/".format(
-                category_pk=category_1.pk,
-                pk=question_1.pk)
-        )
-        self.assertEqual(
-            question_1.get_absolute_url("de"),
-            "/de/faq/{category_pk}/{pk}/".format(
-                category_pk=category_1.pk,
-                pk=question_1.pk)
-        )
+        with force_language('en'):
+            question_1_url_en = reverse(
+                'aldryn_faq:faq-answer',
+                kwargs={
+                    'category_pk': category_1.pk,
+                    'pk': question_1.pk,
+                }
+            )
+
+        with force_language('de'):
+            question_1_url_de = reverse(
+                'aldryn_faq:faq-answer',
+                kwargs={
+                    'category_pk': category_1.pk,
+                    'pk': question_1.pk,
+                }
+            )
+
+        self.assertEqual(question_1.get_absolute_url("en"), question_1_url_en)
+        self.assertEqual(question_1.get_absolute_url("de"), question_1_url_de)
 
         self.app_config.permalink_type = old
         self.app_config.save()
@@ -75,18 +85,26 @@ class TestCategory(AldrynFaqTest):
         self.app_config.permalink_type = "Ps"
         self.app_config.save()
 
-        self.assertEqual(
-            question_1.get_absolute_url("en"),
-            "/en/faq/{category_pk}/{slug}/".format(
-                category_pk=category_1.pk,
-                slug=get_slug_in_language(question_1, "en"))
-        )
-        self.assertEqual(
-            question_1.get_absolute_url("de"),
-            "/de/faq/{category_pk}/{slug}/".format(
-                category_pk=category_1.pk,
-                slug=get_slug_in_language(question_1, "de"))
-        )
+        with force_language('en'):
+            question_1_url_en = reverse(
+                'aldryn_faq:faq-answer',
+                kwargs={
+                    'category_pk': category_1.pk,
+                    'slug': get_slug_in_language(question_1, 'en'),
+                }
+            )
+
+        with force_language('de'):
+            question_1_url_de = reverse(
+                'aldryn_faq:faq-answer',
+                kwargs={
+                    'category_pk': category_1.pk,
+                    'slug': get_slug_in_language(question_1, 'de'),
+                }
+            )
+
+        self.assertEqual(question_1.get_absolute_url("en"), question_1_url_en)
+        self.assertEqual(question_1.get_absolute_url("de"), question_1_url_de)
 
         self.app_config.permalink_type = old
         self.app_config.save()
@@ -99,20 +117,26 @@ class TestCategory(AldrynFaqTest):
         self.app_config.permalink_type = "Sp"
         self.app_config.save()
 
-        self.assertEqual(
-            question_1.get_absolute_url("en"),
-            "/en/faq/{category_slug}/{pk}/".format(
-                category_slug=get_slug_in_language(category_1, "en"),
-                pk=question_1.pk
+        with force_language('en'):
+            question_1_url_en = reverse(
+                'aldryn_faq:faq-answer',
+                kwargs={
+                    'pk': question_1.pk,
+                    'category_slug': get_slug_in_language(category_1, 'en'),
+                }
             )
-        )
-        self.assertEqual(
-            question_1.get_absolute_url("de"),
-            "/de/faq/{category_slug}/{pk}/".format(
-                category_slug=get_slug_in_language(category_1, "de"),
-                pk=question_1.pk
+
+        with force_language('de'):
+            question_1_url_de = reverse(
+                'aldryn_faq:faq-answer',
+                kwargs={
+                    'pk': question_1.pk,
+                    'category_slug': get_slug_in_language(category_1, 'de'),
+                }
             )
-        )
+
+        self.assertEqual(question_1.get_absolute_url("en"), question_1_url_en)
+        self.assertEqual(question_1.get_absolute_url("de"), question_1_url_de)
 
         self.app_config.permalink_type = old
         self.app_config.save()
@@ -125,20 +149,26 @@ class TestCategory(AldrynFaqTest):
         self.app_config.permalink_type = "Ss"
         self.app_config.save()
 
-        self.assertEqual(
-            question_1.get_absolute_url("en"),
-            "/en/faq/{category_slug}/{slug}/".format(
-                category_slug=get_slug_in_language(category_1, "en"),
-                slug=get_slug_in_language(question_1, "en")
+        with force_language('en'):
+            question_1_url_en = reverse(
+                'aldryn_faq:faq-answer',
+                kwargs={
+                    'slug': get_slug_in_language(question_1, 'en'),
+                    'category_slug': get_slug_in_language(category_1, 'en'),
+                }
             )
-        )
-        self.assertEqual(
-            question_1.get_absolute_url("de"),
-            "/de/faq/{category_slug}/{slug}/".format(
-                category_slug=get_slug_in_language(category_1, "de"),
-                slug=get_slug_in_language(question_1, "de")
+
+        with force_language('de'):
+            question_1_url_de = reverse(
+                'aldryn_faq:faq-answer',
+                kwargs={
+                    'slug': get_slug_in_language(question_1, 'de'),
+                    'category_slug': get_slug_in_language(category_1, 'de'),
+                }
             )
-        )
+
+        self.assertEqual(question_1.get_absolute_url("en"), question_1_url_en)
+        self.assertEqual(question_1.get_absolute_url("de"), question_1_url_de)
 
         self.app_config.permalink_type = old
         self.app_config.save()
@@ -151,22 +181,28 @@ class TestCategory(AldrynFaqTest):
         self.app_config.permalink_type = "Bp"
         self.app_config.save()
 
-        self.assertEqual(
-            question_1.get_absolute_url("en"),
-            "/en/faq/{category_pk}-{category_slug}/{pk}/".format(
-                category_slug=get_slug_in_language(category_1, "en"),
-                category_pk=category_1.pk,
-                pk=question_1.pk
+        with force_language('en'):
+            question_1_url_en = reverse(
+                'aldryn_faq:faq-answer',
+                kwargs={
+                    'category_pk': category_1.pk,
+                    'pk': question_1.pk,
+                    'category_slug': get_slug_in_language(category_1, 'en'),
+                }
             )
-        )
-        self.assertEqual(
-            question_1.get_absolute_url("de"),
-            "/de/faq/{category_pk}-{category_slug}/{pk}/".format(
-                category_slug=get_slug_in_language(category_1, "de"),
-                category_pk=category_1.pk,
-                pk=question_1.pk
+
+        with force_language('de'):
+            question_1_url_de = reverse(
+                'aldryn_faq:faq-answer',
+                kwargs={
+                    'category_pk': category_1.pk,
+                    'pk': question_1.pk,
+                    'category_slug': get_slug_in_language(category_1, 'de'),
+                }
             )
-        )
+
+        self.assertEqual(question_1.get_absolute_url("en"), question_1_url_en)
+        self.assertEqual(question_1.get_absolute_url("de"), question_1_url_de)
 
         self.app_config.permalink_type = old
         self.app_config.save()
@@ -179,20 +215,28 @@ class TestCategory(AldrynFaqTest):
         self.app_config.permalink_type = "Bs"
         self.app_config.save()
 
-        self.assertEqual(
-            question_1.get_absolute_url("en"),
-            "/en/faq/{category_pk}-{category_slug}/{slug}/".format(
-                category_slug=get_slug_in_language(category_1, "en"),
-                category_pk=category_1.pk,
-                slug=get_slug_in_language(question_1, "en"))
-        )
-        self.assertEqual(
-            question_1.get_absolute_url("de"),
-            "/de/faq/{category_pk}-{category_slug}/{slug}/".format(
-                category_slug=get_slug_in_language(category_1, "de"),
-                category_pk=category_1.pk,
-                slug=get_slug_in_language(question_1, "de"))
-        )
+        with force_language('en'):
+            question_1_url_en = reverse(
+                'aldryn_faq:faq-answer',
+                kwargs={
+                    'category_pk': category_1.pk,
+                    'slug': get_slug_in_language(question_1, 'en'),
+                    'category_slug': get_slug_in_language(category_1, 'en'),
+                }
+            )
+
+        with force_language('de'):
+            question_1_url_de = reverse(
+                'aldryn_faq:faq-answer',
+                kwargs={
+                    'category_pk': category_1.pk,
+                    'slug': get_slug_in_language(question_1, 'de'),
+                    'category_slug': get_slug_in_language(category_1, 'de'),
+                }
+            )
+
+        self.assertEqual(question_1.get_absolute_url("en"), question_1_url_en)
+        self.assertEqual(question_1.get_absolute_url("de"), question_1_url_de)
 
         self.app_config.permalink_type = old
         self.app_config.save()
@@ -246,26 +290,31 @@ class TestQuestion(AldrynFaqTest):
             ct.pk
         )
 
-    def test_get_absolue_url(self):
-        category_pk = self.question1.category_id
-        question_1_pk = self.question1.pk
-        question_1_url_en = "/en/faq/{cat_pk}-example/{pk}/".format(
-            cat_pk=category_pk,
-            pk=question_1_pk
-        )
-        question_1_url_de = "/de/faq/{cat_pk}-beispiel/{pk}/".format(
-            cat_pk=category_pk,
-            pk=question_1_pk
-        )
+    def test_get_absolute_url(self):
+        category = self.question1.category
 
-        self.assertEqual(
-            self.question1.get_absolute_url("en"),
-            question_1_url_en
-        )
-        self.assertEqual(
-            self.question1.get_absolute_url("de"),
-            question_1_url_de
-        )
+        with force_language('en'):
+            question_1_url_en = reverse(
+                'aldryn_faq:faq-answer',
+                kwargs={
+                    'category_pk': category.pk,
+                    'pk': self.question1.pk,
+                    'category_slug': get_slug_in_language(category, 'en'),
+                }
+            )
+
+        with force_language('de'):
+            question_1_url_de = reverse(
+                'aldryn_faq:faq-answer',
+                kwargs={
+                    'category_pk': category.pk,
+                    'pk': self.question1.pk,
+                    'category_slug': get_slug_in_language(category, 'de'),
+                }
+            )
+
+        self.assertEqual(self.question1.get_absolute_url("en"), question_1_url_en)
+        self.assertEqual(self.question1.get_absolute_url("de"), question_1_url_de)
 
     def test_manager_filter_by_language(self):
         questions = Question.objects.filter_by_language('en')

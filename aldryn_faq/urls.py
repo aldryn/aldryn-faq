@@ -2,12 +2,12 @@
 
 from __future__ import unicode_literals
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from .views import FaqAnswerView, FaqByCategoryView, FaqByCategoryListView
 
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', FaqByCategoryListView.as_view(), name='faq-category-list'),
 
 
@@ -70,4 +70,4 @@ urlpatterns = patterns('',
         FaqAnswerView.as_view(),
         name='faq-answer'
     ),
-)
+]

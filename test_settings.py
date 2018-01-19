@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from distutils.version import LooseVersion
-from cms import __version__ as cms_string_version
-
-cms_version = LooseVersion(cms_string_version)
-
-
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
@@ -52,20 +46,6 @@ HELPER_SETTINGS = {
         # required for testing the migrations.
         'adminsortable',
     ],
-    'MIDDLEWARE_CLASSES': [
-        'cms.middleware.utils.ApphookReloadMiddleware',
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'django.middleware.csrf.CsrfViewMiddleware',
-        'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'django.contrib.messages.middleware.MessageMiddleware',
-        'django.middleware.locale.LocaleMiddleware',
-        'django.middleware.common.CommonMiddleware',
-        'django.middleware.clickjacking.XFrameOptionsMiddleware',
-        'cms.middleware.user.CurrentUserMiddleware',
-        'cms.middleware.page.CurrentPageMiddleware',
-        'cms.middleware.toolbar.ToolbarMiddleware',
-        'cms.middleware.language.LanguageCookieMiddleware'
-    ],
     'HAYSTACK_CONNECTIONS': HAYSTACK_CONNECTIONS,
     'PARLER_LANGUAGES': {
         1: (
@@ -101,24 +81,26 @@ HELPER_SETTINGS = {
             'hide_untranslated': False,
         }
     },
-    'SOUTH_MIGRATION_MODULES': {
-        'taggit': 'taggit.south_migrations',
-    }
+    'MIDDLEWARE_CLASSES': [
+        'cms.middleware.utils.ApphookReloadMiddleware',
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'django.middleware.locale.LocaleMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'cms.middleware.user.CurrentUserMiddleware',
+        'cms.middleware.page.CurrentPageMiddleware',
+        'cms.middleware.toolbar.ToolbarMiddleware',
+        'cms.middleware.language.LanguageCookieMiddleware'
+    ],
 }
-
-# If using CMS 3.2+, use the CMS middleware for ApphookReloading, otherwise,
-# use aldryn_apphook_reload's.
-if cms_version < LooseVersion('3.2.0'):
-    HELPER_SETTINGS['INSTALLED_APPS'].insert(0, 'aldryn_apphook_reload'),
-    HELPER_SETTINGS['MIDDLEWARE_CLASSES'].remove(
-        'cms.middleware.utils.ApphookReloadMiddleware')
-    HELPER_SETTINGS['MIDDLEWARE_CLASSES'].insert(
-        0, 'aldryn_apphook_reload.middleware.ApphookReloadMiddleware')
 
 
 def run():
     from djangocms_helper import runner
-    runner.cms('aldryn_faq', extra_args=[])
+    runner.cms('aldryn_faq')
 
 
 if __name__ == "__main__":

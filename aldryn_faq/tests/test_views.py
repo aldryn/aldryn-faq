@@ -9,6 +9,7 @@ except ImportError:
 
 from django.core.urlresolvers import resolve, reverse
 from django.http import Http404
+from django.test import override_settings
 from django.utils.translation import override
 
 import parler.appsettings
@@ -20,6 +21,7 @@ from .test_base import AldrynFaqTest
 
 
 class TestFaqByCategoryView(AldrynFaqTest):
+    reload_parler_appsettings = True
 
     def test_view_context(self):
         """Tests that the FaqByCategoryView produces the correct context."""
@@ -64,7 +66,7 @@ class TestFaqByCategoryView(AldrynFaqTest):
 
         url_kwargs = resolve(category_2_url).kwargs
 
-        with self.settings(**self.enabled_parler_fallback_settings):
+        with override_settings(**self.enabled_parler_fallback_settings):
             reload(parler.appsettings)
 
             try:
@@ -120,12 +122,13 @@ class TestFaqByCategoryView(AldrynFaqTest):
         for language_code in ('en', 'de'):
             _do_test_list_view(language_code)
 
-        with self.settings(**self.settings_en):
+        with override_settings(**self.settings_en):
             reload(parler.appsettings)
             _do_test_list_view('en')
 
 
 class TestFaqAnswerView(AldrynFaqTest):
+    reload_parler_appsettings = True
 
     def test_view_context(self):
         """Tests that the FaqByCategoryView produces the correct context."""
@@ -163,7 +166,7 @@ class TestFaqAnswerView(AldrynFaqTest):
             path=question_2_url,
         )
 
-        with self.settings(**self.enabled_parler_fallback_settings):
+        with override_settings(**self.enabled_parler_fallback_settings):
             reload(parler.appsettings)
             response = FaqAnswerView.as_view()(request, **url_kwargs)
 

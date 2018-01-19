@@ -1,29 +1,22 @@
 # -*- coding: utf-8 -*-
-
 from __future__ import unicode_literals
+from distutils.version import LooseVersion
 
 import six
 
 from django.template import RequestContext
 from django.utils.translation import override
-
+import cms
 from cms.api import add_plugin
 
-from ..compat import LTE_DJANGO_1_7
 from ..models import SelectedCategory
 from .test_base import AldrynFaqTest
 
 
 def _render_plugin(request, plugin):
-    context = RequestContext(request)
-
-    if not LTE_DJANGO_1_7:
+    def _render_via_django():
         from django.template import Engine
-        # On Django <= 1.7, the RequestContext class would call
-        # all context processors and update the context on initialization.
-        # On Django >= 1.8 the logic to update the context
-        # from context processors is now tied to the bind_template
-        # context manager.
+        context = RequestContext(request)
         updates = {}
         engine = Engine.get_default()
 
@@ -31,14 +24,22 @@ def _render_plugin(request, plugin):
             updates.update(processor(context.request))
         context.dicts[context._processors_index] = updates
 
-    try:
+        return plugin.render_plugin(context)
+
+    def _render_via_cms():
         from cms.plugin_rendering import ContentRenderer
-    except ImportError:
-        # djangoCMS < 3.4 compatibility
-        pass
+        renderer = ContentRenderer(request)
+        context = RequestContext(request)
+        # Avoid errors if plugin require a request object
+        # when rendering.
+        context['request'] = request
+        return renderer.render_plugin(plugin, context)
+
+    cms_lt_3_4 = LooseVersion(cms.__version__) < LooseVersion('3.4')  # COMPAT: CMS3.4
+    if cms_lt_3_4:
+        return _render_via_django()
     else:
-        context['cms_content_renderer'] = ContentRenderer(request=request)
-    return plugin.render_plugin(context)
+        return _render_via_cms()
 
 
 class TestQuestionListPlugin(AldrynFaqTest):

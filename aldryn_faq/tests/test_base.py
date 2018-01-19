@@ -1,21 +1,25 @@
 # -*- coding: utf-8 -*-
-
 from __future__ import unicode_literals
-
+try:
+    from imp import reload
+except ImportError:
+    from importlib import reload
 import random
 import string
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
-from django.test import RequestFactory, TransactionTestCase
+from django.test import override_settings, RequestFactory, TransactionTestCase
 from django.utils.translation import override
 
 from cms import api
-from cms.models import Title
-from cms.utils import get_cms_setting
+from cms.models import Page, Title
+from cms.utils.conf import get_cms_setting
 from cms.utils.i18n import get_language_list
 from djangocms_helper.utils import create_user
+
+import parler.appsettings
 
 from ..models import Category, Question, FaqConfig
 
@@ -32,15 +36,16 @@ class TestUtilityMixin(object):
             # In Python3, this method has been renamed (poorly)
             assertCountEqual = self.assertCountEqual
         except AttributeError:
-            # In 2.6, assertItemsEqual() doesn't sort first
             def assertCountEqual(a, b):
-                return self.assertItemsEqual(sorted(a), sorted(b))
+                return self.assertItemsEqual(a, b)
 
         return assertCountEqual(a, b)
 
 
 class AldrynFaqTestMixin(TestUtilityMixin, object):
     """Sets up basic Category and Question objects for testing."""
+    reload_parler_appsettings = False
+
     data = {
         "category1": {
             "en": {"name": "Example1", "slug": "example", },
@@ -167,6 +172,15 @@ class AldrynFaqTestMixin(TestUtilityMixin, object):
             self.question2.category = self.category2
             self.question2.save()
 
+        if self.reload_parler_appsettings:
+            self.original_parler_languages = settings.PARLER_LANGUAGES
+
+    def tearDown(self):
+        super(AldrynFaqTestMixin, self).tearDown()
+        if self.reload_parler_appsettings:
+            with override_settings(PARLER_LANGUAGES=self.original_parler_languages):
+                reload(parler.appsettings)
+
 
 class CMSRequestBasedTest(TestUtilityMixin, TransactionTestCase):
     """Sets-up User(s) and CMS Pages for testing."""
@@ -174,6 +188,7 @@ class CMSRequestBasedTest(TestUtilityMixin, TransactionTestCase):
 
     @classmethod
     def setUpClass(cls):
+        super(CMSRequestBasedTest, cls).setUpClass()
         cls.request_factory = RequestFactory()
         if not User.objects.filter(username='normal').count():
             cls.user = create_user('normal', 'normal@admin.com', 'normal')
@@ -181,6 +196,7 @@ class CMSRequestBasedTest(TestUtilityMixin, TransactionTestCase):
 
     @classmethod
     def tearDownClass(cls):
+        super(CMSRequestBasedTest, cls).tearDownClass()
         User.objects.all().delete()
 
     def setUp(self):
@@ -226,7 +242,7 @@ class CMSRequestBasedTest(TestUtilityMixin, TransactionTestCase):
         try:
             page_title = Title.objects.get(title=base_title)
             return page_title.page.get_draft_object()
-        except:
+        except (Page.DoesNotExist, Title.DoesNotExist):
             pass
 
         # No? Okay, create one.
@@ -259,5 +275,6 @@ class CMSRequestBasedTest(TestUtilityMixin, TransactionTestCase):
         return request
 
 
+@override_settings(ROOT_URLCONF='aldryn_faq.tests.urls')
 class AldrynFaqTest(AldrynFaqTestMixin, CMSRequestBasedTest):
     pass

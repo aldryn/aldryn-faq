@@ -30,7 +30,7 @@ Manual Installation
 Requirements
 ============
 
-- This project requires **django CMS 3.0.12** or later.
+- This project requires **django CMS 3.2** or later.
 
 
 PIP dependency
@@ -115,19 +115,6 @@ followed by ``python manage.py migrate`` to prepare the database for the new
 applications.
 
 Now run ``python manage.py migrate aldryn_faq``.
-
-.. note::
-
-    Aldryn FAQ supports both South and Django 1.7 migrations.
-    If using Django 1.6 and South < 1.0 you may need to add the following to
-    your settings: ::
-
-        SOUTH_MIGRATION_MODULES = {
-           ...
-           'taggit': 'taggit.south_migrations',
-           'aldryn_faq': 'aldryn_faq.south_migrations',
-           ...
-        }
 
 
 Server
