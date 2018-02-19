@@ -23,6 +23,13 @@ env:
     # NOTE: FE-TESTS ARE DISABLED UNTIL THEY ARE FIXED FOR CMS 3.3 and PhantomJS
     - TOXENV=flake8
 
+    - TOXENV=py35-dj111-cms35
+    - TOXENV=py35-dj111-cms34
+    - TOXENV=py34-dj111-cms35
+    - TOXENV=py34-dj111-cms34
+    - TOXENV=py27-dj111-cms35
+    - TOXENV=py27-dj111-cms34
+
     - TOXENV=py35-dj110-cms35
     - TOXENV=py35-dj110-cms34
     - TOXENV=py34-dj110-cms35

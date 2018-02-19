@@ -6,14 +6,17 @@ except ImportError:
     from importlib import reload
 import random
 import string
+import sys
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
+from django.core.urlresolvers import clear_url_caches
 from django.test import override_settings, RequestFactory, TransactionTestCase
 from django.utils.translation import override
 
 from cms import api
+from cms.appresolver import clear_app_resolvers
 from cms.models import Page, Title
 from cms.utils.conf import get_cms_setting
 from cms.utils.i18n import get_language_list
@@ -28,6 +31,7 @@ User = get_user_model()
 
 class TestUtilityMixin(object):
     """Just adds some common test utilities to the testing class."""
+
     def rand_str(self, prefix='', length=16, chars=string.ascii_letters):
         return prefix + ''.join(random.choice(chars) for _ in range(length))
 
@@ -40,6 +44,24 @@ class TestUtilityMixin(object):
                 return self.assertItemsEqual(a, b)
 
         return assertCountEqual(a, b)
+
+    def reload_urls(self):
+        """
+        Clean up url related things (caches, app resolvers, modules).
+        Taken from cms.
+        :return: None
+        """
+        clear_app_resolvers()
+        clear_url_caches()
+        url_modules = [
+            'cms.urls',
+            'aldryn_faq.urls',
+            settings.ROOT_URLCONF
+        ]
+
+        for module in url_modules:
+            if module in sys.modules:
+                del sys.modules[module]
 
 
 class AldrynFaqTestMixin(TestUtilityMixin, object):
@@ -175,6 +197,8 @@ class AldrynFaqTestMixin(TestUtilityMixin, object):
         if self.reload_parler_appsettings:
             self.original_parler_languages = settings.PARLER_LANGUAGES
 
+        self.reload_urls()
+
     def tearDown(self):
         super(AldrynFaqTestMixin, self).tearDown()
         if self.reload_parler_appsettings:
@@ -275,6 +299,5 @@ class CMSRequestBasedTest(TestUtilityMixin, TransactionTestCase):
         return request
 
 
-@override_settings(ROOT_URLCONF='aldryn_faq.tests.urls')
 class AldrynFaqTest(AldrynFaqTestMixin, CMSRequestBasedTest):
     pass

@@ -35,7 +35,6 @@ class TestFAQWizard(AldrynFaqTest):
         )
         self.assertTrue(form.is_valid())
         question = form.save()
-
         url = question.get_absolute_url('en')
         response = self.client.get(url)
         self.assertContains(response, 'Where are we?', status_code=200)

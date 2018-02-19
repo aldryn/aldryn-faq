@@ -7,7 +7,7 @@ REQUIREMENTS = [
     'aldryn-boilerplates>=0.7.4,<0.8',
     'aldryn-search',
     'aldryn-translation-tools>=0.2.1',
-    'django>=1.8,<1.11',
+    'django>=1.8,<2.0',
     'django-admin-sortable2>=0.5.2',
     'django-cms>=3.2',
     'djangocms-text-ckeditor',
