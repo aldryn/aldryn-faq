@@ -30,7 +30,7 @@ Manual Installation
 Requirements
 ============
 
-- This project requires **django CMS 3.2** or later.
+- This project requires **django CMS 3.4** or later.
 
 
 PIP dependency

@@ -14,10 +14,9 @@ class FaqApp(CMSConfigApp):
     name = _('FAQ')
     app_name = 'aldryn_faq'
     app_config = FaqConfig
-    urls = ['aldryn_faq.urls']  # COMPAT: CMS3.2
 
     def get_urls(self, *args, **kwargs):
-        return self.urls
+        return ['aldryn_faq.urls']
 
 
 apphook_pool.register(FaqApp)
