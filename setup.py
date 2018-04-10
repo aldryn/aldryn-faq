@@ -11,7 +11,7 @@ REQUIREMENTS = [
     'django-admin-sortable2>=0.5.2',
     'django-cms>=3.4',
     'djangocms-text-ckeditor',
-    'django-parler>=1.4,<1.7',
+    'django-parler>=1.8.1',
     'django-sortedm2m>=1.4.0',
     'django-admin-sortable',
     'django-taggit',
