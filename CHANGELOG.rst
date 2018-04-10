@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+2.1.1 (unreleased)
+------------------
+
+* Changed the category field label
+
+
 2.1.0 (2018-04-06)
 ------------------
 
