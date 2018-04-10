@@ -151,7 +151,7 @@ class Question(TranslatedAutoSlugifyMixin, TranslationHelperMixin,
                         'an auto-generated one.')),
     )
     category = models.ForeignKey(
-        verbose_name=_('Title'),
+        verbose_name=_('Category'),
         to=Category,
         related_name='questions',
     )
