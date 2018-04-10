@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-2.1.2 (unreleased)
+2.1.2 (2018-04-10)
 ------------------
 
 * django-parler >= 1.8.1 is now required
