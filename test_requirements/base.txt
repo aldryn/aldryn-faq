@@ -11,7 +11,6 @@ django-haystack
 django-taggit
 docopt
 flake8
-html5lib<0.99999999
 python-coveralls>=2.4.2
 selenium
 six
